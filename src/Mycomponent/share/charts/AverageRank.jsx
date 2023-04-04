@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend, } from 'chart.js';
 // import faker from 'faker';
 import { Line } from 'react-chartjs-2';
@@ -10,24 +10,59 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const AverageChart = () => {
     const webURL = localStorage.getItem("websiteurl");
-    const companyRankk = useRef(null);
-
-    const AllPreviousData = useSelector(state => state.alloldkeyworddata);
-    console.log('AllPreviousData', AllPreviousData)
+    const companyRankk = useRef(0);
 
     const searchCompany = useSelector(state => state.keyworddata);
 
+    useEffect(() => {
+        searchCompany && searchCompany.filter((res) => {
+            if (res.rank_group !== 'no rank') {
+                companyRankk.current = companyRankk.current + res.rank_group
+            }
+        })
 
 
-    // getting all average rank data here ---
-    // AllPreviousData && AllPreviousData.map(())
+    }, [searchCompany])
 
 
-    searchCompany && searchCompany.filter((res) => {
-        if (res.rank_group !== 'no rank') {
-            companyRankk.current = companyRankk.current + res.rank_group
-        }
+
+    const oldcompanyRankk = useRef(null);
+    const oldAverageRank = useRef([])
+    const oldAverageLabel = useRef([])
+    const AllPreviousData = useSelector(state => state.alloldkeyworddata);
+
+
+    AllPreviousData && AllPreviousData.map((res) => {
+        // console.log('AllPreviousData.res', res.data  )
+        oldcompanyRankk.current = 0
+        res.data && res.data.filter((res) => {
+            if (res.rank_group !== 'no rank') {
+                oldcompanyRankk.current = oldcompanyRankk.current + res.rank_group
+            }
+        })
+        oldAverageRank.current.push(oldcompanyRankk.current / res.data.length)
+        oldAverageLabel.current.push(res.date + ' ' + res.month)
+        // console.log('res.rank_group', oldAverageRank.current)
+
     })
+
+    const date = new Date();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    let day = date.getDate();
+    let month = date.getMonth();
+    const DDate =day + ' ' + monthNames[month]
+
+
+    // if (oldAverageRank.current.length === AllPreviousData.length ) {
+    //     oldAverageLabel.current.push('')
+    //     oldAverageRank.current.push(companyRankk.current / searchCompany.length)
+    // }
+
+
+
 
     const options = {
         // maintainAspectRatio: false,
@@ -45,17 +80,17 @@ const AverageChart = () => {
         scales: {
             y: {
                 // max: Math.round(companyRankk.current / searchCompany.length * 2 / 5) * 5,
-                max: Math.round(companyRankk.current / searchCompany.length) * 2,
-                min: 0,
-                ticks: {
-                    stepSize: Math.round(companyRankk.current / searchCompany.length)
-                }
+                // max: 50,
+                // min: 0,
+                // ticks: {
+                //     stepSize: Math.round(companyRankk.current / searchCompany.length)
+                // }
             }
         }
 
     };
 
-    const labels = ['', webURL, '']
+    const labels = oldAverageLabel.current.concat(DDate)
     // const dataSet = [0, companyRankk.current / searchCompany.length, 100]
     const data = {
         labels,
@@ -63,7 +98,7 @@ const AverageChart = () => {
             {
                 label: webURL,
                 // data: [0, Math.round(companyRankk.current / searchCompany.length < 1 ? 1 : companyRankk.current / searchCompany.length)],
-                data: [0, Math.round(companyRankk.current / searchCompany.length)],
+                data: oldAverageRank.current.concat(companyRankk.current / searchCompany.length),
                 borderColor: 'rgb(53, 162, 235)',
                 backgroundColor: 'rgba(53, 162, 235, 0.5)',
                 fill: true,

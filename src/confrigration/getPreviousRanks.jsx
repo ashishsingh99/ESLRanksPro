@@ -76,17 +76,17 @@ const GetPreviousRanks = () => {
 
 
 
-                PreviousUserAllProjects && PreviousUserAllProjects.map((res, key) => {
+                PreviousUserAllProjects && PreviousUserAllProjects.map((rest, key) => {
 
 
                     ALLPROJECTDATA.current = []
                     KEYWORDDATA.current = []
 
-                    // console.log('res', res)
+                    // console.log('rest', rest)
                     // console.log('     ALLPROJECTDATA.current', ALLPROJECTDATA.current)
                     // console.log('   KEYWORDDATA.current', KEYWORDDATA.current)
 
-                    res.datasave && res.datasave.map((datasave) => {
+                    rest.datasave && rest.datasave.map((datasave) => {
                         return datasave.data.tasks && datasave.data.tasks.filter((task) => {
                             if (task.data.device === deviceType) {
                                 return (task.result && task.result.map((result) => {
@@ -98,8 +98,8 @@ const GetPreviousRanks = () => {
                     });
 
                     // console.log(' ALLPROJECTDATA.current', ALLPROJECTDATA.current)
-
                     USERALLKEYWORDRESULT.current = []
+
                     filteredUrlBasedData && filteredUrlBasedData.map((detail) => {
                         return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
                             return (ALLPROJECTDATA.current && ALLPROJECTDATA.current.map((rankKeyword) => {
@@ -121,6 +121,8 @@ const GetPreviousRanks = () => {
                         })
                         );
                     });
+
+
 
                     USERALLKEYWORDRESULT.current.map((rankdata) => {
                         // PUSHING THE ANOTHER ITEM THAT HELP TO RENDER UNRANKED VALUE SHOW IN RESPONSE ITEMS
@@ -174,7 +176,7 @@ const GetPreviousRanks = () => {
                     if (KEYWORDDATA.current !== []) {
                         // dispatch({ type: "OLDKEYWORDDATA", payload: KEYWORDDATA.current });
                         // console.log(' KEYWORDDATA.current', KEYWORDDATA.current)
-                        AllOLDKEYWORDDATA.current.push(KEYWORDDATA.current)
+                        AllOLDKEYWORDDATA.current.push({data:KEYWORDDATA.current, date:rest.date,month:rest.month,year:rest.year})
                     }
                 });
 
@@ -182,7 +184,7 @@ const GetPreviousRanks = () => {
                 if (AllOLDKEYWORDDATA.current !== []) {
                     // console.log('AllOLDKEYWORDDATA.current', AllOLDKEYWORDDATA.current)
                     dispatch({ type: "ALLOLDKEYWORDDATA", payload: AllOLDKEYWORDDATA.current });
-                    dispatch({ type: "OLDKEYWORDDATA", payload: AllOLDKEYWORDDATA.current[AllOLDKEYWORDDATA.current.length - 1] });
+                    dispatch({ type: "OLDKEYWORDDATA", payload: AllOLDKEYWORDDATA.current[AllOLDKEYWORDDATA.current.length - 1].data });
                 }
 
 

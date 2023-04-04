@@ -17,8 +17,8 @@ export const Home = () => {
   const loginOut = useSelector(state => state.loginOut)
   useEffect(() => {
     if (loginOut !== 'true') {
-      window.location.href = 'http://127.0.0.1:5500/Esl%20SEO%20tool%20web/home.html'
 
+      // window.location.href = '#index.html'
     }
   })
   return (
@@ -134,7 +134,7 @@ export const Home = () => {
                 */
               }
 
-              {/* <RankTable /> */}
+             <div className='d-none'> <RankTable /> </div>
 
 
               <div className='w-100 mt-5'>

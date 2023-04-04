@@ -19,33 +19,38 @@ const Login = () => {
     const navigate = useNavigate();
 
     const login = (e) => {
-
         e.preventDefault();
-        dispatch({ type: 'LOADING' });
-        let item = {
-            email: Email,
-            password: password
-        };
-        axios.post(login_withAPi(), item)
-            .then(res => {
-                // console.log(res.data)
-                setMydata(res.data);
 
-                localStorage.setItem('token', res.data.token.access);
-                localStorage.setItem('email', res.data.email);
+        if (Email === '' || password === '') {
+            setMydata('Please Enter correct email or password')
+        }
+        else {
+            dispatch({ type: 'LOADING' });
+            let item = {
+                email: Email,
+                password: password
+            };
+            axios.post(login_withAPi(), item)
+                .then(res => {
+                    // console.log(res.data)
+                    setMydata(res.data.msg);
 
-                const status = res.data.status
-                if (status === '200') {
-                    const loginOut = true;
-                    localStorage.setItem('loginOut', loginOut)
-                    dispatch({ type: "USER" });
-                    navigate('/')
-                }
-            })
-        // .then(err => {
-        //     // console.log(err);
-        // })
-        // dispatch({ type: 'NOTLOADING' });
+                    localStorage.setItem('token', res.data.token.access);
+                    localStorage.setItem('email', res.data.email);
+
+                    const status = res.data.status
+                    if (status === '200') {
+                        const loginOut = true;
+                        localStorage.setItem('loginOut', loginOut)
+                        dispatch({ type: "USER" });
+                        navigate('/')
+                    }
+
+
+                })
+
+        }
+
     }
 
 
@@ -85,7 +90,7 @@ const Login = () => {
 
                                         <input type='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)} autoComplete='true'></input>
                                         <label id='lb'>Password</label>
-                                        <p className='vl-msd-line'> <div>{mydata.msg}</div><div><Link to='/forgot'>forgot password </Link></div> </p>
+                                        <p className='vl-msd-line'> <div>{mydata}</div><div><Link to='/forgot'>forgot password </Link></div> </p>
 
                                         <div>
                                             <button type='submit' className='lg-button' onClick={login}>LOGIN</button>

@@ -23,13 +23,18 @@ const GetRanks = () => {
   const filPeNameUrl = useRef([])
   const projectKeywordLength = useRef([])
   const userEmailBasedTotalPushedData = useRef([])
+
+
   if (deviceType === null) {
     localStorage.setItem("devicetype", "desktop");
+        // window.location.reload(false)
   }
 
 
 
   useEffect(() => {
+
+
 
     // // isproject set false because its default value always have to false;
     // localStorage.setItem("IsProject", false);
@@ -59,13 +64,6 @@ const GetRanks = () => {
         // flat() is use for romove array to an array
         const projectData = projectDatalist.flat();
         // console.log('projectData', projectData)
-
-
-
-
-
-
-        // window.location.reload(false)
         const ProjectDetail = projectData.filter(devtype => {
           if (devtype.deviceType === deviceType) {
             return devtype;
@@ -75,10 +73,8 @@ const GetRanks = () => {
 
         // console.log('ProjectDetail', ProjectDetail)
 
-
-
         ALLPROJECTDETAILS.current = ProjectDetail;
-        dispatch({ type: "ALLPROJECTDETAILS", payload: ALLPROJECTDETAILS.current, });
+        dispatch({ type: "ALLPROJECTDETAILS", payload: ALLPROJECTDETAILS.current});
 
         const filteredEmailList = ProjectDetail && ProjectDetail.filter((selectedEmail) => {
           if (selectedEmail.email === email) {
@@ -86,7 +82,6 @@ const GetRanks = () => {
           }
         });
         // console.log('filteredEmailList', filteredEmailList)
-
 
         dispatch({ type: "USERALLPROJECTDETAILS", payload: filteredEmailList });
 
