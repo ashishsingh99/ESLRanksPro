@@ -1,0 +1,123 @@
+
+.add-pr-url {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
+
+.add-pr-url input {
+    /* width: 100%; */
+    margin-top: 1rem;
+    max-width: 450px;
+}
+
+.add-pr-btn {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.add-pr-btn button {
+    padding: 0.5rem 2rem !important;
+}
+
+.key-fm-ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    max-width: 450px;
+    min-width: 450px;
+    background-color: #fff;
+    flex-wrap: wrap;
+    padding: 1rem;
+    margin: auto;
+    border-radius: 4px 4px 0 0;
+    max-height: 100px;
+    overflow: auto;
+    border: 1.5px solid #dcdcdc;
+    border-bottom: none;
+    z-index: -1;
+    margin-bottom: -20px;
+}
+
+.key-fm-ul li {
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    border-radius: 4px;
+}
+
+.key-fm-ul li b {
+    font-size: 12px;
+    color: #8b8585;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.key-te-in input:focus {
+    border-color: #dcdcdc !important;
+    /* border-top: none; */
+    /* border-radius: 0 0 4px 4px !important; */
+}
+
+.add-pr-url select {
+width: 280px !important;
+}
+
+.add-sel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+.add-sel select{
+    margin-left: 1rem;
+}
+
+.cm-btn{
+    transition:none;
+    left: 0px !important;
+}
+.ho-btn:hover .cm-btn{
+    position: relative;
+    left: -150px !important;
+    transition: 0.1s ease-in;
+
+}
+
+.dev-type{
+    width: 450px;
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 0.5rem;
+}
+.dev-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #dcdcdc; */
+    border-radius: 4px;
+    height: fit-content;
+    padding: 0.1rem 0.75rem;
+    margin-right: 0.5rem;
+
+}
+.dev-btn input{
+    margin-right: 0.3rem;
+}
+
+
+
+/* media query for mobile max width  */
+@media (max-width: 426px) {
+    .key-fm-ul {
+        min-width: 0;
+        max-width: 90vw;
+    }
+}

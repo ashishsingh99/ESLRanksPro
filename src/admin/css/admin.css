@@ -1,0 +1,74 @@
+.admin-Layout {
+    display: flex;
+}
+
+.admin-body {
+    width: 100%;
+    background: #efefef;
+
+}
+
+.admin-ground {
+    margin: 1.5rem;
+    padding: 1rem;
+    height: calc(100vh - 110px);
+    overflow: auto;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+}
+
+.table_title {
+    color: #455197;
+}
+
+.table-edit {
+    width: max-content;
+    display: block;
+    margin-left: auto;
+}
+
+.table-edit svg {
+    margin-right: 0.8rem;
+    cursor: pointer;
+}
+
+.table-edit svg:nth-child(1) {
+    color: rgb(37, 150, 37);
+}
+
+.table-edit svg:nth-child(2) {
+    color: rgb(162, 68, 68);
+}
+
+.exeMark {
+    border-radius: 50%;
+    box-shadow: -10px 0px 0px 0px rgb(153, 244, 6),
+        -20px 0px 0px 0px rgb(241, 43, 8),
+        10px 0px 0px 0px rgb(153, 244, 6),
+        20px 0px 0px 0px rgb(241, 43, 8);
+    width: 50px;
+    border: 2px dashed red;
+    border-style: groove;
+    height: 50px;
+    color: red;
+    margin: auto;
+    margin-bottom: 1rem;
+
+}
+
+
+/* media query for mobile max width  */
+@media (max-width: 426px) {
+    .table_title{
+        /* font-size:20px; */
+    }
+
+    .admin-ground {
+        margin: 0;
+        border-radius: 0;
+        height: auto;
+        box-shadow: none;
+    }
+
+}

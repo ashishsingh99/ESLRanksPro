@@ -1,0 +1,143 @@
+.upgrade-card {
+    width: 100%;
+    border: 1px solid #dcdcdc;
+    border-top: 20px solid #FF6384;
+    text-align: center;
+    border-radius: 4px;
+    padding: 1rem 0 0 0;
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+
+}
+
+.upgrade-card:hover {
+    position: relative;
+    transform: scale(1.05);
+}
+
+.up-cont {
+    text-align: left;
+    padding: 0 1rem 2rem 1rem;
+    color: #827575;
+    font-weight: 400;
+
+}
+
+.up-cont ul {
+    margin-bottom: 1rem;
+}
+
+.up-cont ul li {
+    margin-bottom: 0.3rem;
+}
+
+.up-cont svg {
+    margin-right: 0.75rem;
+}
+
+.upgrade-card h3 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #FF6384;
+}
+
+.upgrade-card h4 {
+    font-size: 35px;
+    font-weight: bold;
+    /* color: #FF6384; */
+}
+
+.upgrade-button {
+    width: 100%;
+    padding: 0.5rem;
+    display: block;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #FF6384;
+    border: none;
+}
+
+.upgrade-button:hover {
+    background-color: #fff;
+    color: #FF6384;
+    border: 1px solid #FF6384;
+    font-weight: 600;
+}
+
+.usd-p {
+    color: #827575;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.up-ca-active {
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    border-top: 20px solid #455197;
+}
+
+.up-ca-active .upgrade-button {
+    background-color: #455197;
+    color: #fff;
+
+}
+
+.up-ca-active .upgrade-button:hover {
+    background-color: #fff;
+    color: #455197;
+    border: 1px solid #455197;
+
+}
+
+.up-ca-active h3 {
+    color: #455197;
+}
+
+
+
+.table-planpr {
+    margin-top: 1rem;
+}
+
+.table-planpr table {
+    width: 100%;
+    text-align: center;
+    /* border: 1px solid #dcdcdc; */
+    margin-top: 0.5rem;
+
+}
+
+.table-planpr table tr {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* border: 1px solid #dcdcdc; */
+
+}
+
+.table-planpr table tr td,
+th {
+    width: 25%;
+    margin: 0;
+    padding: 0;
+    padding: 0.5rem 0;
+}
+
+.table-planpr table tr th,
+.table-planpr table tr td:nth-child(1) {
+    text-align: left !important;
+    color: black !important;
+    padding-left: 1rem !important;
+}
+
+/* .table-planpr table tr td,th {
+    color: #1A73E8;
+
+} */
+.ty-tr {
+    text-align: center !important;
+    font-weight: 600;
+    color: #FF6384 !important;
+}
+.see_more{
+    cursor:pointer;
+}

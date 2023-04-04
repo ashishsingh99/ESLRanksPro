@@ -1,0 +1,130 @@
+.Top-bar {
+    height: 60px;
+    width: 100%;
+    background-color: #fff;
+    padding: 0.5rem 1.5rem;
+
+}
+
+.userLogo img {
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.admin_NameBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.adminName_drop {
+    display: none;
+}
+
+.admin_NameBar:hover .adminName_drop {
+    display: block;
+    position: absolute;
+    background: #fff;
+    width: 200px;
+    margin-top: 120px;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    border-radius: 4px;
+    padding: 0.3rem 0;
+
+}
+
+.adminName_drop ul li {
+    padding: 0.3rem 0.3rem;
+    color: black;
+}
+
+.adminName_drop ul li:hover {
+    background: #dcdcdc;
+}
+
+
+.admin_NameBar h6 {
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+}
+
+.admin_NameBar p {
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    color: #827575;
+}
+
+.admin_NameBar svg {
+    margin: 0 1rem;
+}
+
+.admin_search {
+    border-radius: 4px;
+    border: 1.5px solid #dcdcdc;
+    display: flex;
+    align-items: center;
+    max-width: 300px;
+    min-width: 300px;
+    margin-right: 1rem;
+}
+
+.admin_search svg {
+    padding: 0 0.5rem;
+    color: #dcdcdc;
+}
+
+.admin_search input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+}
+
+#adminSearch:focus-within {
+    border: 1.5px solid #455197 !important;
+    background-color: #455197;
+}
+
+#adminSearch:focus-within svg {
+    color: #fff !important;
+    transform: scale(1.1);
+}
+
+.top-bar_menu {
+    display: none;
+}
+
+/* media query for mobile max width  */
+@media (max-width: 426px) {
+    .admin_search {
+        max-width: 300px;
+        min-width: 0;
+        margin-right: 0;
+    }
+
+    .admin_NameBar{
+        display: none;
+
+    }
+
+    .Top-bar {
+        position: sticky;
+        display: grid;
+        padding: 0.5rem 1rem;
+        box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    }
+
+    .top-bar_menu {
+        display: block;
+        padding-right: 0.5rem;
+    }
+    .top-bar_menu svg{
+        font-size: 25px;
+    }
+
+
+
+}

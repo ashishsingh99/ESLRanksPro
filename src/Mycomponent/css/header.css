@@ -1,0 +1,226 @@
+.navBar {
+    width: 100%;
+    border-bottom: 1.5px solid #dcdcdc;
+    padding: 0.5rem 3rem;
+}
+
+.nv-logo img {
+    width: 180px;
+}
+
+.nv-ul {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+
+}
+
+.nv-ul li {
+    margin-left: 2rem;
+}
+
+.nv-select {
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 40px;
+    margin-left: 0.5rem;
+    position: relative;
+
+}
+
+.nv-select_con {
+    display: none;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    min-height: 100%;
+    width: 120px;
+    background-color: #fff;
+}
+
+.nv-select:hover .nv-select_con {
+    display: block;
+    position: absolute;
+    left: -50px;
+    top: 20px;
+    border-radius: 4px;
+}
+
+.nv-select_con ul {
+    display: block;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+.nv-select_con ul li {
+    padding: 0;
+    margin: 0;
+    padding: 0.3rem 0.5rem;
+}
+
+.nv-select_con ul li:hover {
+    background-color: #dcdcdc;
+}
+
+
+
+
+
+.us-logo {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #455197;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(1);
+}
+
+.us-logo:hover {
+    transform: scale(1.2);
+}
+
+.us-logo svg {
+    color: #fff;
+    font-size: 16px;
+
+}
+
+.nv-btn {
+    padding: 1rem 3rem;
+    border-bottom: 1px solid #dcdcdc;
+
+}
+
+.nv-ul2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.nv-btn-body {
+    overflow: auto;
+    display: grid;
+}
+
+.nv-btn-body::-webkit-scrollbar {
+    background-color: #fcfcfc;
+    height: 0px !important;
+
+}
+
+.nv-btn-body::-webkit-scrollbar-thumb {
+    background: #dcdcdc;
+}
+
+.nv-ul2 li {
+    min-width: 130px;
+    text-align: center;
+    margin: 0 1.5rem;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #F4F5FA;
+    border-radius: 4px;
+}
+
+.nv-ul2 li a {
+    padding: 0.5rem 0.5rem;
+    display: block;
+    border-radius: 4px;
+    color: #455197;
+
+
+}
+
+.nv-ul2 li:hover svg {
+    font-size: 15px;
+}
+
+.nv-ul2 li a:hover {
+    text-decoration: none;
+}
+
+.active {
+    background-color: #455197 !important;
+    color: #ffffff !important;
+    border: none !important;
+
+}
+
+/* media query for mobile max width  */
+@media(max-width:1024px) {
+    .navBar{
+        padding: 0.5rem 2rem;
+    }
+    .nv-btn {
+        padding: 1rem;
+    }
+}
+
+/* media query for mobile max width  */
+@media (max-width: 768px) {
+    .nv-logo img {
+        max-width: 125px;
+    }
+
+    .navBar {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .nv-btn {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .nv-ul2 li {
+        min-width: 112px;
+        margin: 0 0.5rem;
+        font-size: 12px;
+        border-radius: 20px;
+
+    }
+
+    .nv-ul2 li a {
+        border-radius: 20px;
+    }
+
+    .nv-ul li {
+        margin-left: 0.5rem;
+    }
+
+}
+
+/* media query for mobile max width  */
+@media (max-width: 426px) {
+    .nv-logo img {
+        max-width: 125px;
+    }
+
+    .navBar {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .nv-btn {
+        padding: 0.5rem 0.5rem;
+    }
+
+    .nv-ul2 li {
+        min-width: 115px;
+        margin: 0 0.5rem;
+        font-size: 12px;
+        border-radius: 20px;
+
+    }
+
+    .nv-ul2 li a {
+        border-radius: 20px;
+    }
+
+    .nv-ul li {
+        margin-left: 0.5rem;
+    }
+
+}
