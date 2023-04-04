@@ -48,18 +48,18 @@ const RankTable = () => {
 
         keywordData && keywordData.filter((res, key) => {
 
-            const resRankgroup = res.rank_group
+            const resRankgroup = res.rank_group && res.rank_group
             // console.log('res.RANKGROUP', resRankgroup)
             const oldataRankgroup = oldKeywordData[key] && oldKeywordData[key].rank_group
             // console.log('oldataRankgroup', oldataRankgroup)
-            if (resRankgroup === 'no rank') {
+            if (resRankgroup === 'no rank' || resRankgroup === undefined) {
                 // alert('nannn')
                 setProgressBar(obj => {
                     return [...obj, { result: 0, growth: true }]
                 })
 
             }
-            else if (oldataRankgroup === 'no rank') {
+            else if (oldataRankgroup === 'no rank' || oldataRankgroup === undefined) {
                 setProgressBar(obj => {
                     return [...obj, { result: 0, growth: true }]
                 })

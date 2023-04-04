@@ -116,3 +116,10 @@ export const SelectCusDate = (selectcustomdate) => {
 
 }
 
+
+export const AllOLdKEYWORDData = (alloldkeyworddata) => {
+  return { type: "ALLOLDKEYWORDDATA", payload: alloldkeyworddata };
+}
+
+
+

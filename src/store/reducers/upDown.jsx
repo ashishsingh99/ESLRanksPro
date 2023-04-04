@@ -121,6 +121,12 @@ export const reducerSelectDate = (state = 7, action) => {
     else { return state; }
 }
 
+export const reducerAllOldKEYWORDDATAData = (state = 0, action) => {
+    if (action.type === 'ALLOLDKEYWORDDATA') { return state = action.payload }
+    else { return state; }
+}
+
+
 
 
 

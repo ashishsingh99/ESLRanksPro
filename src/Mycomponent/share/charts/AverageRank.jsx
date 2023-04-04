@@ -9,12 +9,14 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 
 const AverageChart = () => {
-    // const searchCompany = useSelector(state => state.chartranking);
-    const AllPreviousData = useSelector(state => state.AllPreviousData);
-
-    const searchCompany = useSelector(state => state.keyworddata);
     const webURL = localStorage.getItem("websiteurl");
     const companyRankk = useRef(null);
+
+    const AllPreviousData = useSelector(state => state.alloldkeyworddata);
+    console.log('AllPreviousData', AllPreviousData)
+
+    const searchCompany = useSelector(state => state.keyworddata);
+
 
 
     // getting all average rank data here ---

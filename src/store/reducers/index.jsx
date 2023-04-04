@@ -1,4 +1,5 @@
 import {
+  reducerAllOldKEYWORDDATAData,
   reducerFnEight,
   reducerFnEightteen,
   reducerFnEle,
@@ -48,6 +49,7 @@ const RootReducer = combineReducers({
   userkeywordlength: reducerFnTwentyONE, // user current used keywordlength
   userprojectlength: reducerFnTwentyTWO, // user current used project length
   showmenu: reducerShowMenu, // show side Menu bar
-  selectcustomdate:reducerSelectDate
+  selectcustomdate: reducerSelectDate,  //custom data selector
+  alloldkeyworddata: reducerAllOldKEYWORDDATAData, //getting user all day keyword data
 });
 export default RootReducer;

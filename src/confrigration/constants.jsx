@@ -4,7 +4,6 @@ import GetCustomer from "./getCustomer";
 import GetPreviousRanks from "./getPreviousRanks";
 import GetProfile from "./getProfile";
 import GetRanks from "./getRanks";
-import GetAllAverageRanks from "./getAllAverageRanks";
 
 const ManageData_Configure = () => {
     const loginOut = localStorage.getItem('loginOut')
@@ -19,7 +18,7 @@ const ManageData_Configure = () => {
             <GetRanks />
             <GetPreviousRanks />
             <Get_Country />
-            <GetAllAverageRanks />
+
         </>
 
     }
