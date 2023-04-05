@@ -53,6 +53,9 @@
     font-weight: bold;
     color: #455197;
     display: flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre;
 }
 
 .lg-sn-op ul li img {

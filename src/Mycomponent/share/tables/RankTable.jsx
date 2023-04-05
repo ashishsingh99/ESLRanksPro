@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import KeywordAllRanksChart from "../charts/constant";
 import RippleButton from "../components/rippleButton";
+import { curday } from "../upDater/constant";
 
 const RankTable = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const RankTable = () => {
     const keywordData = useSelector((state) => state.keyworddata);
     const UserAllKeywordResult = useSelector((state) => state.userallkeywordresult);
     const UserAllPendingResult = useSelector((state) => state.userallpendingresult);
-    const detailsCSV = useSelector((state) => state.userallkeywordresult)
+    const [detailsCSV, setDetailsCSV] = useState([])
     const oldKeywordData = useSelector((state) => state.oldkeyworddata);
     const [KeywordMovedup, setKeywordMovedUp] = useState([])
     const [Keyworddown, setKeywordMovedDown] = useState([])
@@ -29,13 +30,17 @@ const RankTable = () => {
     const [keywordAlloldDataAlert, setKeywordAlloldDataAlert] = useState(false);
     const [CurrentKeyword, setCurrentKeyword] = useState(null);
     const [progressBar, setProgressBar] = useState([]);
-    const tableShowHandler = () => {
-        setTableShowMore(tableShowMore + 5);
-    }
 
-    const tableHideHandler = () => {
-        setTableShowMore(3);
-    }
+    useEffect(() => {
+        UserAllKeywordResult && UserAllKeywordResult.map((res, key) => {
+
+
+            console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
+            setDetailsCSV((obj) => {
+                return [...obj, { Keyword: res.keyword, Rank: keywordData[key].rank_group, Previous_Rank: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
+            })
+        })
+    }, [oldKeywordData])
 
 
     useEffect(() => {
@@ -94,35 +99,6 @@ const RankTable = () => {
         // console.log(' setProgressBar', progressBar)
     }, [oldKeywordData, progressBar[0]]);
 
-    // useEffect(() => {
-    //     keywordData && keywordData.filter((res, key) => {
-
-    //         const resRankgroup = res.rank_group
-    //         const oldataRankgroup = oldKeywordData && oldKeywordData[key].rank_group
-    //         if (resRankgroup && oldataRankgroup === 'no rank') {
-    //             // alert('nannn')
-    //             setProgressBar(obj => {
-    //                 return [...obj, { result: 0, growth: true }]
-    //             })
-
-    //         }
-    //         else if (resRankgroup - oldataRankgroup <= 0) {
-    //             setProgressBar(obj => {
-    //                 return [...obj, { result: oldataRankgroup - resRankgroup, growth: true }]
-    //             })
-    //         }
-    //         else {
-    //             setProgressBar(obj => {
-    //                 return [...obj, { result: resRankgroup - oldataRankgroup, growth: false }]
-    //             })
-    //         }
-
-    //     })
-    //     console.log(' setProgressBar', progressBar)
-
-    // }, [progressBar[0], ])
-
-
     const ChangeDesktopType = () => {
         if (deviceType !== "desktop") {
             localStorage.setItem("devicetype", "desktop");
@@ -131,6 +107,7 @@ const RankTable = () => {
             return false;
         }
     };
+
     const ChangeMobileType = () => {
         if (deviceType !== "mobile") {
             localStorage.setItem("devicetype", "mobile");
@@ -139,6 +116,7 @@ const RankTable = () => {
             return false;
         }
     };
+
     const Chartalert = (keyword) => {
         setKeywordAlloldDataAlert(true)
         setCurrentKeyword(keyword)
@@ -149,6 +127,7 @@ const RankTable = () => {
         setCurrentKeyword(null)
         setKeywordAlloldDataAlert(false)
     }
+
     const AddKeywordHandler = () => {
         if (webURL === null) {
             navigate('/addpr')
@@ -160,6 +139,13 @@ const RankTable = () => {
 
     }
 
+    const tableShowHandler = () => {
+        setTableShowMore(tableShowMore + 5);
+    }
+
+    const tableHideHandler = () => {
+        setTableShowMore(3);
+    }
 
     return (
         <>
@@ -183,7 +169,7 @@ const RankTable = () => {
                         </button>
                     </div>
                     <div className="d-flex">
-                        <div className="me-3"> <CSVLink data={detailsCSV ? detailsCSV : 'null'} > <RippleButton > CSV <i className="fa fa-solid fa-download"></i> </RippleButton> </CSVLink> </div>
+                        <div className="me-3"> <CSVLink filename={curday() + ' ' + webURL + '.csv'} data={detailsCSV ? detailsCSV : 'null'} > <RippleButton > CSV <i className="fa fa-solid fa-download"></i> </RippleButton> </CSVLink> </div>
                         <RippleButton onClick={() => AddKeywordHandler()}>Add Keyword +</RippleButton>
                     </div>
 

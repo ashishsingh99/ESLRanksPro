@@ -1,5 +1,4 @@
 import React from 'react'
-import userImg from '../Assets/seoimg/userImg.jpg';
 import '../css/profile.css'
 import { Link } from 'react-router-dom';
 
@@ -36,7 +35,7 @@ const Profile = () => {
 
 
                                 <div className='c-line-name mb-4'><span> User Membership</span> </div>
-                                <div className='cmd'><h6>Membership  </h6> <a href='https://billing.stripe.com/p/login/test_7sIbMBgUe8nTbx63cc'><button className='cm-btn-b'>Customer Portal</button></a></div>
+                                <div className='cmd'><h6>Membership  </h6> <a href='https://billing.stripe.com/p/login/test_7sIbMBgUe8nTbx63cc'><button className='cm-btn-b'>Manage Membership</button></a></div>
                                 {/* <p>170 william street <br />
                                     New York, NY 10038-78-212-312
                                 </p> */}
