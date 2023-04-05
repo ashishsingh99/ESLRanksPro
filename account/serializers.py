@@ -54,7 +54,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ProjectGetSerializer(serializers.ModelSerializer):
   class Meta:
     model = Project
-    fields = '__all__'
+    fields = ['keyword']
 
 class otpSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(max_length=255)
