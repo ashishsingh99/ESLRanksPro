@@ -32,14 +32,15 @@ const RankTable = () => {
     const [progressBar, setProgressBar] = useState([]);
 
     useEffect(() => {
-        UserAllKeywordResult && UserAllKeywordResult.map((res, key) => {
-
-
-            console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
-            setDetailsCSV((obj) => {
-                return [...obj, { Keyword: res.keyword, Rank: keywordData[key].rank_group, Previous_Rank: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
+        if (oldKeywordData !== 0) {
+            UserAllKeywordResult && UserAllKeywordResult.map((res, key) => {
+                console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
+                setDetailsCSV((obj) => {
+                    return [...obj, { Keyword: res.keyword, Rank: keywordData[key].rank_group, Previous_Rank: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
+                })
             })
-        })
+        }
+
     }, [oldKeywordData])
 
 
@@ -179,11 +180,17 @@ const RankTable = () => {
                     <thead >
                         <tr >
                             <th scope="col" >
-                                Keyword
+                                <div >Keywords <div className="Tooltip">    <span class="Tooltiptext">Words that people type into Google</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
                             </th>
-                            <th scope="col">Ranks</th>
-                            <th scope="col">Previous Rank</th>
-                            <th scope="col">URL</th>
+                            <th scope="col">
+                                <div >Positions <div className="Tooltip">    <span class="Tooltiptext">The Position this URL is ranked in Google search</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                            </th>
+                            <th scope="col">
+                                <div >Previous <div className="Tooltip">    <span class="Tooltiptext">The Position this URL is ranked in Google search</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                            </th>
+                            <th scope="col">
+                                <div >URL <div className="Tooltip">    <span class="Tooltiptext">The particular URL that ranks for the given keyword</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                            </th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
@@ -191,7 +198,8 @@ const RankTable = () => {
                         <tbody>
 
                             {
-                                UserAllKeywordResult === false ? <Noproject /> : UserAllKeywordResult.length === 0 ? false : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.slice(0, tableShowMore).map((res, key) => {
+                                // .slice(0, tableShowMore)  add slice when ever you need to pagination
+                                UserAllKeywordResult === false ? <Noproject /> : UserAllKeywordResult.length === 0 ? false : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.map((res, key) => {
                                     return (
                                         <tr key={key}>
                                             <td> {UserAllKeywordResult[key].keyword}</td>
@@ -247,8 +255,12 @@ const RankTable = () => {
                         </tbody>
                     }
                 </table>
-                <p className='v_All'> <a onClick={() => tableShowHandler()}> View all Keywords</a> <b>/</b> <a onClick={() => tableHideHandler()}>hide</a></p>
-                <hr />
+
+
+                {/* this is pagination bar for upper table with already add with slice fun or showmore useState  */}
+
+                {/* <p className='v_All '> <a onClick={() => tableShowHandler()}> View all Keywords</a> <b>/</b> <a onClick={() => tableHideHandler()}>hide</a></p> */}
+                {/* <hr /> */}
 
             </div>
 

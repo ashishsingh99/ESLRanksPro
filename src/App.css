@@ -138,7 +138,8 @@ select:focus {
     align-items: center;
     z-index: 999999;
 }
-.pop-select select{
+
+.pop-select select {
     width: 100%;
     border: 1.5px solid #dcdcdc;
     border-radius: 4px;
@@ -146,7 +147,7 @@ select:focus {
     /* margin-bottom: 1rem; */
 }
 
-.pop-select select:focus{
+.pop-select select:focus {
     border: 1.5px solid #455197;
 
 }
@@ -187,40 +188,6 @@ select:focus {
     }
 }
 
-
-
-
-
-/* tooltip custom css  */
-[data-title] {
-    position: relative;
-
-}
-
-[data-title]:hover:after {
-    opacity: 1;
-    transition: all 0.1s ease 0.5s;
-    visibility: visible;
-    z-index: 999999;
-}
-
-[data-title]:after {
-
-    content: attr(data-title);
-    opacity: 0;
-    z-index: 99999;
-    visibility: hidden;
-    position: absolute;
-    bottom: -1.6em;
-    /* left: 100%; */
-    padding: 4px 4px 4px 8px;
-    border-right: 2px solid #455197;
-    border-bottom: 2px solid #455197;
-    font-size: 12px;
-    color: #666;
-    white-space: nowrap;
-}
-
 .tb-link-lmt {
     white-space: nowrap;
     max-width: 200px;
@@ -228,9 +195,54 @@ select:focus {
     text-overflow: ellipsis;
 }
 
-.table th,td {
+.table th,
+td {
     white-space: nowrap;
- }
+}
+
+
+.Tooltip {
+    position: relative;
+    display: inline-block;
+    /* border-bottom: 1px dotted black; */
+}
+
+.Tooltip .Tooltiptext {
+
+    visibility: hidden;
+    min-width: 200px;
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
+    white-space: pre-wrap;
+    height: auto;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 50%;
+    margin-left: -95px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.Tooltip .Tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.Tooltip:hover .Tooltiptext {
+    visibility: visible;
+}
 
 
 /* media query for mobile max width  */
@@ -240,14 +252,17 @@ select:focus {
         /* border-radius: 4px; */
         padding: 0rem;
     }
-    .table{
+
+    .table {
         overflow-x: auto;
         display: block;
     }
-    .cm-btn{
+
+    .cm-btn {
         font-size: 12px;
     }
-    .cm-btn-b{
+
+    .cm-btn-b {
         font-size: 12px;
     }
 }
@@ -260,20 +275,25 @@ select:focus {
         padding: 0rem;
         margin-top: 1rem;
     }
-    .table{
+
+    .table {
         overflow-x: auto;
         display: block;
     }
-    .cm-btn{
+
+    .cm-btn {
         font-size: 12px;
     }
-    .cm-btn-b{
+
+    .cm-btn-b {
         font-size: 12px;
     }
-    .popBody{
+
+    .popBody {
         min-width: 95vw;
     }
-    .pop{
+
+    .pop {
         align-items: center;
         height: 90vh;
     }
