@@ -128,7 +128,6 @@ class projectGetView(APIView):
     for data in serializer.data:
       GetData = dict(data)
       Check = ast.literal_eval(GetData.get('keyword'))
-      datas.append(GetData.get('id'))
       datas.append(Check)
     return Response({"status": "success", "data": datas}, status=status.HTTP_200_OK)
 
