@@ -132,8 +132,8 @@ class projectGetView(APIView):
     return Response({"status": "success", "data": datas}, status=status.HTTP_200_OK)
 
 class projectDeleteView(APIView):
-  def delete(self, request, id):
-    keyword = Project.objects.get(id=id)
+  def delete(self, request, keyword):
+    keyword = Project.objects.get(keyword=keyword)
     keyword.delete()
     return Response("deleted successfully")
 
