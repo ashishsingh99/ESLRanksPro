@@ -21,13 +21,15 @@ const GetRanks = () => {
   const CHARTRANKING = useRef([]);
   const KEYWORDDATA = useRef([]);
   const filPeNameUrl = useRef([])
+  const desktopKeywordLength = useRef([])
+  const mobileKeywordLength = useRef([])
   const projectKeywordLength = useRef([])
   const userEmailBasedTotalPushedData = useRef([])
 
 
   if (deviceType === null) {
     localStorage.setItem("devicetype", "desktop");
-        // window.location.reload(false)
+    // window.location.reload(false)
   }
 
 
@@ -60,9 +62,27 @@ const GetRanks = () => {
 
       axios.get(PROJECT_GET()).then((res) => {
         const projectDatalist = res.data.data;
+        // console.log('projectDatalist',projectDatalist)
+        dispatch({ type: "ALLPROJECTDETAILS", payload: projectDatalist });
+
+
 
         // flat() is use for romove array to an array
         const projectData = projectDatalist.flat();
+        const UserallProjectDetailsbyMail = projectData && projectData.filter((selectedEmail) => {
+          if (selectedEmail.email === email) {
+            return selectedEmail.email === email;
+          }
+        });
+
+        const UserAllProjectDetailsByProjectName = UserallProjectDetailsbyMail && UserallProjectDetailsbyMail.filter((selByurl) => {
+          if (selByurl.weburl === webURL) {
+            return selByurl;
+          }
+        })
+
+        // console.log('UserAllProjectDetailsByProjectName', UserAllProjectDetailsByProjectName)
+
         // console.log('projectData', projectData)
         const ProjectDetail = projectData.filter(devtype => {
           if (devtype.deviceType === deviceType) {
@@ -71,19 +91,24 @@ const GetRanks = () => {
 
         });
 
+
         // console.log('ProjectDetail', ProjectDetail)
 
         ALLPROJECTDETAILS.current = ProjectDetail;
-        dispatch({ type: "ALLPROJECTDETAILS", payload: ALLPROJECTDETAILS.current});
+        // dispatch({ type: "ALLPROJECTDETAILS", payload: ALLPROJECTDETAILS.current });
 
+
+        // this is user all project details by devicetype
         const filteredEmailList = ProjectDetail && ProjectDetail.filter((selectedEmail) => {
           if (selectedEmail.email === email) {
             return selectedEmail.email === email;
           }
         });
-        // console.log('filteredEmailList', filteredEmailList)
 
         dispatch({ type: "USERALLPROJECTDETAILS", payload: filteredEmailList });
+
+        // console.log('filteredEmailList', filteredEmailList)
+
 
         filteredEmailList && filteredEmailList.map(prnameurl => {
           filPeNameUrl.current.push(prnameurl.weburl)
@@ -125,8 +150,6 @@ const GetRanks = () => {
 
           const filtersameUrlName = Array.from(new Set(userEmailBasedTotalPushedData.current))
           // console.log('filtersameUrlName', filtersameUrlName.length)
-
-
           dispatch({ type: "USERPROJECTLENGTH", payload: filtersameUrlName.length });
 
           const userDataFilterByProjectUrl = userEmailBasedTotalData.filter((selectedUrl) => {
@@ -135,23 +158,59 @@ const GetRanks = () => {
             }
           });
 
-          userDataFilterByProjectUrl && userDataFilterByProjectUrl.map((detail) => {
-            return detail.keyword && detail.keyword.map((onlyKeyword) => {
-              // console.log('userDataFilterByProjectUrlonlyKeyword', onlyKeyword)
-              // setProjectKeywordLength((resw) => [...resw, onlyKeyword])
-              projectKeywordLength.current.push(onlyKeyword)
 
-              dispatch({ type: "USERKEYWORDLENGTH", payload: projectKeywordLength.current.length });
-            })
+          // getting userProject Keyword length with same same keyword filtration for desktop
+          userDataFilterByProjectUrl.filter((type) => {
+            if (type.deviceType === 'desktop') {
+              // return type;
+              desktopKeywordLength.current.push(type.keyword)
+              desktopKeywordLength.current = desktopKeywordLength.current.flat()
+              desktopKeywordLength.current = desktopKeywordLength.current.filter(function (item, pos) {
+                return desktopKeywordLength.current.indexOf(item) == pos;
+              })
+              // console.log('userDataFilterByProjectUrl', desktopKeywordLength.current)
+
+            }
+          })
+          // getting userProject Keyword length with same same keyword filtration for mobile
+
+          userDataFilterByProjectUrl.filter((type) => {
+            if (type.deviceType === 'mobile') {
+              // return type;
+              mobileKeywordLength.current.push(type.keyword)
+              mobileKeywordLength.current = mobileKeywordLength.current.flat()
+              mobileKeywordLength.current = mobileKeywordLength.current.filter(function (item, pos) {
+                return mobileKeywordLength.current.indexOf(item) == pos;
+              })
+              // console.log('userDataFilterByProjectUrl', mobileKeywordLength.current)
+
+            }
           })
 
+          projectKeywordLength.current.push(desktopKeywordLength.current)
+          projectKeywordLength.current.push(mobileKeywordLength.current)
+          projectKeywordLength.current = projectKeywordLength.current.flat()
+          // console.log('projectKeywordLength', projectKeywordLength.current)
+
+          dispatch({ type: "USERKEYWORDLENGTH", payload: projectKeywordLength.current.length });
 
 
+
+
+
+          // userDataFilterByProjectUrl && userDataFilterByProjectUrl.map((detail) => {
+          //   return detail.keyword && detail.keyword.map((onlyKeyword) => {
+          //     // console.log('userDataFilterByProjectUrlonlyKeyword', onlyKeyword)
+          //     // setProjectKeywordLength((resw) => [...resw, onlyKeyword])
+          //     projectKeywordLength.current.push(onlyKeyword)
+
+          //   })
+          // })
+
+          // console.log('projectKeywordLength', projectKeywordLength.current)
 
           // we make new filterration for keyword limitation per plan  end
           ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 
           const filteredUrlBasedData = filteredEmailList.filter((selectedUrl) => {
@@ -186,13 +245,21 @@ const GetRanks = () => {
             );
           });
 
-          dispatch({ type: "USERALLKEYWORDRESULT", payload: USERALLKEYWORDRESULT.current });
+
+          // it filter remove same name keywords because it print the data duplicate keyword on the table
+          USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
+            return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
+          })
+
+          // console.log('USERALLKEYWORDRESULT', USERALLKEYWORDRESULT.current)
 
           const RemoveSimilarResult = Array.from(new Set(USERALLPENDINGRESULT.current));
           // console.log('RemoveSimilarResult', RemoveSimilarResult)
           const RemoveResultKeyword = RemoveSimilarResult.filter((id1) => !USERALLKEYWORDRESULT.current.some((o2) => o2.keyword === id1));
           // console.log('RemoveResultKeyword', RemoveResultKeyword)
           dispatch({ type: "USERALLPENDINGRESULT", payload: RemoveResultKeyword });
+
+          dispatch({ type: "USERALLKEYWORDRESULT", payload: USERALLKEYWORDRESULT.current });
 
           USERALLKEYWORDRESULT.current.map((rankdata) => {
             // PUSHING THE ANOTHER ITEM THAT HELP TO RENDER UNRANKED VALUE SHOW IN RESPONSE ITEMS
@@ -235,8 +302,6 @@ const GetRanks = () => {
                 return obj.domain === "not";
               }
             });
-
-
 
             // SETTING IN A STATE (ALL-FIRST) filteredUrlData VALUE FOR GETHRING TOGETHER IN ARRAY
             KEYWORDDATA.current.push(filteredUrlData[0]);

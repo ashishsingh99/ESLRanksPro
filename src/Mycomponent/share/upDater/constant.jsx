@@ -1,4 +1,27 @@
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { delete_Project } from "../../../services/constants";
+
+export const Do_Project_Delete = function (allprojectDetails) {
+    // const allprojectDetails = useSelector(state => state.allprojectdetails);
+
+    // localStorage data
+    const webURL = localStorage.getItem("websiteurl");
+    const email = localStorage.getItem("email");
+
+    return allprojectDetails && allprojectDetails.map((res) => {
+        res && res.filter((resfilter) => {
+            if (resfilter.email === email && resfilter.weburl === webURL) {
+                // console.log('res', res)
+                const obj = res;
+                const myJson = JSON.stringify(obj)
+                console.log('myJson', myJson)
+                axios.delete('https://eslrankspro.com/api/user/deleteproject/' + myJson + '/')
+
+            }
+
+        })
+    })
+}
 
 export const curday = function (sp) {
     const today = new Date();
@@ -28,3 +51,5 @@ export const Logout = () => {
     window.location.href = '/'
     // window.location.reload(false);
 };
+
+

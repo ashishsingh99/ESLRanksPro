@@ -10,38 +10,42 @@ import { KEYWORD_POST, PROJECT_POST } from "../../../services/constants";
 import Keygatter from "./keygatter";
 
 export const AddKeyword = () => {
+    const userprojectalldetails = useSelector(state => state.userallprojectdetails)
     const userKeywordlimit = useSelector(state => state.userkeywordlimit)
+    const UserKeywordLength = useSelector(state => state.userkeywordlength)
+    const NewProjectUrl = useSelector(state => state.newprojecturl);
 
-    // getting  local storage data
+    // local storage
     const email = localStorage.getItem('email')
     const locationcode = localStorage.getItem('locationcode')
 
-    // useState data
+    // useState data hooks
     const [keyword, setKeyword] = useState('')
     const [item, setItem] = useState([]);
-    const sameKeyword = useRef(false);
-
     const [itemAlert, setItemAlert] = useState(false);
     const [deviceAlert, setDeviceAlert] = useState(false);
     const [minLenth, setMinLengthAlert] = useState(false);
     const [sameKeyAlert, setSameKeyALert] = useState(false)
 
+
+    // useRef data hooks
     const desktop = useRef(null);
     const mobile = useRef(null);
     const deviceType = useRef([]);
     const messagesEndRef = useRef(null);
-    const UserKeywordLength = useSelector(state=>state.userkeywordlength)
+    const sameKeyword = useRef(false);
 
-    const NewProjectUrl = useSelector(state=>state.newprojecturl);
+
 
     // state manage
     // navigator
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        if(NewProjectUrl === false){
+    useEffect(() => {
+        if (NewProjectUrl === false) {
             navigate('/')
         }
+
     })
 
     // useeffect to auto run the function
@@ -69,6 +73,44 @@ export const AddKeyword = () => {
     const Listofitems = (e) => {
 
         e.preventDefault();
+
+        // this filtration for user already keyword exist from the project.in this
+        // function , A bug, this function cant stop that keyword that comes after devicemode check box change
+        // for that i comment this function for now
+
+        // userprojectalldetails && userprojectalldetails.filter((prdetails) => {
+        //     console.log(deviceType.current)
+        //     console.log('prdetails', prdetails)
+
+        //     if (deviceType.current.length === 1 && deviceType.current[0] === prdetails.deviceType) {
+        //         return prdetails.keyword.filter((filKey) => {
+
+        //             if (filKey === keyword) {
+        //                 console.log('checking same keyword desktop', filKey, keyword)
+        //                 return sameKeyword.current = filKey
+
+        //             }
+
+        //         })
+        //     }
+
+        //     else if (deviceType.current.length === 2) {
+        //         prdetails.keyword.filter((filKey) => {
+
+        //             if (filKey === keyword) {
+        //                 console.log('checking same keyword both', filKey, keyword)
+        //                 return sameKeyword.current = filKey
+
+        //             }
+
+        //         })
+        //     }
+        //     else {
+        //         return sameKeyword.current = false
+        //     }
+
+        // })
+
         item.filter(filtered => {
             if (filtered === keyword) {
                 // console.log('sameKeywords', filtered)
@@ -78,27 +120,30 @@ export const AddKeyword = () => {
 
 
         if (keyword.trim().length === 0) {
-            e.preventDefault();
-        }
-        else if (keyword === sameKeyword.current) {
-            setSameKeyALert(true);
-            localStorage.removeItem('filtered')
-        }
+                e.preventDefault();
+            }
+            else if (deviceType.current.length === 0) {
+                setDeviceAlert(true);
+            }
+            else if (keyword === sameKeyword.current) {
+                setSameKeyALert(true);
+                localStorage.removeItem('filtered')
+            }
 
-        else if (item.length * deviceType.current.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
-            setItemAlert(true)
-        }
+            else if (item.length * deviceType.current.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
+                setItemAlert(true)
+            }
 
-        else {
-            setItem((olditems) => {
-                return [...olditems, keyword]
-            })
-            setKeyword('');
-            setItemAlert(false)
-            setMinLengthAlert(false)
-            setSameKeyALert(false);
+            else {
+                setItem((olditems) => {
+                    return [...olditems, keyword]
+                })
+                setKeyword('');
+                setItemAlert(false)
+                setMinLengthAlert(false)
+                setSameKeyALert(false);
 
-        };
+            };
 
 
 
@@ -197,12 +242,12 @@ export const AddKeyword = () => {
                 <div className="cmc">
                     <div className="dev-type">
                         <div>
-                            <label for='typedesktop'>
+                            <label htmlFor='typedesktop'>
                                 <div className="dev-btn" >
                                     <input id="typedesktop" name="typedesktop" value={desktop} type='checkbox' onChange={Typedesktop} />   <span>Desktop</span>
                                 </div>
                             </label>
-                            <label for='typemobile'>
+                            <label htmlFor='typemobile'>
                                 <div className="dev-btn">
                                     <input id="typemobile" name="typemobile" value={mobile} type='checkbox' onChange={Typemobile} /> <span> Mobile</span>
                                 </div>

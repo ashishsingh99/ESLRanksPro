@@ -39,7 +39,7 @@ const RankTracking = () => {
           </div>
 
           <div className='rank-se'>
-            <span className='me-3'>  India  </span> <i className='fa-solid fa-earth'> </i>
+            <span className='me-3'>  India  </span> <i className='fa-solid fa-earth fa-spin'> </i>
             <button className='cm-btn ms-3'>Search</button>
           </div>
         </div>

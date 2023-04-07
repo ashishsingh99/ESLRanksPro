@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../css/index.css';
 import '../css/loader.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import RankTable from '../share/tables/RankTable';
 import AutoSearch from '../share/searchBox/autoSearch';
 import ProjectList from '../share/searchBox/ProjectList';
 import RippleButton from '../share/components/rippleButton';
-import { curday, perday } from '../share/upDater/constant';
-import LastUpdate from '../share/components/lastUpdate';
+import { Do_Project_Delete, curday, perday } from '../share/upDater/constant';
 import DoughnutChartone from '../share/charts/doughnutChart';
 export const Home = () => {
-  const RankMovedup = useSelector(state => state.rankmovedup)
-  const RankMovedDown = useSelector(state => state.rankmoveddown)
-  const loginOut = useSelector(state => state.loginOut)
+  const allprojectDetails = useSelector(state => state.allprojectdetails);
+  const RankMovedup = useSelector(state => state.rankmovedup);
+  const RankMovedDown = useSelector(state => state.rankmoveddown);
+  const loginOut = useSelector(state => state.loginOut);
   useEffect(() => {
     if (loginOut !== 'true') {
 
@@ -27,7 +27,8 @@ export const Home = () => {
         <div className='cmd-b'>
           <div>
             <ProjectList />
-            <Link to='/addpr'>  <RippleButton >    +  Add Project  </RippleButton></Link>
+            <RippleButton onClick={() => Do_Project_Delete(allprojectDetails)} >    <i className="fa-solid fa-trash  "></i> </RippleButton>
+            <Link to='/addpr'>  <RippleButton >    <i className="fa-solid fa-plus "></i>  Add Project  </RippleButton></Link>
           </div>
           <AutoSearch />
         </div>
@@ -47,14 +48,14 @@ export const Home = () => {
                         {/* {companyRank[0] ? companyRank[0] : 0} */}
                         {RankMovedup}
                       </h2>
-                      <span>   Keywords Moved up </span>
+                      <span>   Keywords <br /> Moved up </span>
                     </div>
                     <div className='hm-ng-18'>
                       <h2>
                         {/* {companyRank && companyRank[rankLength - 1] ? companyRank[rankLength - 1] : 0} */}
                         {RankMovedDown}
                       </h2>
-                      <span>   Keywords moved down </span>
+                      <span>   Keywords <br /> moved down </span>
                     </div>
                   </div>
                   <p>
@@ -134,7 +135,7 @@ export const Home = () => {
                 */
               }
 
-             <div className='d-none'> <RankTable /> </div>
+              <div className='d-none'> <RankTable /> </div>
 
 
               <div className='w-100 mt-5'>

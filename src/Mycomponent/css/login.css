@@ -318,9 +318,7 @@
         width: 100%;
         height: auto;
     }
-    [data-title]:after {
-        position:inherit;
-    }
+
 }
 
 /* media query for mobile max width  */
@@ -355,7 +353,5 @@
         width: 100%;
         height: auto;
     }
-    [data-title]:after {
-        position:inherit;
-    }
+
 }

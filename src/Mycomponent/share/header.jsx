@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { profile_withApi } from "../../services/constants";
@@ -92,17 +91,17 @@ const Header = () => {
             </li>
             <li>
               <NavLink to="rank">
-                <i className="fa-solid fa-circle-nodes"></i> Rank Tracking
+                <i className="fa-solid fa-circle-nodes fa-spin"></i> Rank Tracking
               </NavLink>
             </li>
             <li>
               <NavLink to="siteaudit">
-                <i className="fa-solid fa-file"></i> Site Audit
+              <i className="fa-solid fa-sitemap"></i> Site Audit
               </NavLink>
             </li>
             <li>
               <NavLink to="keywords">
-                <i className="fa-solid fa-bolt-auto"></i> Keywords
+                <i className="fa-solid fa-bolt"></i> Keywords
               </NavLink>
             </li>
             <li>
@@ -112,7 +111,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink to="backlinks">
-                <i className="fa-solid fa-link"></i> Backlinks
+              <i className="fa-solid fa-link "></i> Backlinks
               </NavLink>
             </li>
           </ul>

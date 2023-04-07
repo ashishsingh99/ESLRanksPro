@@ -206,6 +206,9 @@ td {
     display: inline-block;
     /* border-bottom: 1px dotted black; */
 }
+.Tooltip svg{
+    color:#0000005e;
+}
 
 .Tooltip .Tooltiptext {
 

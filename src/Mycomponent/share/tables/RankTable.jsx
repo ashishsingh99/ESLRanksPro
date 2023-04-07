@@ -2,41 +2,46 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import KeywordAllRanksChart from "../charts/constant";
 import RippleButton from "../components/rippleButton";
 import { curday } from "../upDater/constant";
 
+
+// keyword ranking show handler component
 const RankTable = () => {
+
+    // functional variables
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    // Redux Data
-
-    const keywordData = useSelector((state) => state.keyworddata);
-    const UserAllKeywordResult = useSelector((state) => state.userallkeywordresult);
-    const UserAllPendingResult = useSelector((state) => state.userallpendingresult);
-    const [detailsCSV, setDetailsCSV] = useState([])
-    const oldKeywordData = useSelector((state) => state.oldkeyworddata);
-    const [KeywordMovedup, setKeywordMovedUp] = useState([])
-    const [Keyworddown, setKeywordMovedDown] = useState([])
-    const [tableShowMore, setTableShowMore] = useState(3)
-    // const [oldKeywordData, setOldKeywordData] = useState(0);
 
     // localstorage Data
     const isProject = localStorage.getItem("IsProject");
     const webURL = localStorage.getItem("websiteurl");
     const deviceType = localStorage.getItem("devicetype");
+
+    // Redux Data
+    const keywordData = useSelector((state) => state.keyworddata);
+    const UserAllKeywordResult = useSelector((state) => state.userallkeywordresult);
+    const UserAllPendingResult = useSelector((state) => state.userallpendingresult);
+    const oldKeywordData = useSelector((state) => state.oldkeyworddata);
+
+    // useStates
+    const [detailsCSV, setDetailsCSV] = useState([])
+    const [KeywordMovedup, setKeywordMovedUp] = useState([])
+    const [Keyworddown, setKeywordMovedDown] = useState([])
+    const [tableShowMore, setTableShowMore] = useState(3)
     const [keywordAlloldDataAlert, setKeywordAlloldDataAlert] = useState(false);
     const [CurrentKeyword, setCurrentKeyword] = useState(null);
     const [progressBar, setProgressBar] = useState([]);
 
+    // useEffect data rendring
     useEffect(() => {
         if (oldKeywordData !== 0) {
             UserAllKeywordResult && UserAllKeywordResult.map((res, key) => {
-                console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
+                // console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
                 setDetailsCSV((obj) => {
-                    return [...obj, { Keyword: res.keyword, Rank: keywordData[key].rank_group, Previous_Rank: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
+                    return [...obj, { Keyword: res.keyword, Positions: keywordData[key].rank_group, Previous: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
                 })
             })
         }
@@ -100,6 +105,32 @@ const RankTable = () => {
         // console.log(' setProgressBar', progressBar)
     }, [oldKeywordData, progressBar[0]]);
 
+
+    // alerts function
+    const Chartalert = (keyword) => {
+        setKeywordAlloldDataAlert(true)
+        setCurrentKeyword(keyword)
+        // alert(keyword)
+    }
+
+    const CloseChartAlert = () => {
+        setCurrentKeyword(null)
+        setKeywordAlloldDataAlert(false)
+    }
+
+    // OnClick functions
+    const AddKeywordHandler = () => {
+        if (webURL === null) {
+            navigate('/addpr')
+        }
+        else {
+            dispatch({ type: "NEWPROJECTURL", payload: webURL });
+            navigate('/addpr/addcountry')
+        }
+
+    }
+
+    // onClick function for device type change handler
     const ChangeDesktopType = () => {
         if (deviceType !== "desktop") {
             localStorage.setItem("devicetype", "desktop");
@@ -118,28 +149,7 @@ const RankTable = () => {
         }
     };
 
-    const Chartalert = (keyword) => {
-        setKeywordAlloldDataAlert(true)
-        setCurrentKeyword(keyword)
-        // alert(keyword)
-    }
-
-    const CloseChartAlert = () => {
-        setCurrentKeyword(null)
-        setKeywordAlloldDataAlert(false)
-    }
-
-    const AddKeywordHandler = () => {
-        if (webURL === null) {
-            navigate('/addpr')
-        }
-        else {
-            dispatch({ type: "NEWPROJECTURL", payload: webURL });
-            navigate('/addpr/addcountry')
-        }
-
-    }
-
+    // onClick function for table pagination
     const tableShowHandler = () => {
         setTableShowMore(tableShowMore + 5);
     }
@@ -150,6 +160,7 @@ const RankTable = () => {
 
     return (
         <>
+            {/* keyword ranking table  */}
             <div className="hm-b-ta">
                 <div className="cmd mb-3">
                     <div>
@@ -170,8 +181,8 @@ const RankTable = () => {
                         </button>
                     </div>
                     <div className="d-flex">
-                        <div className="me-3"> <CSVLink filename={curday() + ' ' + webURL + '.csv'} data={detailsCSV ? detailsCSV : 'null'} > <RippleButton > CSV <i className="fa fa-solid fa-download"></i> </RippleButton> </CSVLink> </div>
-                        <RippleButton onClick={() => AddKeywordHandler()}>Add Keyword +</RippleButton>
+                        <div className="me-3"> <CSVLink filename={curday() + ' ' + webURL + '.csv'} data={detailsCSV ? detailsCSV : 'null'} > <RippleButton > CSV <i className="fa fa-solid fa-download fa-bounce"></i> </RippleButton> </CSVLink> </div>
+                        <RippleButton onClick={() => AddKeywordHandler()}>Add Keyword  <i className="fa-solid fa-plus "></i> </RippleButton>
                     </div>
 
 
@@ -180,16 +191,16 @@ const RankTable = () => {
                     <thead >
                         <tr >
                             <th scope="col" >
-                                <div >Keywords <div className="Tooltip">    <span class="Tooltiptext">Words that people type into Google</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                                <div >Keywords <div className="Tooltip">    <span className="Tooltiptext">Words that people type into Google</span><i className="fa-solid fa-circle-question fa-beat-fade ms-2"></i> </div> </div>
                             </th>
                             <th scope="col">
-                                <div >Positions <div className="Tooltip">    <span class="Tooltiptext">The Position this URL is ranked in Google search</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                                <div >Positions <div className="Tooltip">    <span className="Tooltiptext">The Position this URL is ranked in Google search</span><i className="fa-solid fa-circle-question fa-beat-fade ms-2"></i> </div> </div>
                             </th>
                             <th scope="col">
-                                <div >Previous <div className="Tooltip">    <span class="Tooltiptext">The Position this URL is ranked in Google search</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                                <div >Previous <div className="Tooltip">    <span className="Tooltiptext">The Position this URL is ranked in Google search</span><i className="fa-solid fa-circle-question fa-beat-fade ms-2"></i> </div> </div>
                             </th>
                             <th scope="col">
-                                <div >URL <div className="Tooltip">    <span class="Tooltiptext">The particular URL that ranks for the given keyword</span><i class="fa-solid fa-circle-question ms-2"></i> </div> </div>
+                                <div >URL <div className="Tooltip">    <span className="Tooltiptext">The particular URL that ranks for the given keyword</span><i className="fa-solid fa-circle-question fa-beat-fade ms-2"></i> </div> </div>
                             </th>
                             <th scope="col"> </th>
                         </tr>
@@ -208,7 +219,7 @@ const RankTable = () => {
                                                     <div style={{ minWidth: "60px" }}>   {res.rank_group} </div>
 
                                                     <div className="growArrow ">
-                                                        {progressBar.length !== 0 ? progressBar[key].growth !== true ? <i className="fa-solid fa-sort-down text-danger "></i> : <i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i> : <div><i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i></div>}
+                                                        {progressBar.length !== 0 ? progressBar[key].growth !== true ? <i className="fa-solid fa-sort-down  text-danger "></i> : <i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i> : <div><i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i></div>}
                                                         {progressBar.length !== 0 ? progressBar[key].result : '0'}
                                                     </div>
 
@@ -264,7 +275,7 @@ const RankTable = () => {
 
             </div>
 
-
+            {/* pop chart for keyword old ranking show  */}
             <div className="KeywordRanksChart" style={keywordAlloldDataAlert ? { display: "flex" } : { display: "none" }}>
                 <div className='keywordCanvas '>
                     <div className="w-100 text-end">
@@ -279,6 +290,8 @@ const RankTable = () => {
 
 export default RankTable;
 
+
+// no project handler component
 export const Noproject = () => {
     return (
         <tr>
@@ -290,6 +303,8 @@ export const Noproject = () => {
     );
 };
 
+
+// please wait handler component
 export const PleaseWait = () => {
     return (
         <tr>

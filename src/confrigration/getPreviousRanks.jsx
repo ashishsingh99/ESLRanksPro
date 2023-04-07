@@ -122,7 +122,9 @@ const GetPreviousRanks = () => {
                         );
                     });
 
-
+                       USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
+                                return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
+                              })
 
                     USERALLKEYWORDRESULT.current.map((rankdata) => {
                         // PUSHING THE ANOTHER ITEM THAT HELP TO RENDER UNRANKED VALUE SHOW IN RESPONSE ITEMS
@@ -176,7 +178,7 @@ const GetPreviousRanks = () => {
                     if (KEYWORDDATA.current !== []) {
                         // dispatch({ type: "OLDKEYWORDDATA", payload: KEYWORDDATA.current });
                         // console.log(' KEYWORDDATA.current', KEYWORDDATA.current)
-                        AllOLDKEYWORDDATA.current.push({data:KEYWORDDATA.current, date:rest.date,month:rest.month,year:rest.year})
+                        AllOLDKEYWORDDATA.current.push({ data: KEYWORDDATA.current, date: rest.date, month: rest.month, year: rest.year })
                     }
                 });
 
