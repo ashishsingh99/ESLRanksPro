@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from account.models import User, Keyword, OTP, Project, Plan
+from account.models import User, Keyword, OTP, Plan, DeleteProject
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -45,16 +45,16 @@ class KeywordGetSerializer(serializers.ModelSerializer):
     model = Keyword
     fields ='__all__'
 
-class ProjectSerializer(serializers.ModelSerializer):
+class DeleteProjectSerializer(serializers.ModelSerializer):
   keyword = serializers.JSONField()
   class Meta:
-    model = Project
+    model = DeleteProject
     fields = ['keyword']
 
-class ProjectGetSerializer(serializers.ModelSerializer):
+class DeleteProjectGetSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Project
-    fields = ['keyword']
+    model = DeleteProject
+    fields = '__all__'
 
 class otpSerializer(serializers.ModelSerializer):
   email = serializers.EmailField(max_length=255)

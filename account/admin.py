@@ -1,5 +1,5 @@
 from django.contrib import admin
-from account.models import User, Keyword, OTP, Project, Plan
+from account.models import User, Keyword, OTP, Plan, DeleteProject
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class UserModelAdmin(BaseUserAdmin):
@@ -25,6 +25,6 @@ class UserModelAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserModelAdmin)
 admin.site.register(OTP)
-admin.site.register(Project)
 admin.site.register(Keyword)
 admin.site.register(Plan)
+admin.site.register(DeleteProject)

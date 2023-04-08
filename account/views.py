@@ -1,13 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import SendPasswordResetEmailSerializer,PlanGetSerializer,PlanSerializer,ProjectSerializer,ProjectGetSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
+from account.serializers import SendPasswordResetEmailSerializer,DeleteProjectGetSerializer,DeleteProjectSerializer,PlanGetSerializer,PlanSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.middleware.csrf import get_token
-from .models import Keyword, User, Project, Plan
+from .models import Keyword, User, Plan, DeleteProject
 import ast
 from .client import RestClient
 from pymongo import MongoClient
@@ -113,7 +113,7 @@ class keywordView(APIView):
 
 class projectView(APIView):
   def post(self,request):
-    serializer = ProjectSerializer(data=request.data)
+    serializer = DeleteProjectSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
       return Response({'msg':'save Successful', 'data':serializer.data}, status=status.HTTP_201_CREATED)
@@ -123,27 +123,20 @@ class projectView(APIView):
 class projectGetView(APIView):
   def get(self, request):
     datas = []
-    keyword = Project.objects.all()
-    serializer = ProjectGetSerializer(keyword, many=True)
+    keyword = DeleteProject.objects.all()
+    serializer = DeleteProjectGetSerializer(keyword, many=True)
     for data in serializer.data:
       GetData = dict(data)
       Check = ast.literal_eval(GetData.get('keyword'))
+      datas.append(GetData.get('id'))
       datas.append(Check)
     return Response({"status": "success", "data": datas}, status=status.HTTP_200_OK)
 
 class projectDeleteView(APIView):
-  def delete(self, request, keyword):
-    keyword = Project.objects.get(keyword=keyword)
+  def delete(self, request, id):
+    keyword = DeleteProject.objects.get(id=id)
     keyword.delete()
     return Response("deleted successfully")
-
-# class KeywordDeleteView(APIView):
-#   def delete(self, request, id):
-#     if id:
-#       del_keyword = Keyword.objects.get(id=id)
-#       serializer = KeywordGetSerializer(del_keyword)
-
-#     return Response()
 
 class KeywordGetView(APIView):
   def get(self, request, id=None, format=None):

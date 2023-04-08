@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from . import views
-from account.views import SendPasswordResetEmailView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
+from account.views import SendPasswordResetEmailView,projectView,projectGetView,projectDeleteView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
 urlpatterns = [
     
     path('register/', UserRegistrationView.as_view(), name='register'),
@@ -11,8 +11,9 @@ urlpatterns = [
     path('send-reset-password-email/', SendPasswordResetEmailView.as_view(), name='send-reset-password-email'),
     path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(), name='reset-password'),
     path('otp/',OTPView.as_view(), name='otp'),
-    path('project/', projectView.as_view(), name='project'),
+    path('project/', projectView.as_view(), name='del-prefds'),
     path('projectGet/', projectGetView.as_view(), name='projectGet'),
+    path('deleteproject/<id>/',projectDeleteView.as_view(), name='userProject-delete'),
     path('Keyword/', keywordView.as_view(), name='Keyword'),
     path('KeywordGet/', KeywordGetView.as_view(), name='Keyword'),
     path('Newdata/', NewDataView.as_view(), name = 'Newdata'),

@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
 class Keyword(models.Model):
     data = models.SlugField(max_length=5000000)
 
-class Project(models.Model):
+class DeleteProject(models.Model):
     keyword = models.SlugField(max_length=5000000)
 
 class OTP(models.Model):
