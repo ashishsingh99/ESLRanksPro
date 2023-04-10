@@ -128,8 +128,8 @@ class projectGetView(APIView):
     for data in serializer.data:
       GetData = dict(data)
       Check = ast.literal_eval(GetData.get('keyword'))
-      datas.append(GetData.get('id'))
-      datas.append(Check)
+      GetData['keyword'] = Check
+      datas.append(GetData)
     return Response({"status": "success", "data": datas}, status=status.HTTP_200_OK)
 
 class projectDeleteView(APIView):
@@ -137,6 +137,32 @@ class projectDeleteView(APIView):
     keyword = DeleteProject.objects.get(id=id)
     keyword.delete()
     return Response("deleted successfully")
+
+class keywordprojDeleteView(APIView):
+  def put(self,request,id):
+    new_data = dict()
+    key_list = []
+    if id:
+      del_keyword = DeleteProject.objects.get(id=id)
+      serializer = DeleteProjectGetSerializer(del_keyword)
+      key = request.query_params.get('key')
+      device = request.query_params.get('device')
+      data_key = ast.literal_eval(serializer.data['keyword'])
+      for i in range(len(data_key)):
+        print(i)
+        if data_key[i]['deviceType'] == device and key in data_key[i]['keyword']:
+          data_key[i]['keyword'].remove(key)
+          del_keyword.save()
+        else:
+          print("not found")
+        key_list.append(data_key[i])
+      new_data['keyword'] = key_list
+      serializer = DeleteProjectSerializer(data=new_data)
+      if serializer.is_valid():
+          serializer.update(del_keyword, new_data)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+      return Response({"msg":"No Keyword found"}, status=status.HTTP_400_BAD_REQUEST)
 
 class KeywordGetView(APIView):
   def get(self, request, id=None, format=None):
