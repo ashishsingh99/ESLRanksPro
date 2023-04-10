@@ -25,6 +25,7 @@ const GetRanks = () => {
   const mobileKeywordLength = useRef([])
   const projectKeywordLength = useRef([])
   const userEmailBasedTotalPushedData = useRef([])
+  const ProjectData = useRef([]);
 
 
   if (deviceType === null) {
@@ -67,28 +68,39 @@ const GetRanks = () => {
 
 
 
-        // flat() is use for romove array to an array
-        const projectData = projectDatalist.flat();
-        const UserallProjectDetailsbyMail = projectData && projectData.filter((selectedEmail) => {
-          if (selectedEmail.email === email) {
-            return selectedEmail.email === email;
-          }
-        });
+        // // flat() is use for romove array to an array
+        // const projectData = projectDatalist.flat();
 
-        const UserAllProjectDetailsByProjectName = UserallProjectDetailsbyMail && UserallProjectDetailsbyMail.filter((selByurl) => {
-          if (selByurl.weburl === webURL) {
-            return selByurl;
-          }
-        })
+
+        // const UserallProjectDetailsbyMail = projectData && projectData.filter((selectedEmail) => {
+        //   if (selectedEmail.email === email) {
+        //     return selectedEmail.email === email;
+        //   }
+        // });
+
+        // const UserAllProjectDetailsByProjectName = UserallProjectDetailsbyMail && UserallProjectDetailsbyMail.filter((selByurl) => {
+        //   if (selByurl.weburl === webURL) {
+        //     return selByurl;
+        //   }
+        // })
 
         // console.log('UserAllProjectDetailsByProjectName', UserAllProjectDetailsByProjectName)
 
         // console.log('projectData', projectData)
-        const ProjectDetail = projectData.filter(devtype => {
-          if (devtype.deviceType === deviceType) {
-            return devtype;
-          }
 
+
+        // flat() is use for romove array to an array
+        projectDatalist.map((res) => {
+          ProjectData.current.push(res.keyword);
+        })
+
+        ProjectData.current = ProjectData.current.flat()
+        // console.log('projectDatalist', ProjectData.current);
+
+        const ProjectDetail = ProjectData.current.filter((type) => {
+          if (type.deviceType === deviceType) {
+            return type;
+          }
         });
 
 
@@ -134,7 +146,7 @@ const GetRanks = () => {
           // we make new filterration for keyword limitation per plan  start
 
 
-          const userEmailBasedTotalData = projectData && projectData.filter((selectedEmail) => {
+          const userEmailBasedTotalData = ProjectData.current && ProjectData.current.filter((selectedEmail) => {
             if (selectedEmail.email === email) {
               return selectedEmail.email === email;
 

@@ -22,6 +22,7 @@ const GetPreviousRanks = () => {
     const CHARTRANKING = useRef([]);
     const KEYWORDDATA = useRef([]);
     const AllOLDKEYWORDDATA = useRef([]);
+    const ProjectData = useRef([]);
 
     useEffect(() => {
         // All old project Data Start
@@ -45,10 +46,14 @@ const GetPreviousRanks = () => {
                 const projectDatalist = res.data.data;
 
                 // flat() is use for romove array to an array
-                const projectData = projectDatalist.flat();
-                // console.log('projectData', projectData)
+                projectDatalist.map((res) => {
+                    ProjectData.current.push(res.keyword);
+                })
 
-                const ProjectDetail = projectData.filter((type) => {
+                ProjectData.current = ProjectData.current.flat()
+                // console.log('projectDatalist', ProjectData.current);
+
+                const ProjectDetail = ProjectData.current.filter((type) => {
                     if (type.deviceType === deviceType) {
                         return type;
                     }
@@ -122,9 +127,9 @@ const GetPreviousRanks = () => {
                         );
                     });
 
-                       USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
-                                return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
-                              })
+                    USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
+                        return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
+                    })
 
                     USERALLKEYWORDRESULT.current.map((rankdata) => {
                         // PUSHING THE ANOTHER ITEM THAT HELP TO RENDER UNRANKED VALUE SHOW IN RESPONSE ITEMS
