@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import KeywordAllRanksChart from "../charts/constant";
 import RippleButton from "../components/rippleButton";
 import { curday } from "../upDater/constant";
+import axios from "axios";
 
 
 // keyword ranking show handler component
@@ -25,6 +26,7 @@ const RankTable = () => {
     const UserAllKeywordResult = useSelector((state) => state.userallkeywordresult);
     const UserAllPendingResult = useSelector((state) => state.userallpendingresult);
     const oldKeywordData = useSelector((state) => state.oldkeyworddata);
+    const UserSelectedPrId = useSelector((state) => state.userselectedprojectallid)
 
     // useStates
     const [detailsCSV, setDetailsCSV] = useState([])
@@ -34,6 +36,8 @@ const RankTable = () => {
     const [keywordAlloldDataAlert, setKeywordAlloldDataAlert] = useState(false);
     const [CurrentKeyword, setCurrentKeyword] = useState(null);
     const [progressBar, setProgressBar] = useState([]);
+    const selectedKeyword = useRef([])
+
 
     // useEffect data rendring
     useEffect(() => {
@@ -149,6 +153,46 @@ const RankTable = () => {
         }
     };
 
+
+    const ChooseKeywordDelete = (e) => {
+
+        const index = selectedKeyword.current.indexOf(e)
+
+        if (index === -1) {
+            // if the number does not exist in the array, add it
+            selectedKeyword.current.push(e);
+        } else {
+            // if the number exists in the array, remove it
+            selectedKeyword.current.splice(index, 1);
+        }
+
+        console.log(selectedKeyword.current);
+    }
+
+    const KeywordDelete = () => {
+        selectedKeyword.current.push('nokeyword')
+        console.log(selectedKeyword.current)
+        UserSelectedPrId.map((resId) => {
+            selectedKeyword.current.map(res => {
+                axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(resId) + '/?key=' + res + '&device=' + deviceType)
+
+                // if ('nokeyword' === res) {
+
+                //     // after 2 seconds stops
+                //     const timerId = setInterval(() => window.location.reload(false), 10000);
+                //     setTimeout(() => { clearInterval(timerId) }, 10000);
+
+                // }
+                // console.log(resId, res)
+            })
+        })
+
+    }
+
+
+
+
+
     // onClick function for table pagination
     const tableShowHandler = () => {
         setTableShowMore(tableShowMore + 5);
@@ -179,6 +223,13 @@ const RankTable = () => {
 
                             <div className="btn-hov">Mobile </div>
                         </button>
+                        <button
+                            style={{ borderRadius: "0px" }}
+                            className={"cm-btn-b ms-3"}
+                            onClick={() => KeywordDelete()}
+                        >
+                            <div className="btn-hov">Delete Keywords </div>
+                        </button>
                     </div>
                     <div className="d-flex">
                         <div className="me-3"> <CSVLink filename={curday() + ' ' + webURL + '.csv'} data={detailsCSV ? detailsCSV : 'null'} > <RippleButton > CSV <i className="fa fa-solid fa-download fa-bounce"></i> </RippleButton> </CSVLink> </div>
@@ -190,6 +241,7 @@ const RankTable = () => {
                 <table className="table" >
                     <thead >
                         <tr >
+
                             <th scope="col" >
                                 <div >Keywords <div className="Tooltip">    <span className="Tooltiptext">Words that people type into Google</span><i className="fa-solid fa-circle-question fa-beat-fade ms-2"></i> </div> </div>
                             </th>
@@ -213,7 +265,8 @@ const RankTable = () => {
                                 UserAllKeywordResult === false ? <Noproject /> : UserAllKeywordResult.length === 0 ? false : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.map((res, key) => {
                                     return (
                                         <tr key={key}>
-                                            <td> {UserAllKeywordResult[key].keyword}</td>
+
+                                            <td> <input type='checkbox' value={UserAllKeywordResult[key].keyword} onChange={(e) => ChooseKeywordDelete(e.target.value)} style={{ width: "auto", margin: '0 5px 0 0', top: '2px', position: "relative" }} /> {UserAllKeywordResult[key].keyword}</td>
                                             <td>
                                                 <div className="cml">
                                                     <div style={{ minWidth: "60px" }}>   {res.rank_group} </div>
@@ -251,10 +304,12 @@ const RankTable = () => {
                             {
                                 UserAllPendingResult && UserAllPendingResult.map((pendingKey, key) => {
                                     return <tr key={key}>
-                                        <td>{pendingKey}</td>
+
+                                        <td><input type='checkbox' value={pendingKey} onChange={(e) => ChooseKeywordDelete(e.target.value)} style={{ width: "auto", margin: '0 5px 0 0', top: '2px', position: "relative" }} /> {pendingKey}</td>
                                         <td className="text-success">Pending</td>
                                         <td className="text-success">Pending</td>
                                         <td className="text-success">Pending</td>
+                                        <td>  </td>
                                     </tr>
                                 })
                             }

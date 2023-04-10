@@ -11,7 +11,7 @@ export const get_Plans_Details = () => `https://eslrankspro.com/api/user/planget
 export const delete_User = (UserId) => 'https://eslrankspro.com/api/user/deleteuser/' + UserId + '/';
 export const delete_Plan = (PlanId) => 'https://eslrankspro.com/api/user/deleteplan/' + PlanId + '/';
 export const update_plans_Details = (PlanId) => 'https://eslrankspro.com/api/user/planupdate/' + PlanId + '/';
-export const delete_Project = (res) => 'https://eslrankspro.com/api/user/deleteproject/' + res + '/';
+export const delete_Project = (projectId) => 'https://eslrankspro.com/api/user/deleteproject/' + projectId + '/';
 export const Admin_Keyword_Get = () => 'https://eslrankspro.com/api/user/KeywordGet/';
 
 // GET LOCATION FROM SERP API ------

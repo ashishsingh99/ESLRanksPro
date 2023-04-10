@@ -127,6 +127,12 @@ export const reducerAllOldKEYWORDDATAData = (state = 0, action) => {
 }
 
 
+export const reducerSelectedProjectAllId = (state = 0, action) => {
+    if (action.type === 'USERSELECTEDPROJECTALLID') { return state = action.payload }
+    else { return state; }
+}
+
+
 
 
 

@@ -122,4 +122,10 @@ export const AllOLdKEYWORDData = (alloldkeyworddata) => {
 }
 
 
+export const UserSelectedProjectAllId = (userselectedprojectallid) => {
+  return { type: "USERSELECTEDPROJECTALLID", payload: userselectedprojectallid };
+}
+
+
+
 

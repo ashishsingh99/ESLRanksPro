@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import '../css/index.css';
 import '../css/loader.css';
 import { Link } from 'react-router-dom';
@@ -10,11 +10,64 @@ import ProjectList from '../share/searchBox/ProjectList';
 import RippleButton from '../share/components/rippleButton';
 import { Do_Project_Delete, curday, perday } from '../share/upDater/constant';
 import DoughnutChartone from '../share/charts/doughnutChart';
+import axios from 'axios';
+import { delete_Project } from '../../services/constants';
 export const Home = () => {
   const allprojectDetails = useSelector(state => state.allprojectdetails);
   const RankMovedup = useSelector(state => state.rankmovedup);
   const RankMovedDown = useSelector(state => state.rankmoveddown);
   const loginOut = useSelector(state => state.loginOut);
+  const [deleteAlert, setdeleteAlert] = useState(false)
+  const dlProjectId = useRef([])
+
+
+
+
+  const Do_Project_Delete = (allprojectDetails, _callBack) => {
+    // const allprojectDetails = useSelector(state => state.allprojectdetails);
+
+    // localStorage data
+    const webURL = localStorage.getItem("websiteurl");
+    const email = localStorage.getItem("email");
+
+    allprojectDetails && allprojectDetails.map((res) => {
+      res.keyword.filter((resfilter) => {
+        if (resfilter.email === email && resfilter.weburl === webURL) {
+          const projectId = Number(res.id);
+          dlProjectId.current.push(projectId)
+          // axios.delete(delete_Project(projectId))
+
+
+        }
+      })
+    })
+    dlProjectId.current = dlProjectId.current.concat('no')
+    dlProjectId.current.map((res, key) => {
+
+      if ('no' === res) {
+        localStorage.removeItem("websiteurl");
+        window.location.reload(false);
+
+      }
+      else {
+        console.log('resfilter', res, key)
+        const projectId = Number(res);
+        axios.delete(delete_Project(projectId))
+
+      }
+
+    })
+
+
+    console.log('dlProjectId.current', dlProjectId.current)
+
+
+
+
+  }
+
+
+
   useEffect(() => {
     if (loginOut !== 'true') {
 
@@ -27,7 +80,7 @@ export const Home = () => {
         <div className='cmd-b'>
           <div>
             <ProjectList />
-            <RippleButton onClick={() => Do_Project_Delete(allprojectDetails)} >    <i className="fa-solid fa-trash  "></i> </RippleButton>
+            <RippleButton onClick={() => setdeleteAlert(true)} >    <i className="fa-solid fa-trash  "></i> </RippleButton>
             <Link to='/addpr'>  <RippleButton >    <i className="fa-solid fa-plus "></i>  Add Project  </RippleButton></Link>
           </div>
           <AutoSearch />
@@ -148,6 +201,21 @@ export const Home = () => {
           </div>
         }
       </div >
+
+
+      {
+        deleteAlert ? <div className='pop'  >
+          <div className='popBody'>
+            <div className='exeMark'><h1>?</h1> </div>
+            <h3>Are You Sure</h3>
+            <p>You will not able to recover this Project ! </p>
+            <div className='cmd' style={{ justifyContent: "space-evenly" }}>
+              <button onClick={() => setdeleteAlert(false)} className='cm-btn-b'> Cancel</button>
+              <button onMouseDown={() => Do_Project_Delete(allprojectDetails)} onMouseUp={() => setdeleteAlert(false)} className='cm-btn'> Delete</button>
+            </div>
+          </div>
+        </div> : false
+      }
 
 
 

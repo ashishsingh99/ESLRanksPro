@@ -26,6 +26,7 @@ const GetRanks = () => {
   const projectKeywordLength = useRef([])
   const userEmailBasedTotalPushedData = useRef([])
   const ProjectData = useRef([]);
+  const UserSelectedPRAllId = useRef([]);
 
 
   if (deviceType === null) {
@@ -66,28 +67,17 @@ const GetRanks = () => {
         // console.log('projectDatalist',projectDatalist)
         dispatch({ type: "ALLPROJECTDETAILS", payload: projectDatalist });
 
+        // get user current selected projectr id
+        projectDatalist && projectDatalist.map((res) => {
+          res.keyword.filter((resfilter) => {
+            if (resfilter.email === email && resfilter.weburl === webURL) {
+              const projectId = Number(res.id);
+              UserSelectedPRAllId.current.push(projectId)
+            }
+          })
+        })
 
-
-        // // flat() is use for romove array to an array
-        // const projectData = projectDatalist.flat();
-
-
-        // const UserallProjectDetailsbyMail = projectData && projectData.filter((selectedEmail) => {
-        //   if (selectedEmail.email === email) {
-        //     return selectedEmail.email === email;
-        //   }
-        // });
-
-        // const UserAllProjectDetailsByProjectName = UserallProjectDetailsbyMail && UserallProjectDetailsbyMail.filter((selByurl) => {
-        //   if (selByurl.weburl === webURL) {
-        //     return selByurl;
-        //   }
-        // })
-
-        // console.log('UserAllProjectDetailsByProjectName', UserAllProjectDetailsByProjectName)
-
-        // console.log('projectData', projectData)
-
+        dispatch({ type: "USERSELECTEDPROJECTALLID", payload: UserSelectedPRAllId.current })
 
         // flat() is use for romove array to an array
         projectDatalist.map((res) => {

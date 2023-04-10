@@ -23,6 +23,7 @@ import {
   reducerPlansdetails,
   reducerSelectDate,
   reducerShowMenu,
+  reducerSelectedProjectAllId
 } from "./upDown";
 
 import { combineReducers } from "redux";
@@ -51,5 +52,6 @@ const RootReducer = combineReducers({
   showmenu: reducerShowMenu, // show side Menu bar
   selectcustomdate: reducerSelectDate,  //custom data selector
   alloldkeyworddata: reducerAllOldKEYWORDDATAData, //getting user all day keyword data
+  userselectedprojectallid: reducerSelectedProjectAllId,   //  getting selected pr all id
 });
 export default RootReducer;
