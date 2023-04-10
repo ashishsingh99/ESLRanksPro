@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from . import views
-from account.views import SendPasswordResetEmailView,projectView,keywordprojDeleteView,projectGetView,projectDeleteView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
+from account.views import SendPasswordResetEmailView,projectView,PromotionCodeView,PromotionCodeGetView,keywordprojDeleteView,keywordprojUpdateView,projectGetView,projectDeleteView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
 urlpatterns = [
     
     path('register/', UserRegistrationView.as_view(), name='register'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('Keyword/', keywordView.as_view(), name='Keyword'),
     path('KeywordGet/', KeywordGetView.as_view(), name='Keyword'),
     path('delkeyword/<id>/', keywordprojDeleteView.as_view(), name='keyword-delete'),
+    path('updatekeyword/<id>/', keywordprojUpdateView.as_view(), name='keyword-delete'),
     path('Newdata/', NewDataView.as_view(), name = 'Newdata'),
     path('adminuser/',profileView.as_view(), name='user-profile'),
     path('deleteuser/<id>/',deleteprofileView.as_view(), name='user-delete'),
@@ -25,4 +26,6 @@ urlpatterns = [
     path('planget/', PlanGetView.as_view(), name = 'Plans-Get'),
     path('planupdate/<id>/', PlanUpdateView.as_view(), name = 'Plans-Update'),
     path('deleteplan/<id>/',PlanDeleteView.as_view(), name='plan-delete'),
+    path('codes/', PromotionCodeView.as_view(), name='codes'),
+    path('codesGet/', PromotionCodeGetView.as_view(), name='codesGet'),
 ]

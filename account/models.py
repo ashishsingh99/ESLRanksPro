@@ -82,3 +82,8 @@ class Plan(models.Model):
     validity = models.CharField(max_length=256)
     proj_len = models.CharField(max_length=128)
     keyword_len = models.CharField(max_length=128)
+
+class Codes(models.Model):
+    plan_name = models.CharField(max_length=256)
+    codes = models.SlugField()
+    validity = models.CharField(max_length=256)

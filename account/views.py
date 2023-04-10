@@ -1,13 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import SendPasswordResetEmailSerializer,DeleteProjectGetSerializer,DeleteProjectSerializer,PlanGetSerializer,PlanSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
+from account.serializers import SendPasswordResetEmailSerializer,codesSerializer,codesGetSerializer,DeleteProjectGetSerializer,DeleteProjectSerializer,PlanGetSerializer,PlanSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.middleware.csrf import get_token
-from .models import Keyword, User, Plan, DeleteProject
+from .models import Keyword, User, Plan, DeleteProject,Codes
 import ast
 from .client import RestClient
 from pymongo import MongoClient
@@ -149,13 +149,37 @@ class keywordprojDeleteView(APIView):
       device = request.query_params.get('device')
       data_key = ast.literal_eval(serializer.data['keyword'])
       for i in range(len(data_key)):
-        print(i)
         if data_key[i]['deviceType'] == device and key in data_key[i]['keyword']:
           data_key[i]['keyword'].remove(key)
           del_keyword.save()
-        else:
-          print("not found")
         key_list.append(data_key[i])
+      new_data['keyword'] = key_list
+      serializer = DeleteProjectSerializer(data=new_data)
+      if serializer.is_valid():
+          serializer.update(del_keyword, new_data)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+      return Response({"msg":"No Keyword found"}, status=status.HTTP_400_BAD_REQUEST)
+
+class keywordprojUpdateView(APIView):
+  def put(self,request,id):
+    new_data = dict()
+    key_list = []
+    if id:
+      del_keyword = DeleteProject.objects.get(id=id)
+      serializer = DeleteProjectGetSerializer(del_keyword)
+      key = request.query_params.get('key')
+      key = ast.literal_eval(key)
+      device = request.query_params.get('device')
+      device = ast.literal_eval(device)
+      data_key = ast.literal_eval(serializer.data['keyword'])
+      for i in range(len(data_key)):
+        for j in device:
+          if data_key[i]['deviceType'] == j:
+            data_key[i]['keyword'].extend(key)
+            del_keyword.save()
+          key_list.append(data_key[i])
+      # new_key_list = set(key_list)
       new_data['keyword'] = key_list
       serializer = DeleteProjectSerializer(data=new_data)
       if serializer.is_valid():
@@ -303,5 +327,26 @@ class UserPasswordResetView(APIView):
     serializer = UserPasswordResetSerializer(data=request.data, context={'uid':uid, 'token':token})
     serializer.is_valid(raise_exception=True)
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
+
+class PromotionCodeView(APIView):
+  def post(self, request):
+    serializer = codesSerializer(data=request.data)
+    if serializer.is_valid():
+      # print(serializer.initial_data)
+      serializer.save()
+    return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
+
+class PromotionCodeGetView(APIView):
+  def get(self, request):
+    new_code = []
+    codes = Codes.objects.all()
+    serializer = codesGetSerializer(codes, many=True)
+    for data in serializer.data:
+      new_data = dict(data)
+      code = ast.literal_eval(new_data['codes'])
+      new_data['codes'] = code
+      new_code.append(new_data)
+    # print(serializer.data)
+    return Response({"data":new_code}, status=status.HTTP_200_OK)
 
 

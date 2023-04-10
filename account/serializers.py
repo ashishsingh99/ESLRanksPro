@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from account.models import User, Keyword, OTP, Plan, DeleteProject
+from account.models import User, Keyword, OTP, Plan, DeleteProject, Codes
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -130,3 +130,15 @@ class UserPasswordResetSerializer(serializers.Serializer):
       PasswordResetTokenGenerator().check_token(user, token)
       raise serializers.ValidationError('Token is not Valid or Expired')
   
+class codesSerializer(serializers.ModelSerializer):
+  plan_name = serializers.CharField(max_length=256)
+  codes = serializers.JSONField()
+  validity = serializers.JSONField()
+  class Meta:
+    model = Codes
+    fields = ['plan_name', 'codes', 'validity']
+
+class codesGetSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Codes
+    fields = '__all__'
