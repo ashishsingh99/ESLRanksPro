@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useRef, useState } from 'react'
+import { useEffect } from 'react'
 
 const Codes = () => {
     const [ShowAlert, setShowAlert] = useState(false)
     const [name, setName] = useState('individual')
     const [genratelmt, setGenratelmt] = useState(0)
-    const [keyLmt, setKeyLmt] = useState(0)
-    const [validityFor, setValidityFor] = useState('month')
-    const [code, setCode] = useState("");
+    const [codesData, setCodesData] = useState(0)
+    const [validityFor, setValidityFor] = useState('7')
+    const code = useRef('')
 
+    useEffect(() => {
+        axios.get('https://eslrankspro.com/api/user/codesGet/')
+            .then((res) => {
+                console.log('res.data of ckdse', res.data)
+                setCodesData(res.data.data)
+            })
+    })
 
 
     const CodesHandler = () => {
@@ -15,7 +24,7 @@ const Codes = () => {
 
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let newCodes = [];
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < genratelmt; i++) {
             let precode = "";
             for (let j = 0; j < 10; j++) {
                 const randomIndex = Math.floor(Math.random() * characters.length);
@@ -23,10 +32,16 @@ const Codes = () => {
             }
             newCodes.push(precode);
         }
-        setCode(newCodes);
-
-        if (Codes.length !== 0) {
-
+        code.current = newCodes
+        if (code.current.length !== 0) {
+            const data = {
+                plan_name: name,
+                codes: code.current,
+                validity: validityFor
+            }
+            console.log(newCodes)
+            axios.post('https://eslrankspro.com/api/user/codes/', data)
+            setShowAlert(false);
         }
 
     }
@@ -55,13 +70,20 @@ const Codes = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Best web devlopment company in india</td>
-                            <td>Best web devlopment company in india</td>
-                            <td>Best web devlopment company in india</td>
-                            <td className='table-edit'> <i className='fa-solid fa-edit'></i> <i className=" fa-solid fa-trash"></i> </td>
+                        {
+                            codesData !== 0 ? codesData && codesData.map((res) => {
+                                return res.codes && res.codes.map(resCode => {
+                                    return < tr >
+                                        <td>{resCode}</td>
+                                        <td>{res.plan_name}</td>
+                                        <td>{res.validity}</td>
+                                        <td className='table-edit'> <i className='fa-solid fa-edit'></i> <i className=" fa-solid fa-trash"></i> </td>
 
-                        </tr>
+                                    </tr>
+                                })
+                            }) : 'Loading'
+
+                        }
 
 
                     </tbody>

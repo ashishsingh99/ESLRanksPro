@@ -45,7 +45,7 @@ const RankTable = () => {
             UserAllKeywordResult && UserAllKeywordResult.map((res, key) => {
                 // console.log({ keyword: res.keyword, rank: keywordData[key].rank_group, prevRank: oldKeywordData[key].rank_group, url: keywordData[key].url })
                 setDetailsCSV((obj) => {
-                    return [...obj, { Keyword: res.keyword, Positions: keywordData[key].rank_group, Previous: oldKeywordData[key].rank_group, URL: keywordData[key].url }]
+                    return [...obj, { Keyword: res.keyword, Positions: keywordData[key].rank_group, Previous: oldKeywordData.length !== 0 && oldKeywordData.length > key ? oldKeywordData[key].rank_group : "0", URL: keywordData[key].url }]
                 })
             })
         }
@@ -129,7 +129,7 @@ const RankTable = () => {
         }
         else {
             dispatch({ type: "NEWPROJECTURL", payload: webURL });
-            navigate('/addpr/addcountry')
+            navigate('/addpr/addkeyword')
         }
 
     }
@@ -170,22 +170,22 @@ const RankTable = () => {
     }
 
     const KeywordDelete = () => {
-        selectedKeyword.current.push('nokeyword')
+        // selectedKeyword.current.push('nokeyword')
         console.log(selectedKeyword.current)
-        UserSelectedPrId.map((resId) => {
-            selectedKeyword.current.map(res => {
-                axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(resId) + '/?key=' + res + '&device=' + deviceType)
+        // selectedKeyword.current.map(res => {
+            const selectedKeywordarray = JSON.stringify(selectedKeyword.current)
+            axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(UserSelectedPrId[0]) + '/?key=' + selectedKeywordarray + '&device=' + deviceType)
 
-                // if ('nokeyword' === res) {
+            // if ('nokeyword' === res) {
 
-                //     // after 2 seconds stops
-                //     const timerId = setInterval(() => window.location.reload(false), 10000);
-                //     setTimeout(() => { clearInterval(timerId) }, 10000);
+            //     // after 2 seconds stops
+                const timerId = setInterval(() => window.location.reload(false), 5000);
+                setTimeout(() => { clearInterval(timerId) }, 5000);
 
-                // }
-                // console.log(resId, res)
-            })
-        })
+            // }
+
+            console.log(UserSelectedPrId[0], selectedKeywordarray)
+        // })
 
     }
 

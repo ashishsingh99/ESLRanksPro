@@ -10,14 +10,20 @@ import { KEYWORD_POST, PROJECT_POST } from "../../../services/constants";
 import Keygatter from "./keygatter";
 
 export const AddKeyword = () => {
+    // navigator
+    const navigate = useNavigate();
+
     const userprojectalldetails = useSelector(state => state.userallprojectdetails)
     const userKeywordlimit = useSelector(state => state.userkeywordlimit)
     const UserKeywordLength = useSelector(state => state.userkeywordlength)
     const NewProjectUrl = useSelector(state => state.newprojecturl);
+    const userselectedprojectallid = useSelector(state => state.userselectedprojectallid)
 
     // local storage
     const email = localStorage.getItem('email')
-    const locationcode = localStorage.getItem('locationcode')
+    const locationcode = localStorage.getItem('locationcode');
+    const webURL = localStorage.getItem("websiteurl");
+
 
     // useState data hooks
     const [keyword, setKeyword] = useState('')
@@ -35,11 +41,6 @@ export const AddKeyword = () => {
     const messagesEndRef = useRef(null);
     const sameKeyword = useRef(false);
 
-
-
-    // state manage
-    // navigator
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (NewProjectUrl === false) {
@@ -120,30 +121,30 @@ export const AddKeyword = () => {
 
 
         if (keyword.trim().length === 0) {
-                e.preventDefault();
-            }
-            else if (deviceType.current.length === 0) {
-                setDeviceAlert(true);
-            }
-            else if (keyword === sameKeyword.current) {
-                setSameKeyALert(true);
-                localStorage.removeItem('filtered')
-            }
+            e.preventDefault();
+        }
+        else if (deviceType.current.length === 0) {
+            setDeviceAlert(true);
+        }
+        else if (keyword === sameKeyword.current) {
+            setSameKeyALert(true);
+            localStorage.removeItem('filtered')
+        }
 
-            else if (item.length * deviceType.current.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
-                setItemAlert(true)
-            }
+        else if (item.length * deviceType.current.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
+            setItemAlert(true)
+        }
 
-            else {
-                setItem((olditems) => {
-                    return [...olditems, keyword]
-                })
-                setKeyword('');
-                setItemAlert(false)
-                setMinLengthAlert(false)
-                setSameKeyALert(false);
+        else {
+            setItem((olditems) => {
+                return [...olditems, keyword]
+            })
+            setKeyword('');
+            setItemAlert(false)
+            setMinLengthAlert(false)
+            setSameKeyALert(false);
 
-            };
+        };
 
 
 
@@ -159,6 +160,38 @@ export const AddKeyword = () => {
         }
         else if (item.length * deviceType.current.length + Number(UserKeywordLength) > Number(userKeywordlimit)) {
             setItemAlert(true)
+        }
+        else if (webURL !== null) {
+
+            // that condition run when the user come from add keyword btn from ranktable
+
+            // posting keywords
+            var dataTwo = {
+                data: deviceType.current && deviceType.current.map(detype => {
+                    return item && item.map((itemData) => {
+                        return {
+                            keyword: itemData,
+                            language_code: "en",
+                            location_code: locationcode,
+                            device: detype
+                        }
+                    })
+                }),
+                weburl: NewProjectUrl,
+                email: email
+            }
+            axios.post(KEYWORD_POST(), dataTwo)
+
+            const itemData = JSON.stringify(item)
+            const deviceTypeData = JSON.stringify(deviceType.current)
+            axios.put('https://eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData)
+            // axios.put('https://eslrankspro.com/api/user/updatekeyword/57/?key=["orm services in noida"]&device=["desktop","mobile"]')
+
+            navigate('/addpr/gotraffic')
+
+
+
+
         }
         else {
 

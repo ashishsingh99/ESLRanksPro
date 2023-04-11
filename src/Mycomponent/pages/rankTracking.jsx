@@ -9,7 +9,8 @@ import ProjectList from '../share/searchBox/ProjectList';
 import RippleButton from '../share/components/rippleButton';
 import AverageChart from '../share/charts/AverageRank';
 import LastUpdate from '../share/components/lastUpdate';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import PlAdd from './login/plAdd';
 
 
 
@@ -17,7 +18,9 @@ const RankTracking = () => {
   const dispatch = useDispatch();
 
   // localStorage data
-  const loginOut = localStorage.getItem('loginOut')
+  const loginOut = localStorage.getItem('loginOut');
+  const IsProject = localStorage.getItem('IsProject')
+  const websiteurl = localStorage.getItem('websiteurl');
 
   // Ranking Body
   if (loginOut === 'true') {
@@ -52,6 +55,7 @@ const RankTracking = () => {
             </div>
           </div> */}
 
+
           <div className='cmd-b'>
             <div className='d-block w-100' >
               <LastUpdate />
@@ -71,6 +75,7 @@ const RankTracking = () => {
 
             </div>
           </div>
+
         </div>
 
       </div >

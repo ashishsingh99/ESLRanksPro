@@ -8,7 +8,7 @@ import RankTable from '../share/tables/RankTable';
 import AutoSearch from '../share/searchBox/autoSearch';
 import ProjectList from '../share/searchBox/ProjectList';
 import RippleButton from '../share/components/rippleButton';
-import { Do_Project_Delete, curday, perday } from '../share/upDater/constant';
+import {  curday, perday } from '../share/upDater/constant';
 import DoughnutChartone from '../share/charts/doughnutChart';
 import axios from 'axios';
 import { delete_Project } from '../../services/constants';
@@ -86,37 +86,37 @@ export const Home = () => {
           <AutoSearch />
         </div>
 
-        {
-          <div className='cmd-b'>
-            <div className='w-100'>
 
-              {/* <LastUpdate /> */}
+        <div className='cmd-b'>
+          <div className='w-100'>
 
-              <div className=' hm-b2-con p-0'>
-                <div className='hm-b2-cl ms-0'>
-                  <h5>Keyword Rankings</h5>
-                  <div className='hm-bg-move'>
-                    <div className='hm-ng-18'>
-                      <h2>
-                        {/* {companyRank[0] ? companyRank[0] : 0} */}
-                        {RankMovedup}
-                      </h2>
-                      <span>   Keywords <br /> Moved up </span>
-                    </div>
-                    <div className='hm-ng-18'>
-                      <h2>
-                        {/* {companyRank && companyRank[rankLength - 1] ? companyRank[rankLength - 1] : 0} */}
-                        {RankMovedDown}
-                      </h2>
-                      <span>   Keywords <br /> moved down </span>
-                    </div>
+            {/* <LastUpdate /> */}
+
+            <div className=' hm-b2-con p-0'>
+              <div className='hm-b2-cl ms-0'>
+                <h5>Keyword Rankings</h5>
+                <div className='hm-bg-move'>
+                  <div className='hm-ng-18'>
+                    <h2>
+                      {/* {companyRank[0] ? companyRank[0] : 0} */}
+                      {RankMovedup}
+                    </h2>
+                    <span>   Keywords <br /> Moved up </span>
                   </div>
-                  <p>
-                    Data from <br />
-                    {curday('/')}  to  {perday('/')}
-                  </p>
+                  <div className='hm-ng-18'>
+                    <h2>
+                      {/* {companyRank && companyRank[rankLength - 1] ? companyRank[rankLength - 1] : 0} */}
+                      {RankMovedDown}
+                    </h2>
+                    <span>   Keywords <br /> moved down </span>
+                  </div>
                 </div>
-                {/* <div className='hm-b2-cl '>
+                <p>
+                  Data from <br />
+                  {curday('/')}  to  {perday('/')}
+                </p>
+              </div>
+              {/* <div className='hm-b2-cl '>
                   <h5>User Visit</h5>
                   <div className='hm-bg-move'>
                     <div className='hm-ng-18'>
@@ -166,40 +166,40 @@ export const Home = () => {
                   </p>
 
                 </div> */}
-              </div>
-
-
-
-              {/* static data currently commited  */}
-
-              {
-                /*
-                  <div className='hm-analyze'>
-                    <div className='hm-ana-img'><img src={analyze} alt="analyze img" /></div>
-                    <div className='hm-an-con'>
-                      <h3>
-                        Analyze your competitors SEO and get new opportinities to increase SEO Score
-                      </h3>
-                    </div>
-                    <div className='hm-an-cm'>
-                      <p>Analyze competitors -</p>
-                    </div>
-                  </div>
-                */
-              }
-
-              <div className='d-none'> <RankTable /> </div>
-
-
-              <div className='w-100 mt-5'>
-                <h6>Top Keyword Ranking</h6>
-                <DoughnutChartone />
-              </div>
-
-
             </div>
+
+
+
+            {/* static data currently commited  */}
+
+            {
+              /*
+                <div className='hm-analyze'>
+                  <div className='hm-ana-img'><img src={analyze} alt="analyze img" /></div>
+                  <div className='hm-an-con'>
+                    <h3>
+                      Analyze your competitors SEO and get new opportinities to increase SEO Score
+                    </h3>
+                  </div>
+                  <div className='hm-an-cm'>
+                    <p>Analyze competitors -</p>
+                  </div>
+                </div>
+              */
+            }
+
+            <div className='d-none'> <RankTable /> </div>
+
+
+            <div className='w-100 mt-5'>
+              <h6>Top Keyword Ranking</h6>
+              <DoughnutChartone />
+            </div>
+
+
           </div>
-        }
+        </div>
+
       </div >
 
 
