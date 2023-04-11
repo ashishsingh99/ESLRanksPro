@@ -146,12 +146,14 @@ class keywordprojDeleteView(APIView):
       del_keyword = DeleteProject.objects.get(id=id)
       serializer = DeleteProjectGetSerializer(del_keyword)
       key = request.query_params.get('key')
+      key = ast.literal_eval(key)
       device = request.query_params.get('device')
       data_key = ast.literal_eval(serializer.data['keyword'])
       for i in range(len(data_key)):
-        if data_key[i]['deviceType'] == device and key in data_key[i]['keyword']:
-          data_key[i]['keyword'].remove(key)
-          del_keyword.save()
+        for j in key:
+          if data_key[i]['deviceType'] == device and j in data_key[i]['keyword']:
+            data_key[i]['keyword'].remove(j)
+            del_keyword.save()
         key_list.append(data_key[i])
       new_data['keyword'] = key_list
       serializer = DeleteProjectSerializer(data=new_data)
@@ -173,13 +175,20 @@ class keywordprojUpdateView(APIView):
       device = request.query_params.get('device')
       device = ast.literal_eval(device)
       data_key = ast.literal_eval(serializer.data['keyword'])
-      for i in range(len(data_key)):
+      if len(device) > 1:
         for j in device:
-          if data_key[i]['deviceType'] == j:
-            data_key[i]['keyword'].extend(key)
-            del_keyword.save()
-          key_list.append(data_key[i])
-      # new_key_list = set(key_list)
+          for i in range(len(data_key)):
+            if data_key[i]['deviceType'] == j:
+              data_key[i]['keyword'].extend(key)
+              del_keyword.save()
+              key_list.append(data_key[i])
+      else:
+        for j in device:
+          for i in range(len(data_key)):
+            if data_key[i]['deviceType'] == j:
+              data_key[i]['keyword'].extend(key)
+              del_keyword.save()
+            key_list.append(data_key[i])
       new_data['keyword'] = key_list
       serializer = DeleteProjectSerializer(data=new_data)
       if serializer.is_valid():
