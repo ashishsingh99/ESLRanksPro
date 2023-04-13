@@ -13,15 +13,17 @@ export const AddKeyword = () => {
     // navigator
     const navigate = useNavigate();
 
-    const userprojectalldetails = useSelector(state => state.userallprojectdetails)
-    const userKeywordlimit = useSelector(state => state.userkeywordlimit)
-    const UserKeywordLength = useSelector(state => state.userkeywordlength)
+    const userprojectalldetails = useSelector(state => state.userallprojectdetails);
+    const userKeywordlimit = useSelector(state => state.userkeywordlimit);
+    const UserKeywordLength = useSelector(state => state.userkeywordlength);
     const NewProjectUrl = useSelector(state => state.newprojecturl);
-    const userselectedprojectallid = useSelector(state => state.userselectedprojectallid)
+    const userselectedprojectallid = useSelector(state => state.userselectedprojectallid);
+    const addprojectlocation = useSelector(state => state.addprojectlocation)
+
 
     // local storage
     const email = localStorage.getItem('email')
-    const locationcode = localStorage.getItem('locationcode');
+    // const locationcode = localStorage.getItem('locationcode');
     const webURL = localStorage.getItem("websiteurl");
 
 
@@ -40,6 +42,7 @@ export const AddKeyword = () => {
     const deviceType = useRef([]);
     const messagesEndRef = useRef(null);
     const sameKeyword = useRef(false);
+    const ALLLocationCode = useRef([])
 
 
     useEffect(() => {
@@ -150,84 +153,6 @@ export const AddKeyword = () => {
 
     }
 
-    // on submit data send to the rest api
-    const getproject = () => {
-        if (deviceType.current.length === 0) {
-            setDeviceAlert(true);
-        }
-        else if (item.length === 0) {
-            setMinLengthAlert(true)
-        }
-        else if (item.length * deviceType.current.length + Number(UserKeywordLength) > Number(userKeywordlimit)) {
-            setItemAlert(true)
-        }
-        else if (webURL !== null) {
-
-            // that condition run when the user come from add keyword btn from ranktable
-
-            // posting keywords
-            var dataTwo = {
-                data: deviceType.current && deviceType.current.map(detype => {
-                    return item && item.map((itemData) => {
-                        return {
-                            keyword: itemData,
-                            language_code: "en",
-                            location_code: locationcode,
-                            device: detype
-                        }
-                    })
-                }),
-                weburl: NewProjectUrl,
-                email: email
-            }
-            axios.post(KEYWORD_POST(), dataTwo)
-
-            const itemData = JSON.stringify(item)
-            const deviceTypeData = JSON.stringify(deviceType.current)
-            axios.put('https://eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData)
-            // axios.put('https://eslrankspro.com/api/user/updatekeyword/57/?key=["orm services in noida"]&device=["desktop","mobile"]')
-
-            navigate('/addpr/gotraffic')
-
-
-
-
-        }
-        else {
-
-            // posting keywords
-            var dataTwo = {
-                data: deviceType.current && deviceType.current.map(detype => {
-                    return item && item.map((itemData) => {
-                        return {
-                            keyword: itemData,
-                            language_code: "en",
-                            location_code: locationcode,
-                            device: detype
-                        }
-                    })
-                }),
-                weburl: NewProjectUrl,
-                email: email
-            }
-            axios.post(KEYWORD_POST(), dataTwo)
-
-
-            var data = {
-                keyword: deviceType.current && deviceType.current.map(dataType => {
-                    return {
-                        email: email,
-                        weburl: NewProjectUrl,
-                        keyword: item,
-                        deviceType: dataType
-                    }
-                })
-            }
-            axios.post(PROJECT_POST(), data)
-
-            navigate('/addpr/gotraffic')
-        }
-    }
 
     const Typedesktop = () => {
         if (desktop.current === null) {
@@ -235,8 +160,6 @@ export const AddKeyword = () => {
             deviceType.current.push('desktop')
             // console.log(deviceType.current)
             setDeviceAlert(false);
-
-
         }
         else {
             desktop.current = null
@@ -259,6 +182,99 @@ export const AddKeyword = () => {
             const index = deviceType.current.indexOf('mobile')
             deviceType.current.splice(index, index + 1)
             // console.log(deviceType.current)
+        }
+    }
+
+
+    // on submit data send to the rest api
+    const getproject = () => {
+
+        if (deviceType.current.length === 0) {
+            setDeviceAlert(true);
+        }
+        else if (item.length === 0) {
+            setMinLengthAlert(true)
+        }
+        else if (item.length * deviceType.current.length + Number(UserKeywordLength) > Number(userKeywordlimit)) {
+            setItemAlert(true)
+        }
+
+        else if (webURL !== null && NewProjectUrl === webURL) {
+
+            // that condition run when the user come from add keyword btn from ranktable
+
+            const dataTwo = addprojectlocation && addprojectlocation.map(loca => {
+                return deviceType.current && deviceType.current.map(detype => {
+                    return item && item.map((itemData) => {
+                        return {
+                            keyword: itemData,
+                            language_code: "en",
+                            location_code: loca.location_code,
+                            device: detype
+                        }
+                    })
+                })
+            })
+
+            const datatwoHandler = { data: dataTwo.flat() }
+            // console.log('keyword post', datatwoHandler)
+            axios.post(KEYWORD_POST(), datatwoHandler)
+
+            addprojectlocation && addprojectlocation.filter(loca => {
+                return ALLLocationCode.current.push(loca.location_code)
+            })
+            // console.log('locationCode', ALLLocationCode.current)
+
+            const itemData = JSON.stringify(item)
+            const deviceTypeData = JSON.stringify(deviceType.current)
+            const locations = JSON.stringify(ALLLocationCode.current)
+            axios.put('https://eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData + '&location_code=' + locations)
+
+            navigate('/addpr/gotraffic')
+
+        }
+        else {
+
+            // posting keywords
+            const dataTwo = addprojectlocation && addprojectlocation.map(loca => {
+                return deviceType.current && deviceType.current.map(detype => {
+                    return item && item.map((itemData) => {
+                        return {
+                            keyword: itemData,
+                            language_code: "en",
+                            location_code: loca.location_code,
+                            device: detype
+                        }
+                    })
+                })
+            })
+
+            const datatwoHandler = { data: dataTwo.flat() }
+            console.log('keyword post', datatwoHandler)
+            axios.post(KEYWORD_POST(), datatwoHandler)
+
+
+            const data = addprojectlocation && addprojectlocation.map(loca => {
+                return deviceType.current && deviceType.current.map(dataType => {
+                    return {
+                        email: email,
+                        weburl: NewProjectUrl,
+                        deviceType: dataType,
+                        location_name: loca.location_name,
+                        location_code: loca.location_code,
+                        keyword: item,
+                    }
+                })
+            })
+
+
+            const dataHandler = {
+                keyword: data.flat()
+            }
+            // console.log('dataHandler', dataHandler)
+            axios.post(PROJECT_POST(), dataHandler)
+
+            navigate('/addpr/gotraffic')
         }
     }
 

@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const ProjectList = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const webUrl = localStorage.getItem('websiteurl');
     const userallprojectskeywords = useSelector(state => state.userallprojectdetails);
     const [filPeNameUrl, setFilprNameUrl] = useState([])
@@ -33,6 +33,9 @@ const ProjectList = () => {
 
     const SelectPrName = (e) => {
         localStorage.setItem('websiteurl', e.target.value)
+        localStorage.removeItem('current_location_code')
+        localStorage.removeItem('current_location')
+
         window.location.reload(false);
     }
     return (

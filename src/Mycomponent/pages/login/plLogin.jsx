@@ -7,6 +7,7 @@ const PlLogin = () => {
     const gotologin = () => {
         navigate('/login')
     }
+
     return (
         <div className='pllogin-div'>
 

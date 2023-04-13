@@ -23,12 +23,16 @@ import {
   reducerPlansdetails,
   reducerSelectDate,
   reducerShowMenu,
-  reducerSelectedProjectAllId
+  reducerSelectedProjectAllId,
+  reducerIsProject,
+  reducerAddProjectLocation,
+  reducerUserCurrentProjectLocation,
+  reducerUserCurrentLocation
 } from "./upDown";
 
 import { combineReducers } from "redux";
 const RootReducer = combineReducers({
-  loginOut: reducerFnthree,  // authentication user login or not
+  loginout: reducerFnthree,  // authentication user login or not
   loading: reducerFnFour, // loading function for loading
   getcountry: reducerFnEight, // get country data from rest api
   chartranking: reducerFnNine, // chartRanks data only Ranked Data
@@ -53,5 +57,9 @@ const RootReducer = combineReducers({
   selectcustomdate: reducerSelectDate,  //custom data selector
   alloldkeyworddata: reducerAllOldKEYWORDDATAData, //getting user all day keyword data
   userselectedprojectallid: reducerSelectedProjectAllId,   //  getting selected pr all id
+  isproject: reducerIsProject,    // get details for user isproject
+  addprojectlocation: reducerAddProjectLocation,  // here we save add project selected locations for the add keyword
+  usercurrentprojectlocation: reducerUserCurrentProjectLocation,  // here we see user current selected project locations
+  currentlocation: reducerUserCurrentLocation, // here we get selected current project location
 });
 export default RootReducer;

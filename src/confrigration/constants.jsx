@@ -4,13 +4,14 @@ import GetCustomer from "./getCustomer";
 import GetPreviousRanks from "./getPreviousRanks";
 import GetProfile from "./getProfile";
 import GetRanks from "./getRanks";
+import { useSelector } from "react-redux";
 
 const ManageData_Configure = () => {
-    const loginOut = localStorage.getItem('loginOut')
+    const loginOut = useSelector(state => state.loginout)
     // useEffect(() => {
 
     // })
-    if (loginOut === 'true') {
+    if (loginOut === true) {
         // alert('login succesfullly')
         return <>
             <GetCustomer />

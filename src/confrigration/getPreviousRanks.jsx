@@ -12,6 +12,7 @@ const GetPreviousRanks = () => {
     const deviceType = localStorage.getItem("devicetype");
     const webURL = localStorage.getItem("websiteurl");
     const email = localStorage.getItem("email");
+    const current_location_code = Number(localStorage.getItem('current_location_code'));
 
     // useState data
     // devicetypeFiltered DataBase Data
@@ -29,9 +30,7 @@ const GetPreviousRanks = () => {
         axios.get(OLD_RANK_DATA()).then((res) => {
 
             const AllPreviousData = res.data.data;
-
             dispatch({ type: "PREVIOUSALLOLDDATA", payload: AllPreviousData });
-
             // const PreviousUserAllProjects = [res.data.data[res.data.data.length - 1]];
             const PreviousUserAllProjects = res.data.data;
             // console.log('PreviousUserAllProjects', PreviousUserAllProjects);
@@ -58,9 +57,9 @@ const GetPreviousRanks = () => {
                         return type;
                     }
                 });
+                // console.log('ProjectDetail', ProjectDetail)
 
-                ALLPROJECTDETAILS.current = ProjectDetail;
-
+                // ALLPROJECTDETAILS.current = ProjectDetail;
                 // dispatch({
                 //     type: "ALLPROJECTDETAILS",
                 //     payload: ALLPROJECTDETAILS.current,
@@ -78,24 +77,27 @@ const GetPreviousRanks = () => {
                         return selectedUrl.weburl === webURL;
                     }
                 });
+                // console.log('filteredUrlBasedData_old', filteredUrlBasedData)
 
+                // here we do project filtration by the location_code
+                const country_Based_Data = filteredUrlBasedData.filter(countrybased => {
+                    if (countrybased.location_code === current_location_code) {
+                        return countrybased;
+                    }
+                })
 
+                // console.log('country_Based_Data_old', country_Based_Data)
 
                 PreviousUserAllProjects && PreviousUserAllProjects.map((rest, key) => {
-
-
                     ALLPROJECTDATA.current = []
                     KEYWORDDATA.current = []
-
-                    // console.log('rest', rest)
-                    // console.log('     ALLPROJECTDATA.current', ALLPROJECTDATA.current)
-                    // console.log('   KEYWORDDATA.current', KEYWORDDATA.current)
-
                     rest.datasave && rest.datasave.map((datasave) => {
                         return datasave.data.tasks && datasave.data.tasks.filter((task) => {
                             if (task.data.device === deviceType) {
                                 return (task.result && task.result.map((result) => {
-                                    return ALLPROJECTDATA.current.push(result);
+                                    if (result.location_code === current_location_code) {
+                                        return ALLPROJECTDATA.current.push(result);
+                                    }
                                 })
                                 );
                             }
@@ -105,7 +107,7 @@ const GetPreviousRanks = () => {
                     // console.log(' ALLPROJECTDATA.current', ALLPROJECTDATA.current)
                     USERALLKEYWORDRESULT.current = []
 
-                    filteredUrlBasedData && filteredUrlBasedData.map((detail) => {
+                    country_Based_Data && country_Based_Data.map((detail) => {
                         return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
                             return (ALLPROJECTDATA.current && ALLPROJECTDATA.current.map((rankKeyword) => {
 
@@ -115,11 +117,10 @@ const GetPreviousRanks = () => {
                                 } else {
                                     USERALLPENDINGRESULT.current.push(onlyKeyword);
                                     // console.log('USERALLPENDINGRESULT.current', USERALLPENDINGRESULT.current)
-                                    const RemoveSimilarResult = Array.from(new Set(USERALLPENDINGRESULT.current));
-                                    const RemoveResultKeyword = RemoveSimilarResult.filter((o1) =>
-                                        !USERALLKEYWORDRESULT.current.lastIndexOf((o2) => o1 === o2.keyword
-                                        ));
-
+                                    // const RemoveSimilarResult = Array.from(new Set(USERALLPENDINGRESULT.current));
+                                    // const RemoveResultKeyword = RemoveSimilarResult.filter((o1) =>
+                                    //     !USERALLKEYWORDRESULT.current.lastIndexOf((o2) => o1 === o2.keyword
+                                    //     ));
                                 }
                             })
                             );
@@ -127,8 +128,11 @@ const GetPreviousRanks = () => {
                         );
                     });
 
-                    USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
-                        return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
+                    // removing common keyword name from userAllkeyword result
+                    USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter((obj, index, self) => {
+                        return index === self.findIndex((t) => (
+                            t.keyword === obj.keyword && t.location_code === obj.location_code
+                        ))
                     })
 
                     USERALLKEYWORDRESULT.current.map((rankdata) => {
@@ -187,13 +191,11 @@ const GetPreviousRanks = () => {
                     }
                 });
 
-
                 if (AllOLDKEYWORDDATA.current !== []) {
                     // console.log('AllOLDKEYWORDDATA.current', AllOLDKEYWORDDATA.current)
                     dispatch({ type: "ALLOLDKEYWORDDATA", payload: AllOLDKEYWORDDATA.current });
                     dispatch({ type: "OLDKEYWORDDATA", payload: AllOLDKEYWORDDATA.current[AllOLDKEYWORDDATA.current.length - 1].data });
                 }
-
 
             });
 

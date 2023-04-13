@@ -6,13 +6,13 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import ManageData_Configure from '../confrigration/constants';
 import Login from '../Mycomponent/pages/login/login';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 const Admin = () => {
   const dispatch = useDispatch();
-  const isAdminLogin = localStorage.getItem('loginOut')
+  const isAdminLogin = useSelector(state => state.loginout)
   const navigate = useNavigate();
   useEffect(() => {
-    if (isAdminLogin === 'true') {
+    if (isAdminLogin === true) {
       // navigate('/admin/dashboard')
     }
   }, [])
@@ -23,13 +23,13 @@ const Admin = () => {
     <>
       <ManageData_Configure />
       {
-        isAdminLogin === 'true' ?
+        isAdminLogin === true ?
           <div className='admin-Layout'>
 
             <SideBar />
             <div className='admin-body'>
               <TopBar />
-              <div className='admin-ground' onClick={()=>{ dispatch({ type: "SHOWMENU", payload: false });}}>
+              <div className='admin-ground' onClick={() => { dispatch({ type: "SHOWMENU", payload: false }); }}>
                 <Outlet />
               </div>
             </div>

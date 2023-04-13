@@ -1,15 +1,3 @@
-import axios from "axios";
-import { delete_Project } from "../../../services/constants";
-import { useRef } from "react";
-
-
-
-
-
-
-
-
-
 export const curday = function (sp) {
     const today = new Date();
     var dd = today.getDate();

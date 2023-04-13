@@ -1,7 +1,11 @@
 // login user
-export const loginUser = (loginOut) => {
-  return { type: "USER", payload: loginOut };
+export const loginUser = (loginout) => {
+  return { type: "USER", payload: loginout };
 };
+
+export const IsProject = (isproject) => {
+  return { type: "ISPROJECT", payload: isproject };
+}
 
 // Loading Data Condition base
 export const isLoading = (loading) => {
@@ -12,6 +16,29 @@ export const isLoading = (loading) => {
 export const isNotLoading = (loading) => {
   return { type: "NOTLOADING", payload: loading };
 };
+
+
+export const ProjectLoctions = (addprojectlocation) => {
+  return { type: "ADDPROJECTLOCATION", payload: addprojectlocation };
+};
+
+export const UserCurrentProjectLoctions = (usercurrentprojectlocation) => {
+  return { type: "USERCURRENTPROJECTLOCATION", payload: usercurrentprojectlocation };
+};
+
+export const CurrentLocation = (currentlocation) => {
+  return { type: "CURRENTLOCATION", payload: currentlocation };
+};
+
+
+
+
+
+
+
+
+
+
 //CHARTRANKING
 export const addProjectRank = (chartranking) => {
   return { type: "CHARTRANKING", payload: chartranking };

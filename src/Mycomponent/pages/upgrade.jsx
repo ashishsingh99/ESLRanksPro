@@ -41,8 +41,8 @@ const Upgrade = () => {
         })
     }, [plansDetails, planType])
 
-    const loginOut = localStorage.getItem('loginOut')
-    if (loginOut === 'true') {
+    const loginOut = useSelector(state => state.loginout)
+    if (loginOut === true) {
         return (
             <>
                 <div className='cmd-b'>

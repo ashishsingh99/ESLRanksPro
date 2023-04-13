@@ -8,7 +8,7 @@ import RankTable from '../share/tables/RankTable';
 import AutoSearch from '../share/searchBox/autoSearch';
 import ProjectList from '../share/searchBox/ProjectList';
 import RippleButton from '../share/components/rippleButton';
-import {  curday, perday } from '../share/upDater/constant';
+import { curday, perday } from '../share/upDater/constant';
 import DoughnutChartone from '../share/charts/doughnutChart';
 import axios from 'axios';
 import { delete_Project } from '../../services/constants';
@@ -16,7 +16,7 @@ export const Home = () => {
   const allprojectDetails = useSelector(state => state.allprojectdetails);
   const RankMovedup = useSelector(state => state.rankmovedup);
   const RankMovedDown = useSelector(state => state.rankmoveddown);
-  const loginOut = useSelector(state => state.loginOut);
+  const loginOut = useSelector(state => state.loginout);
   const [deleteAlert, setdeleteAlert] = useState(false)
   const dlProjectId = useRef([])
 
@@ -46,6 +46,8 @@ export const Home = () => {
 
       if ('no' === res) {
         localStorage.removeItem("websiteurl");
+        localStorage.removeItem('current_location_code')
+        localStorage.removeItem('current_location')
         window.location.reload(false);
 
       }
@@ -69,7 +71,7 @@ export const Home = () => {
 
 
   useEffect(() => {
-    if (loginOut !== 'true') {
+    if (loginOut !== true) {
 
       // window.location.href = '#index.html'
     }

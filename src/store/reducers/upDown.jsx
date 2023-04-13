@@ -1,7 +1,7 @@
 
 
 export const reducerFnthree = (state = false, action) => {
-    const isloginee = localStorage.getItem('loginOut')
+    const isloginee = Boolean(localStorage.getItem('is_userauth'))
     if (action.type === "USER") { return state = isloginee; }
     else { return state = isloginee; }
 };
@@ -71,12 +71,12 @@ export const reducerFnOne = (state = false, action) => {
     else { return state; }
 }
 
-export const reducerFntwo = (state = 0, action) => {
+export const reducerFntwo = (state = 100, action) => {
     if (action.type === 'USERKEYWORDLIMIT') { return state = action.payload }
     else { return state; }
 }
 
-export const reducerFnthr = (state = 0, action) => {
+export const reducerFnthr = (state = 5, action) => {
     if (action.type === 'USERPROJECTLIMIT') { return state = action.payload }
     else { return state; }
 }
@@ -131,6 +131,35 @@ export const reducerSelectedProjectAllId = (state = 0, action) => {
     if (action.type === 'USERSELECTEDPROJECTALLID') { return state = action.payload }
     else { return state; }
 }
+
+
+export const reducerIsProject = (state = true, action) => {
+    if (action.type === 'ISPROJECT') { return state = action.payload }
+    else { return state; }
+}
+
+
+
+
+export const reducerAddProjectLocation = (state = false, action) => {
+    if (action.type === 'ADDPROJECTLOCATION') { return state = action.payload }
+    else { return state; }
+}
+
+
+export const reducerUserCurrentProjectLocation = (state = false, action) => {
+    if (action.type === 'USERCURRENTPROJECTLOCATION') { return state = action.payload }
+    else { return state; }
+}
+
+export const reducerUserCurrentLocation = (state = false, action) => {
+    if (action.type === 'CURRENTLOCATION') { return state = action.payload }
+    else { return state; }
+}
+
+
+
+
 
 
 

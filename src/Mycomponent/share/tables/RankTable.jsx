@@ -17,9 +17,9 @@ const RankTable = () => {
     const dispatch = useDispatch();
 
     // localstorage Data
-    const isProject = localStorage.getItem("IsProject");
     const webURL = localStorage.getItem("websiteurl");
     const deviceType = localStorage.getItem("devicetype");
+    const current_location_code = Number(localStorage.getItem('current_location_code'))
 
     // Redux Data
     const keywordData = useSelector((state) => state.keyworddata);
@@ -27,6 +27,9 @@ const RankTable = () => {
     const UserAllPendingResult = useSelector((state) => state.userallpendingresult);
     const oldKeywordData = useSelector((state) => state.oldkeyworddata);
     const UserSelectedPrId = useSelector((state) => state.userselectedprojectallid)
+    const isProject = useSelector(state => state.isproject);
+    const usercurrentprojectlocation = useSelector(state => state.usercurrentprojectlocation);
+
 
     // useStates
     const [detailsCSV, setDetailsCSV] = useState([])
@@ -37,6 +40,8 @@ const RankTable = () => {
     const [CurrentKeyword, setCurrentKeyword] = useState(null);
     const [progressBar, setProgressBar] = useState([]);
     const selectedKeyword = useRef([])
+    const [addkeywordAlert, setAddKeywordAlert] = useState(false);
+    const [locationViewer, setLocationViewer] = useState([])
 
 
     // useEffect data rendring
@@ -129,7 +134,8 @@ const RankTable = () => {
         }
         else {
             dispatch({ type: "NEWPROJECTURL", payload: webURL });
-            navigate('/addpr/addkeyword')
+            setAddKeywordAlert(true);
+            // navigate('/addpr/addkeyword');
         }
 
     }
@@ -154,6 +160,8 @@ const RankTable = () => {
     };
 
 
+
+    // table Keyword Delete
     const ChooseKeywordDelete = (e) => {
 
         const index = selectedKeyword.current.indexOf(e)
@@ -171,26 +179,42 @@ const RankTable = () => {
 
     const KeywordDelete = () => {
         // selectedKeyword.current.push('nokeyword')
-        console.log(selectedKeyword.current)
+        // console.log(selectedKeyword.current)
         // selectedKeyword.current.map(res => {
-            const selectedKeywordarray = JSON.stringify(selectedKeyword.current)
-            axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(UserSelectedPrId[0]) + '/?key=' + selectedKeywordarray + '&device=' + deviceType)
+        const selectedKeywordarray = JSON.stringify(selectedKeyword.current)
 
-            // if ('nokeyword' === res) {
+        axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(UserSelectedPrId[0]) + '/?key=' + selectedKeywordarray + '&device=' + deviceType + '&location_code=' + current_location_code)
 
-            //     // after 2 seconds stops
-                const timerId = setInterval(() => window.location.reload(false), 5000);
-                setTimeout(() => { clearInterval(timerId) }, 5000);
 
-            // }
+        const timerId = setInterval(() => window.location.reload(false), 1500);
+        setTimeout(() => { clearInterval(timerId) }, 1500);
 
-            console.log(UserSelectedPrId[0], selectedKeywordarray)
-        // })
+        // console.log(UserSelectedPrId[0], selectedKeywordarray)
+
 
     }
 
 
+    const selectKeyViewerHand = (e) => {
+        setLocationViewer((obj) => {
+            return [...obj, { location_code: e.location_code, location_name: e.location_name }]
+        })
+    }
 
+    const SelectKeyViewerDelete = (key) => {
+        setLocationViewer(locationViewer.filter((item, index) => index !== key));
+    }
+
+    const LocationSender = () => {
+        if (locationViewer.length === 0) {
+            alert('please select location')
+        }
+        else {
+            dispatch({ type: "ADDPROJECTLOCATION", payload: locationViewer })
+            navigate('/addpr/addkeyword')
+        }
+
+    }
 
 
     // onClick function for table pagination
@@ -257,45 +281,48 @@ const RankTable = () => {
                             <th scope="col"> </th>
                         </tr>
                     </thead>
-                    {isProject === 'true' ?
+                    {isProject === true ?
                         <tbody>
 
                             {
                                 // .slice(0, tableShowMore)  add slice when ever you need to pagination
-                                UserAllKeywordResult === false ? <Noproject /> : UserAllKeywordResult.length === 0 ? false : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.map((res, key) => {
-                                    return (
-                                        <tr key={key}>
+                                UserAllKeywordResult === false ? <PleaseWait />
+                                    : UserAllKeywordResult.length === 0 && UserAllPendingResult.length === 0 ? <No_deviceTypeKeyword />
+                                        : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.map((res, key) => {
+                                            return (
+                                                <tr key={key}>
 
-                                            <td> <input type='checkbox' value={UserAllKeywordResult[key].keyword} onChange={(e) => ChooseKeywordDelete(e.target.value)} style={{ width: "auto", margin: '0 5px 0 0', top: '2px', position: "relative" }} /> {UserAllKeywordResult[key].keyword}</td>
-                                            <td>
-                                                <div className="cml">
-                                                    <div style={{ minWidth: "60px" }}>   {res.rank_group} </div>
+                                                    <td> <input type='checkbox' value={UserAllKeywordResult[key].keyword} onChange={(e) => ChooseKeywordDelete(e.target.value)} style={{ width: "auto", margin: '0 5px 0 0', top: '2px', position: "relative" }} /> {UserAllKeywordResult[key].keyword}</td>
+                                                    <td>
+                                                        <div className="cml">
+                                                            <div style={{ minWidth: "60px" }}>   {res.rank_group} </div>
 
-                                                    <div className="growArrow ">
-                                                        {progressBar.length !== 0 ? progressBar[key].growth !== true ? <i className="fa-solid fa-sort-down  text-danger "></i> : <i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i> : <div><i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i></div>}
-                                                        {progressBar.length !== 0 ? progressBar[key].result : '0'}
-                                                    </div>
+                                                            <div className="growArrow ">
+                                                                {progressBar.length !== 0 ? progressBar[key].growth !== true ? <i className="fa-solid fa-sort-down  text-danger "></i> : <i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i> : <div><i className="fa-solid fa-sort-up text-success" style={{ bottom: "-7px", position: 'relative' }}></i></div>}
+                                                                {progressBar.length !== 0 ? progressBar[key].result : '0'}
+                                                            </div>
 
-                                                    {/* <div className="">
+                                                            {/* <div className="">
                                                             {progressBar.length !== 0 ? progressBar[key].growth !== true ? <div className="groIcon bg-danger">{progressBar[key].result}</div> : <div className="groIcon ">{progressBar[key].result}</div> : '...'}
 
                                                         </div> */}
 
-                                                </div>
+                                                        </div>
 
-                                            </td>
-                                            <td>{oldKeywordData.length !== 0 && oldKeywordData.length > key ? oldKeywordData[key].rank_group : "0"}</td>
-                                            <td>
-                                                <div className="tb-link-lmt" title={res.url} type='button'>
-                                                    <a href={res.url === "not data found" ? "/" : res.url} target="_blank" rel="noreferrer" >
-                                                        {res.url}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td ><ul><li onClick={() => Chartalert(UserAllKeywordResult[key].keyword)}><i className="fa-solid fa-eye" ></i> </li></ul></td>
-                                        </tr>
-                                    );
-                                }) : <PleaseWait />
+                                                    </td>
+                                                    <td>{oldKeywordData.length !== 0 && oldKeywordData.length > key ? oldKeywordData[key].rank_group : "0"}</td>
+                                                    <td>
+                                                        <div className="tb-link-lmt" title={res.url} type='button'>
+                                                            <a href={res.url === "not data found" ? "/" : res.url} target="_blank" rel="noreferrer" >
+                                                                {res.url}
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td ><ul><li onClick={() => Chartalert(UserAllKeywordResult[key].keyword)}><i className="fa-solid fa-eye" ></i> </li></ul></td>
+                                                </tr>
+                                            );
+                                        })
+                                            : false
 
                             }
 
@@ -339,6 +366,52 @@ const RankTable = () => {
                     <KeywordAllRanksChart Keyword={CurrentKeyword} />
                 </div>
             </div>
+
+
+            <div>
+                {
+                    addkeywordAlert ? <div className='pop ' >
+                        <div className='popBody'>
+                            {/* <div className='exeMark'><h1>?</h1> </div> */}
+                            <h4 style={{ color: '#455197' }}>Please Select Location for Add Keyword </h4 >
+                            {/* <form> */}
+                            <div className='pop-form'>
+                                <div style={{ minWidth: "60vw" }}>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="ranTab_countryChoose">
+                                                <ul >
+                                                    {
+                                                        usercurrentprojectlocation && usercurrentprojectlocation.map((res, key) => {
+                                                            return <li key={key} onClick={() => { selectKeyViewerHand(res) }}>{res.location_name}</li>
+                                                        })
+                                                    }
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <div className="ranTab_countryChoose">
+                                                <ul>
+                                                    {
+                                                        locationViewer && locationViewer.map((res, key) => {
+                                                            return <li key={key}>{res.location_name}<div className="ms-auto" onClick={() => { SelectKeyViewerDelete(key) }}>  <i className="fa fa-solid fa-close"></i></div></li>
+                                                        })
+                                                    }
+
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='cmd mt-3'><button className='cm-btn-b' onClick={() => setAddKeywordAlert(false)}> Cancel</button><button className='cm-btn' onClick={() => LocationSender()} >Add Keyword</button></div>
+                                {/* </form> */}
+                            </div>
+                        </div>
+                    </div> : false
+                }
+            </div>
         </>
     );
 };
@@ -350,7 +423,7 @@ export default RankTable;
 export const Noproject = () => {
     return (
         <tr>
-            <td>No Project Added ---------</td>
+            <td>No Project Added -----</td>
             <td></td>
             <td></td>
             <td></td>
@@ -372,4 +445,20 @@ export const PleaseWait = () => {
         </tr>
     );
 };
+
+
+// please wait handler component
+export const No_deviceTypeKeyword = () => {
+    return (
+        <tr>
+            <td>Please add keyword for this device type -----
+
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    );
+};
+
 

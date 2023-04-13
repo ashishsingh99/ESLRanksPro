@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 const AutoSearch = () => {
     const userallprojectskeywords = useSelector(state => state.userallprojectdetails);
@@ -40,13 +39,15 @@ const AutoSearch = () => {
     }
 
     const SearchedSubmit = (e) => {
-        if (searched.length !== 0 && searched[0] !=='undefined') {
+        if (searched.length !== 0 && searched[0] !== 'undefined') {
             // e.preventDefault()
             localStorage.setItem('websiteurl', searched[0]);
+            localStorage.removeItem('current_location_code')
+
         }
     }
     const SelectedLI = (res) => {
-        // localStorage.setItem('websiteurl', res);
+        localStorage.setItem('websiteurl', res);
         window.location.reload(false);
     }
     return (

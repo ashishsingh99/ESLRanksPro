@@ -61,6 +61,7 @@ const GetCustomer = () => {
             }
             else {
                 // when user not subscribe to any plan
+                // change also his default states from updown.js
                 dispatch({ type: "USERPROJECTLIMIT", payload: 5 });
                 dispatch({ type: "USERKEYWORDLIMIT", payload: 100 });
             }

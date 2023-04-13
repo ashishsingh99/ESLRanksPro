@@ -6,12 +6,13 @@ import "../css/header.css";
 import userImg from "../Assets/seoimg/userImg.jpg";
 import RippleButton from "./components/rippleButton";
 import { Logout } from "./upDater/constant";
+import { useSelector } from "react-redux";
 const Header = () => {
   const profile = localStorage.getItem('name')
   const navigate = useNavigate();
   const ProType = () => {
-    const loginOut = localStorage.getItem("loginOut");
-    if (loginOut === "true") {
+    const loginOut = useSelector(state => state.loginout)
+    if (loginOut === true) {
       return (
         <>
           <div className="d-flex nv-select" style={{ alignItems: "center" }}>

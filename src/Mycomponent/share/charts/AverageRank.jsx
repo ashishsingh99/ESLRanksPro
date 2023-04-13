@@ -9,7 +9,6 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 
 const AverageChart = () => {
-
     const oldcompanyRankk = useRef(null);
     const oldAverageRank = useRef([])
     const [oldAverageLabel, setOldAverageLabel] = useState([])

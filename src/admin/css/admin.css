@@ -9,7 +9,7 @@
 }
 
 .admin-ground {
-    margin: 1.5rem;
+    margin: 1rem 0.5rem;
     padding: 1rem;
     height: calc(100vh - 110px);
     overflow: auto;
@@ -60,11 +60,12 @@
 
 /* media query for mobile max width  */
 @media (max-width: 426px) {
-    .table_title{
+    .table_title {
         /* font-size:20px; */
         margin-bottom: 0 !important;
     }
-    .Card{
+
+    .Card {
         margin-top: 1rem;
         height: auto;
     }

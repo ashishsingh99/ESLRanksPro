@@ -11,7 +11,8 @@ const GetRanks = () => {
   const deviceType = localStorage.getItem("devicetype");
   const webURL = localStorage.getItem("websiteurl");
   const email = localStorage.getItem("email");
-
+  // const current_location = localStorage.getItem('current_location');
+  const current_location_code = Number(localStorage.getItem('current_location_code'));
   // useState data
   // devicetypeFiltered DataBase Data
   const ALLPROJECTDATA = useRef([]);
@@ -31,18 +32,11 @@ const GetRanks = () => {
 
   if (deviceType === null) {
     localStorage.setItem("devicetype", "desktop");
-    // window.location.reload(false)
   }
 
 
 
   useEffect(() => {
-
-
-
-    // // isproject set false because its default value always have to false;
-    // localStorage.setItem("IsProject", false);
-    // // console.log('No Project added')
 
     // All project Data Start ...........................
     axios.get(DB_RANK_DATA()).then((res) => {
@@ -52,15 +46,24 @@ const GetRanks = () => {
         return res.datasave && res.datasave.map((datasave) => {
           return datasave.data.tasks && datasave.data.tasks.filter(task => {
             if (task.data.device === deviceType) {
-              return (task.result && task.result.map((result) => {
-                ALLPROJECTDATA.current.push(result);
+              return (task.result && task.result.filter((result) => {
                 // console.log('  ALLPROJECTDATA.current', ALLPROJECTDATA.current)
+                if (result.location_code === current_location_code) {
+                  // console.log('  ALLPROJECTDATA.current', ALLPROJECTDATA.current)
+                  ALLPROJECTDATA.current.push(result);
+                }
+
               }));
             }
           }
           );
         });
       });
+
+
+
+
+
 
       axios.get(PROJECT_GET()).then((res) => {
         const projectDatalist = res.data.data;
@@ -122,7 +125,10 @@ const GetRanks = () => {
         }
 
 
+
         if (filteredEmailList.length !== 0) {
+
+
           const firstProject = filteredEmailList[filteredEmailList.length - 1].weburl;
 
           if (webURL === null) {
@@ -146,7 +152,6 @@ const GetRanks = () => {
           // console.log('userEmailBasedTotalData', userEmailBasedTotalData)
 
           userEmailBasedTotalData.map(allurlName => {
-
             userEmailBasedTotalPushedData.current.push(allurlName.weburl)
           })
 
@@ -197,20 +202,6 @@ const GetRanks = () => {
           dispatch({ type: "USERKEYWORDLENGTH", payload: projectKeywordLength.current.length });
 
 
-
-
-
-          // userDataFilterByProjectUrl && userDataFilterByProjectUrl.map((detail) => {
-          //   return detail.keyword && detail.keyword.map((onlyKeyword) => {
-          //     // console.log('userDataFilterByProjectUrlonlyKeyword', onlyKeyword)
-          //     // setProjectKeywordLength((resw) => [...resw, onlyKeyword])
-          //     projectKeywordLength.current.push(onlyKeyword)
-
-          //   })
-          // })
-
-          // console.log('projectKeywordLength', projectKeywordLength.current)
-
           // we make new filterration for keyword limitation per plan  end
           ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -220,37 +211,54 @@ const GetRanks = () => {
               return selectedUrl.weburl === webURL;
             }
           });
+          // console.log('filteredUrlBasedData', filteredUrlBasedData)
 
-          if (filteredUrlBasedData.length !== 0) {
-            localStorage.setItem("IsProject", true);
+          if (current_location_code === 0) {
+            localStorage.setItem('current_location', filteredUrlBasedData[0].location_name)
+            localStorage.setItem('current_location_code', filteredUrlBasedData[0].location_code)
+            // dispatch({ type: "CURRENTLOCATION", payload: filteredUrlBasedData[0].location_name });
           }
-          else {
-            localStorage.setItem("IsProject", false);
 
-          }
+          dispatch({ type: "USERCURRENTPROJECTLOCATION", payload: filteredUrlBasedData });
 
+          const country_Based_Data = filteredUrlBasedData.filter(countrybased => {
+            if (countrybased.location_code === current_location_code) {
+              return countrybased;
+            }
+          })
+          // console.log('country_Based_Data', country_Based_Data);
 
-
-          filteredUrlBasedData && filteredUrlBasedData.map((detail) => {
-            return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
-              return (ALLPROJECTDATA.current && ALLPROJECTDATA.current.map((rankKeyword) => {
-                if (onlyKeyword === rankKeyword.keyword) {
-                  USERALLKEYWORDRESULT.current.push(rankKeyword);
-                  // console.log('USERALLKEYWORDRESULT.current', USERALLKEYWORDRESULT.current)
-                } else {
-                  USERALLPENDINGRESULT.current.push(onlyKeyword);
-                  // console.log('USERALLPENDINGRESULT.current', USERALLPENDINGRESULT.current)
-                }
+          if (ALLPROJECTDATA.current.length !== 0) {
+            country_Based_Data && country_Based_Data.map((detail) => {
+              return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
+                return (ALLPROJECTDATA.current.map((rankKeyword) => {
+                  if (onlyKeyword === rankKeyword.keyword) {
+                    USERALLKEYWORDRESULT.current.push(rankKeyword);
+                    // console.log('USERALLKEYWORDRESULT.current', USERALLKEYWORDRESULT.current)
+                  } else {
+                    USERALLPENDINGRESULT.current.push(onlyKeyword);
+                    // console.log('USERALLPENDINGRESULT.current', USERALLPENDINGRESULT.current)
+                  }
+                })
+                );
               })
               );
+            });
+          }
+          else {
+            // alert('no data into database')
+            country_Based_Data && country_Based_Data.map((detail) => {
+              return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
+                return USERALLPENDINGRESULT.current.push(onlyKeyword);
+              }))
             })
-            );
-          });
-
+          }
 
           // it filter remove same name keywords because it print the data duplicate keyword on the table
-          USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter(function (item, pos) {
-            return USERALLKEYWORDRESULT.current.indexOf(item) == pos;
+          USERALLKEYWORDRESULT.current = USERALLKEYWORDRESULT.current.filter((obj, index, self) => {
+            return index === self.findIndex((t) => (
+              t.keyword === obj.keyword && t.location_code === obj.location_code
+            ))
           })
 
           // console.log('USERALLKEYWORDRESULT', USERALLKEYWORDRESULT.current)
@@ -318,7 +326,8 @@ const GetRanks = () => {
 
         }
         else {
-          localStorage.setItem("IsProject", false);
+          dispatch({ type: "ISPROJECT", payload: false });
+          localStorage.removeItem("websiteurl");
 
         }
 

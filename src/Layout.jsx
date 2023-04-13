@@ -6,12 +6,12 @@ import Header from './Mycomponent/share/header';
 import Loader from './Mycomponent/share/loader';
 
 const Layout = () => {
-
     // redux dispatecher
     const dispatch = useDispatch();
 
     // redux state data
     const loading = useSelector(state => state.loading);
+
 
     // after 2 seconds stops
     const timerId = setInterval(() => dispatch({ type: 'NOTLOADING' }), 1000);

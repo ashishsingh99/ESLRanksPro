@@ -41,8 +41,7 @@ const Login = () => {
                     const status = res.data.status
                     if (status === '200') {
                         const loginOut = true;
-                        localStorage.setItem('loginOut', loginOut)
-                        dispatch({ type: "USER" });
+                        localStorage.setItem('is_userauth', loginOut)
                         navigate('/')
                     }
 
