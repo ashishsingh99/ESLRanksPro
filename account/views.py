@@ -17,6 +17,9 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import send_mail
 from django.conf import settings
 import random
+from iteration_utilities import unique_everseen
+from django.views.generic import TemplateView
+
 
 user = 'info@esearchlogix.com'
 password = 'ff9fb26846a160db'
@@ -149,9 +152,11 @@ class keywordprojDeleteView(APIView):
       key = ast.literal_eval(key)
       device = request.query_params.get('device')
       data_key = ast.literal_eval(serializer.data['keyword'])
+      location_code = request.query_params.get('location_code')
+      location_code = int(location_code)
       for i in range(len(data_key)):
         for j in key:
-          if data_key[i]['deviceType'] == device and j in data_key[i]['keyword']:
+          if data_key[i]['deviceType'] == device and j in data_key[i]['keyword'] and data_key[i]['location_code'] == location_code:
             data_key[i]['keyword'].remove(j)
             del_keyword.save()
         key_list.append(data_key[i])
@@ -166,6 +171,7 @@ class keywordprojDeleteView(APIView):
 class keywordprojUpdateView(APIView):
   def put(self,request,id):
     new_data = dict()
+    new_dat = dict()
     key_list = []
     if id:
       del_keyword = DeleteProject.objects.get(id=id)
@@ -174,22 +180,40 @@ class keywordprojUpdateView(APIView):
       key = ast.literal_eval(key)
       device = request.query_params.get('device')
       device = ast.literal_eval(device)
+      location_code = request.query_params.get('location_code')
+      location_code = ast.literal_eval(location_code)
       data_key = ast.literal_eval(serializer.data['keyword'])
       if len(device) > 1:
         for j in device:
-          for i in range(len(data_key)):
-            if data_key[i]['deviceType'] == j:
-              data_key[i]['keyword'].extend(key)
-              del_keyword.save()
-              key_list.append(data_key[i])
+          for l in location_code:
+            for i in range(len(data_key)):
+              if data_key[i]['location_code'] == l and data_key[i]['deviceType'] == j:
+                data_key[i]['keyword'].extend(key)
+                del_keyword.save()
+                key_list.append(data_key[i])
+              elif data_key[i]['location_code'] == l and data_key[i]['deviceType'] != j:
+                new_dat['email'] = data_key[i]['email']
+                new_dat['weburl'] = data_key[i]['weburl']
+                new_dat['deviceType'] = j
+                new_dat['location_name'] = data_key[i]['location_name']
+                new_dat['location_code'] = l
+                new_dat['keyword'] = key
+                key_list.append(new_dat)
+              else:
+                key_list.append(data_key[i])
       else:
         for j in device:
-          for i in range(len(data_key)):
-            if data_key[i]['deviceType'] == j:
-              data_key[i]['keyword'].extend(key)
-              del_keyword.save()
-            key_list.append(data_key[i])
-      new_data['keyword'] = key_list
+          for l in location_code:
+            for i in range(len(data_key)):
+              if data_key[i]['location_code'] == l and data_key[i]['deviceType'] == j:
+                # if data_key[i]['deviceType'] == j:
+                data_key[i]['keyword'].extend(key)
+                del_keyword.save()
+                key_list.append(data_key[i])
+              else:
+                key_list.append(data_key[i])
+      res_list = list(unique_everseen(key_list))
+      new_data['keyword'] = res_list
       serializer = DeleteProjectSerializer(data=new_data)
       if serializer.is_valid():
           serializer.update(del_keyword, new_data)
@@ -341,7 +365,6 @@ class PromotionCodeView(APIView):
   def post(self, request):
     serializer = codesSerializer(data=request.data)
     if serializer.is_valid():
-      # print(serializer.initial_data)
       serializer.save()
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
 
@@ -355,7 +378,7 @@ class PromotionCodeGetView(APIView):
       code = ast.literal_eval(new_data['codes'])
       new_data['codes'] = code
       new_code.append(new_data)
-    # print(serializer.data)
     return Response({"data":new_code}, status=status.HTTP_200_OK)
 
-
+class HomeView(TemplateView):
+  template_name = "home.html"

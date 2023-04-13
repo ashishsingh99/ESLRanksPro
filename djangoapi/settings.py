@@ -17,6 +17,8 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMP_DIR = os.path.join(BASE_DIR, 'ESLWebsite')
+ADDITIONAL_TEMPLATE = os.path.join(BASE_DIR, 'build')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -65,7 +67,7 @@ ROOT_URLCONF = 'djangoapi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [TEMP_DIR, ADDITIONAL_TEMPLATE],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,7 +143,9 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build'),
-    os.path.join(BASE_DIR, 'build', 'static')
+    os.path.join(BASE_DIR, 'build', 'static'),
+    # os.path.join(BASE_DIR, 'ESLWebsite')
+
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
