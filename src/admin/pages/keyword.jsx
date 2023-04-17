@@ -1,20 +1,20 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { Admin_Keyword_Get } from '../../services/constants';
 
 
 const Keyword = () => {
 
-    const allprojectdata = useSelector((state) => state.allprojectdata);
+    const [keyword, setKeyword] = useState([])
 
     useEffect(() => {
         axios.get(Admin_Keyword_Get())
             .then((res) => {
-                console.log('res.data.data',res.data.data)
+                console.log('res.data.data', res.data.data)
+                setKeyword(res.data.data)
             })
-    })
+    }, [keyword])
 
 
 
@@ -28,18 +28,28 @@ const Keyword = () => {
                             <th scope="col" >
                                 Keyword
                             </th>
+                            <th scope="col" >
+                                Device
+                            </th>
+                            <th scope="col" >
+                                Location Code
+                            </th>
 
                             <th scope="col"> </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {allprojectdata.length !== 0 ? allprojectdata && allprojectdata.map((project, key) => {
-                            return <tr key={key}>
-                                <td>{project.keyword}</td>
-                                <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
+                        {keyword.length !== 0 ? keyword && keyword.map((project, key) => {
+                            return project.data && project.data.map((keywo, key) => {
+                                return <tr key={key}>
+                                    <td>{keywo.keyword}</td>
+                                    <td>{keywo.device}</td>
+                                    <td>{keywo.location_code}</td>
+                                    <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
 
-                            </tr>
+                                </tr>
 
+                            })
                         }) : 'loading'
                         }
 

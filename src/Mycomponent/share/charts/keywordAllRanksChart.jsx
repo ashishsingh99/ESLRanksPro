@@ -15,18 +15,32 @@ const KeywordRanksChart = (props) => {
             legend: { position: 'top', display: false },
             title: { display: false, text: 'Chart.js Line Chart', }
         },
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                },
+                ticks: {
+                    display: false
+                }
+
+            },
+            y: {
+                ticks: { stepSize: 10, max: 50, min: 0, },
+                grid: { display: true }
+            },
+        }
     };
 
     const data = {
         labels,
         datasets: [
             {
-                fill: true,
+                fill: false,
                 label: props.Keyword,
                 data: dataSet,
                 borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                tension: 0.2
+                tension: 0.1
             }
         ],
     };

@@ -13,7 +13,6 @@ export const AddKeyword = () => {
     // navigator
     const navigate = useNavigate();
 
-    const userprojectalldetails = useSelector(state => state.userallprojectdetails);
     const userKeywordlimit = useSelector(state => state.userkeywordlimit);
     const UserKeywordLength = useSelector(state => state.userkeywordlength);
     const NewProjectUrl = useSelector(state => state.newprojecturl);
@@ -206,30 +205,30 @@ export const AddKeyword = () => {
             const dataTwo = addprojectlocation && addprojectlocation.map(loca => {
                 return deviceType.current && deviceType.current.map(detype => {
                     return item && item.map((itemData) => {
-                        return {
+                        return [{
                             keyword: itemData,
                             language_code: "en",
                             location_code: loca.location_code,
                             device: detype
-                        }
+                        }]
                     })
                 })
             })
 
-            const datatwoHandler = { data: dataTwo.flat() }
+            const datatwoHandler = { data: dataTwo[0].flat() }
             // console.log('keyword post', datatwoHandler)
             axios.post(KEYWORD_POST(), datatwoHandler)
 
             addprojectlocation && addprojectlocation.filter(loca => {
                 return ALLLocationCode.current.push(loca.location_code)
             })
+
             // console.log('locationCode', ALLLocationCode.current)
 
             const itemData = JSON.stringify(item)
             const deviceTypeData = JSON.stringify(deviceType.current)
             const locations = JSON.stringify(ALLLocationCode.current)
             axios.put('https://eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData + '&location_code=' + locations)
-
             navigate('/addpr/gotraffic')
 
         }
@@ -239,18 +238,19 @@ export const AddKeyword = () => {
             const dataTwo = addprojectlocation && addprojectlocation.map(loca => {
                 return deviceType.current && deviceType.current.map(detype => {
                     return item && item.map((itemData) => {
-                        return {
+                        return [{
                             keyword: itemData,
                             language_code: "en",
                             location_code: loca.location_code,
                             device: detype
-                        }
+                        }]
                     })
                 })
             })
 
-            const datatwoHandler = { data: dataTwo.flat() }
-            console.log('keyword post', datatwoHandler)
+            const datatwoHandler = { data: dataTwo[0].flat() }
+
+            // console.log('keyword post', datatwoHandler)
             axios.post(KEYWORD_POST(), datatwoHandler)
 
 

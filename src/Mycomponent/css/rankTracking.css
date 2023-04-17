@@ -11,6 +11,42 @@
 
 .prLocation {
     position: relative;
+    margin-right: 0.5rem;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    max-width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.prLocation p {
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: pre;
+    overflow: hidden;
+    width: 80%;
+}
+
+.prloc_drop {
+    min-width: 100%;
+    max-width: 150px;
+    z-index: 9999999;
+    white-space: pre;
+    border: 1px solid #dcdcdc;
+    border-radius: 0;
+    left: 0;
+    top: 2rem;
+    font-weight: 400;
+    position: absolute;
+    background: #fff;
+    padding: 0.5rem 0;
+    display: none;
+    overflow-y: hidden;
+    box-shadow: 2px 4px 16px rgba(0, 0, 0, .16);
 }
 
 
@@ -42,22 +78,7 @@
 
 }
 
-.prloc_drop {
-    border: 1px solid #dcdcdc;
-    border-radius: 16px;
-    position: absolute;
-    background: #fff;
-    min-width: 130px;
-    max-width: 150px;
-    padding: 0.5rem 0;
-    /* max-height: 150px; */
-    /* overflow: auto; */
-    display: none;
-    overflow-y: hidden;
-    box-shadow: 2px 4px 16px rgba(0, 0, 0, .16);
-    /* text-overflow:clip ; */
-    white-space: pre;
-}
+
 
 .prloc_drop ul li {
     padding: 0 0.5rem;

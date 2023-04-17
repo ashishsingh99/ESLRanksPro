@@ -25,7 +25,7 @@ const RankTracking = () => {
   if (loginOut === true) {
     return (
       <>
-        {isProject ?
+        {isProject === true ?
           <div className='rank-main'>
             <div className='cmd-b'>
               <div className='d-flex' style={{ alignItems: 'center' }}>
@@ -39,11 +39,12 @@ const RankTracking = () => {
                     <option value={365}>Last 1 Year</option>
                   </select>
                 </div>
+                <ProjectLocation />
+
                 <Link to='/addpr'>  <RippleButton>    +  Add Project  </RippleButton></Link>
               </div>
 
               <div className='rank-se'>
-                <ProjectLocation />
 
                 <button className='cm-btn ms-3'>Search</button>
               </div>

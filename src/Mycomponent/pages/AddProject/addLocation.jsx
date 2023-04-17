@@ -37,11 +37,25 @@ export const AddCountry = () => {
 
     useEffect(() => {
         country.tasks && country.tasks.map((index, key) => (
-            index.result && index.result.slice(0, 100).filter(obj => {
+            index.result && index.result.slice(0, 2000).filter(obj => {
                 if (obj.location_name === countryName) {
+                    // setProjectLocations((prdetails) => {
+                    //     return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }]
+                    // })
+
                     setProjectLocations((prdetails) => {
-                        return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }]
-                    })
+                        // Check if an object with the same location_code already exists in the array
+                        const existingObj = prdetails.find((o) => o.location_code === obj.location_code);
+
+                        // If an object already exists, return the original array without adding a new object
+                        if (existingObj) {
+                            return prdetails;
+                        }
+                        // If an object doesn't exist, add a new object to the array and return the updated array
+                        else {
+                            return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }];
+                        }
+                    });
 
                     locationcode.current = obj.location_code
                 }
@@ -63,14 +77,15 @@ export const AddCountry = () => {
             setCountryName('')
         }
         else {
-            localStorage.setItem('locationcode', locationcode.current)
-            localStorage.setItem('location', countryName)
-            localStorage.setItem('language', language)
-            const projectLOcdetails = projectLocations.filter(
-                (obj, index, self) => index === self.findIndex((t) => t.location_name === obj.location_name)
-            );
-            dispatch({ type: "ADDPROJECTLOCATION", payload: projectLOcdetails });
-            console.log(projectLOcdetails, 'addkeyword');
+            localStorage.setItem('locationcode', locationcode.current);
+            localStorage.setItem('location', countryName);
+            localStorage.setItem('language', language);
+
+            // const projectLOcdetails = projectLocations.filter(
+            //     (obj, index, self) => index === self.findIndex((t) => t.location_name === obj.location_name)
+            // );
+            dispatch({ type: "ADDPROJECTLOCATION", payload: projectLocations });
+            // console.log(projectLOcdetails, 'addkeyword');
             navigate('/addpr/addkeyword');
 
         }
@@ -113,7 +128,7 @@ export const AddCountry = () => {
                                     <select key={key} value={countryName} onChange={(e) => setCountryName(e.target.value)}>
                                         <option> {pllocation}</option>
                                         {
-                                            index.result && index.result.slice(0, 100).map((item, key) => (
+                                            index.result && index.result.slice(0, 2000).map((item, key) => (
                                                 <option value={item.location_name} key={key}>
                                                     {item.location_name}
                                                 </option>

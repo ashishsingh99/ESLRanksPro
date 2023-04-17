@@ -29,7 +29,15 @@ const RankTable = () => {
     const UserSelectedPrId = useSelector((state) => state.userselectedprojectallid)
     const isProject = useSelector(state => state.isproject);
     const usercurrentprojectlocation = useSelector(state => state.usercurrentprojectlocation);
+    const CurrentLocation = useRef([])
 
+    CurrentLocation.current = usercurrentprojectlocation
+    CurrentLocation.current = CurrentLocation.current && CurrentLocation.current.filter((obj, index, self) => {
+        return index === self.findIndex((t) => (
+            t.location_code === obj.location_code
+        ))
+
+    })
 
     // useStates
     const [detailsCSV, setDetailsCSV] = useState([])
@@ -196,14 +204,30 @@ const RankTable = () => {
 
 
     const selectKeyViewerHand = (e) => {
+        // setLocationViewer((obj) => {
+        //     return [...obj, { location_code: e.location_code, location_name: e.location_name }]
+        // })
+
         setLocationViewer((obj) => {
-            return [...obj, { location_code: e.location_code, location_name: e.location_name }]
-        })
+            // Check if an object with the same location_code already exists in the array
+            const existingObj = obj.find((o) => o.location_code === e.location_code);
+
+            // If an object already exists, return the original array without adding a new object
+            if (existingObj) {
+                return obj;
+            }
+            // If an object doesn't exist, add a new object to the array and return the updated array
+            else {
+                return [...obj, { location_code: e.location_code, location_name: e.location_name }];
+            }
+        });
+
     }
 
     const SelectKeyViewerDelete = (key) => {
         setLocationViewer(locationViewer.filter((item, index) => index !== key));
     }
+
 
     const LocationSender = () => {
         if (locationViewer.length === 0) {
@@ -288,7 +312,7 @@ const RankTable = () => {
                                 // .slice(0, tableShowMore)  add slice when ever you need to pagination
                                 UserAllKeywordResult === false ? <PleaseWait />
                                     : UserAllKeywordResult.length === 0 && UserAllPendingResult.length === 0 ? <No_deviceTypeKeyword />
-                                        : keywordData !== 0 && oldKeywordData.length !== 0 ? keywordData && keywordData.map((res, key) => {
+                                        : keywordData !== 0 ? keywordData && keywordData.map((res, key) => {
                                             return (
                                                 <tr key={key}>
 
@@ -382,7 +406,7 @@ const RankTable = () => {
                                             <div className="ranTab_countryChoose">
                                                 <ul >
                                                     {
-                                                        usercurrentprojectlocation && usercurrentprojectlocation.map((res, key) => {
+                                                        CurrentLocation.current && CurrentLocation.current.map((res, key) => {
                                                             return <li key={key} onClick={() => { selectKeyViewerHand(res) }}>{res.location_name}</li>
                                                         })
                                                     }

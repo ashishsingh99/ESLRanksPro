@@ -69,8 +69,9 @@ const AverageChart = () => {
 
 
     const options = {
-        // maintainAspectRatio: false,
+        maintainAspectRatio: false,
         responsive: true,
+        interaction: { mode: 'index', intersect: false, },
         plugins: {
             legend: {
                 position: 'top',
@@ -80,17 +81,34 @@ const AverageChart = () => {
                 display: false,
                 // text: 'Chart.js Line Chart',
             },
+
         },
         scales: {
             y: {
-                // max: Math.round(companyRankk.current / searchCompany.length * 2 / 5) * 5,
-                // max: 50,
-                // min: 0,
+                ticks: { stepSize: 5, max: 100, min: 0, },
+                grid: { display: true }
+            },
+            x: {
                 ticks: {
-                    stepSize: 2
+                    // color: "red"
+                    display:false
+                },
+                grid: {
+                    display: false,
                 }
             }
+            // y: {
+            //     // max: Math.round(companyRankk.current / searchCompany.length * 2 / 5) * 5,
+            //     // max: 50,
+            //     // min: 0,
+            //     ticks: {
+            //         stepSize: 10
+            //     },
+
+            // },
+
         }
+
 
     };
 
@@ -101,18 +119,20 @@ const AverageChart = () => {
         datasets: [
             {
                 label: webURL,
-                // data: [0, Math.round(companyRankk.current / searchCompany.length < 1 ? 1 : companyRankk.current / searchCompany.length)],
                 data: oldAverageRank.current.concat(Number(companyRankk) / Number(searchCompany.length)),
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                fill: true,
-                tension: 0.2
+                borderColor: 'rgb(53,162,235)',
+                fill: false,
+                tension: 0.1
+                // tension: 0.1
+                // data: [0, Math.round(companyRankk.current / searchCompany.length < 1 ? 1 : companyRankk.current / searchCompany.length)],
+                // backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                // backgroundColor: '#',
             },
         ],
     };
 
     return (
-        <div className='vertical-bar'><Line options={options} data={data} /></div>
+        <div className='vertical-bar' > <Line options={options} data={data} /></div>
     )
 
 }

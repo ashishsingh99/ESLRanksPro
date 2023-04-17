@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -55,14 +55,14 @@ const DoughnutChartone = () => {
                 data: [Top3.length, Top10.length, Top100.length, NoRank.length],
                 backgroundColor: [
                     'rgb(127,143,237)',
-                    'rgb(255,99,132)',
+                    '#74d977',
                     'rgb(247,185,38)',
                     'rgb(255,143,132)'
 
                 ],
                 borderColor: [
                     'rgb(127,143,237)',
-                    'rgb(255,99,132)',
+                    '#74d977',
                     'rgb(247,185,38)',
                     'rgb(255,143,132)',
 
@@ -119,7 +119,7 @@ const DoughnutChartone = () => {
                 <div className='col-md-6 col-12 '>
                     <div className='cmc'>
                         <div className='dough-one' style={{ padding: '15px' }} >
-                            <Doughnut data={data} options={options} />
+                            <Pie data={data} options={options} />
                         </div>
                     </div>
                 </div>

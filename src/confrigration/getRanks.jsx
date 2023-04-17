@@ -28,6 +28,7 @@ const GetRanks = () => {
   const userEmailBasedTotalPushedData = useRef([])
   const ProjectData = useRef([]);
   const UserSelectedPRAllId = useRef([]);
+  const projectLocation = useRef([]);
 
 
   if (deviceType === null) {
@@ -67,10 +68,10 @@ const GetRanks = () => {
 
       axios.get(PROJECT_GET()).then((res) => {
         const projectDatalist = res.data.data;
-        // console.log('projectDatalist',projectDatalist)
         dispatch({ type: "ALLPROJECTDETAILS", payload: projectDatalist });
 
-        // get user current selected projectr id
+
+        //-----------------------Start getting user current selected project id  -----------//
         projectDatalist && projectDatalist.map((res) => {
           res.keyword.filter((resfilter) => {
             if (resfilter.email === email && resfilter.weburl === webURL) {
@@ -80,7 +81,10 @@ const GetRanks = () => {
           })
         })
 
-        dispatch({ type: "USERSELECTEDPROJECTALLID", payload: UserSelectedPRAllId.current })
+        dispatch({ type: "USERSELECTEDPROJECTALLID", payload: UserSelectedPRAllId.current });
+        //-----------------------End get user current selected project id  -----------//
+
+
 
         // flat() is use for romove array to an array
         projectDatalist.map((res) => {
@@ -90,31 +94,19 @@ const GetRanks = () => {
         ProjectData.current = ProjectData.current.flat()
         // console.log('projectDatalist', ProjectData.current);
 
-        const ProjectDetail = ProjectData.current.filter((type) => {
-          if (type.deviceType === deviceType) {
-            return type;
-          }
-        });
 
-
-        // console.log('ProjectDetail', ProjectDetail)
-
-        ALLPROJECTDETAILS.current = ProjectDetail;
-        // dispatch({ type: "ALLPROJECTDETAILS", payload: ALLPROJECTDETAILS.current });
-
-
-        // this is user all project details by devicetype
-        const filteredEmailList = ProjectDetail && ProjectDetail.filter((selectedEmail) => {
+        //---------- Start getting user all project details by mail ----------//
+        const filteredEmailList = ProjectData.current && ProjectData.current.filter((selectedEmail) => {
           if (selectedEmail.email === email) {
             return selectedEmail.email === email;
           }
         });
-
         dispatch({ type: "USERALLPROJECTDETAILS", payload: filteredEmailList });
+        //---------- End getting user all project details by mail ----------//
 
-        // console.log('filteredEmailList', filteredEmailList)
 
 
+        //---------- Start getting user all project name ----------//
         filteredEmailList && filteredEmailList.map(prnameurl => {
           filPeNameUrl.current.push(prnameurl.weburl)
         })
@@ -123,33 +115,32 @@ const GetRanks = () => {
           const filteredPrNameUrl = Array.from(new Set(filPeNameUrl.current))
           dispatch({ type: "USERALLPROJECTNAME", payload: filteredPrNameUrl })
         }
-
+        //---------- End getting user all project name ----------//
 
 
         if (filteredEmailList.length !== 0) {
 
-
-          const firstProject = filteredEmailList[filteredEmailList.length - 1].weburl;
-
+          // ----------Start getting first project name of user---------- //
+          const firstProject = filteredEmailList[0].weburl;
           if (webURL === null) {
             localStorage.setItem("websiteurl", firstProject);
             window.location.reload(false);
             // console.log('websiteurldone')
           }
-
-          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-          // we make new filterration for keyword limitation per plan  start
+          // ----------End getting first project name of user---------- //
 
 
+
+          // --------------------------------------------------------------------------------------//
+          //---------- we make new filterration for keyword limitation per plan  start ------------//
+
+          // --------------------------Start Getting User project length--------------------------------//
           const userEmailBasedTotalData = ProjectData.current && ProjectData.current.filter((selectedEmail) => {
             if (selectedEmail.email === email) {
               return selectedEmail.email === email;
 
             }
           });
-
-          // console.log('userEmailBasedTotalData', userEmailBasedTotalData)
 
           userEmailBasedTotalData.map(allurlName => {
             userEmailBasedTotalPushedData.current.push(allurlName.weburl)
@@ -159,68 +150,150 @@ const GetRanks = () => {
           // console.log('filtersameUrlName', filtersameUrlName.length)
           dispatch({ type: "USERPROJECTLENGTH", payload: filtersameUrlName.length });
 
+          // --------------------------END Getting User project length--------------------------------//
+
+
+
+          // --------------------------Start Getting project keyword length--------------------------------//
+
           const userDataFilterByProjectUrl = userEmailBasedTotalData.filter((selectedUrl) => {
             if (selectedUrl.weburl === webURL) {
               return selectedUrl.weburl === webURL;
             }
           });
+          console.log('userDataFilterByProjectUrl', userDataFilterByProjectUrl)
 
+          const result = userDataFilterByProjectUrl.reduce((acc, obj) => {
+            const key = obj.location_code + obj.deviceType;
+            if (!acc[key]) {
+              acc[key] = {
+                location_code: obj.location_code,
+                deviceType: obj.deviceType,
+                total_keyword: 0,
+                unique_keywords: new Set()
+              };
+            }
+            obj.keyword.forEach(keyword => {
+              if (!acc[key].unique_keywords.has(keyword)) {
+                acc[key].total_keyword++;
+                acc[key].unique_keywords.add(keyword);
+              }
+            });
+            return acc;
+          }, {});
+
+          // console.log(result);
+
+          let totalKeywordCount = 0;
+
+          for (let key in result) {
+            totalKeywordCount += result[key].total_keyword;
+          }
+          dispatch({ type: "USERKEYWORDLENGTH", payload: totalKeywordCount });
+
+          // const filter_commonLocation_code = userDataFilterByProjectUrl.filter((obj, index, self) => {
+          //   return index === self.findIndex((t) => (
+          //     t.location_code === obj.location_code
+          //   ))
+          // })
+          // console.log('filter_commonLocation_code', filter_commonLocation_code)
+
+          // filter_commonLocation_code.map((res) =>
+          //   projectLocation.current.push(res.location_code)
+          // )
+          // console.log('projectLocation,', projectLocation.current)
+
+          // projectLocation.current.map((cCode) => {
+          //   userDataFilterByProjectUrl.filter(type => {
+          //     if (type.location_code === cCode) {
+          //       if (type.deviceType === 'desktop') {
+          //         if (type.keyword.length !== 0) {
+          //           desktopKeywordLength.current.push(type.keyword)
+          //           // console.log('type.deviceType desktop', type.keyword)
+          //           desktopKeywordLength.current = desktopKeywordLength.current.flat()
+          //           desktopKeywordLength.current = desktopKeywordLength.current.filter(function (item, pos) {
+          //             return desktopKeywordLength.current.indexOf(item) == pos;
+          //           })
+          //         }
+          //       }
+          //       if (type.deviceType === 'mobile') {
+          //         // console.log('type.deviceType mobile', type.keyword)
+          //         if (type.keyword.length !== 0) {
+          //           mobileKeywordLength.current.push(type.keyword)
+          //           mobileKeywordLength.current = mobileKeywordLength.current.flat()
+          //           mobileKeywordLength.current = mobileKeywordLength.current.filter(function (item, pos) {
+          //             return mobileKeywordLength.current.indexOf(item) == pos;
+          //           })
+          //         }
+          //       }
+          //       // console.log('prRes', type)
+          //     }
+          //   })
+          // })
+
+          // console.log('desktopKeywordLength',desktopKeywordLength.current)
+          // console.log('mobileKeywordLength',mobileKeywordLength.current)
 
           // getting userProject Keyword length with same same keyword filtration for desktop
-          userDataFilterByProjectUrl.filter((type) => {
-            if (type.deviceType === 'desktop') {
-              // return type;
-              desktopKeywordLength.current.push(type.keyword)
-              desktopKeywordLength.current = desktopKeywordLength.current.flat()
-              desktopKeywordLength.current = desktopKeywordLength.current.filter(function (item, pos) {
-                return desktopKeywordLength.current.indexOf(item) == pos;
-              })
-              // console.log('userDataFilterByProjectUrl', desktopKeywordLength.current)
+          // userDataFilterByProjectUrl.filter((type) => {
+          //   if (type.deviceType === 'desktop') {
+          //     if (type.keyword.length !== 0) {
+          //       desktopKeywordLength.current.push(type.keyword)
+          //       // console.log('type.deviceType desktop', type.keyword)
+          //       desktopKeywordLength.current = desktopKeywordLength.current.flat()
+          //       desktopKeywordLength.current = desktopKeywordLength.current.filter(function (item, pos) {
+          //         return desktopKeywordLength.current.indexOf(item) == pos;
+          //       })
+          //     }
+          //   }
+          //   if (type.deviceType === 'mobile') {
+          //     // console.log('type.deviceType mobile', type.keyword)
+          //     if (type.keyword.length !== 0) {
+          //       mobileKeywordLength.current.push(type.keyword)
+          //       mobileKeywordLength.current = mobileKeywordLength.current.flat()
+          //       mobileKeywordLength.current = mobileKeywordLength.current.filter(function (item, pos) {
+          //         return mobileKeywordLength.current.indexOf(item) == pos;
+          //       })
+          //     }
+          //   }
+          // })
 
-            }
-          })
           // getting userProject Keyword length with same same keyword filtration for mobile
 
-          userDataFilterByProjectUrl.filter((type) => {
-            if (type.deviceType === 'mobile') {
-              // return type;
-              mobileKeywordLength.current.push(type.keyword)
-              mobileKeywordLength.current = mobileKeywordLength.current.flat()
-              mobileKeywordLength.current = mobileKeywordLength.current.filter(function (item, pos) {
-                return mobileKeywordLength.current.indexOf(item) == pos;
-              })
-              // console.log('userDataFilterByProjectUrl', mobileKeywordLength.current)
+          // projectKeywordLength.current.push(desktopKeywordLength.current)
+          // projectKeywordLength.current.push(mobileKeywordLength.current)
+          // projectKeywordLength.current = projectKeywordLength.current.flat()
 
-            }
-          })
-
-          projectKeywordLength.current.push(desktopKeywordLength.current)
-          projectKeywordLength.current.push(mobileKeywordLength.current)
-          projectKeywordLength.current = projectKeywordLength.current.flat()
           // console.log('projectKeywordLength', projectKeywordLength.current)
 
-          dispatch({ type: "USERKEYWORDLENGTH", payload: projectKeywordLength.current.length });
+          // dispatch({ type: "USERKEYWORDLENGTH", payload: projectKeywordLength.current.length });
 
 
-          // we make new filterration for keyword limitation per plan  end
-          ////////////////////////////////////////////////////////////////////////////////////////////////////////
+          //---------------- we make new filterration for keyword limitation per plan  end--------------//
+          //--------------------------------------------------------------------------------------------//
 
 
+          //---------- Start getting user selected project all details ----------//
           const filteredUrlBasedData = filteredEmailList.filter((selectedUrl) => {
             if (selectedUrl.weburl === webURL) {
               return selectedUrl.weburl === webURL;
             }
           });
-          // console.log('filteredUrlBasedData', filteredUrlBasedData)
+          // console.log('filteredUrlBasedData', filteredUrlBasedData);
+          //---------- End getting user selected project all details ----------//
+
 
           if (current_location_code === 0) {
             localStorage.setItem('current_location', filteredUrlBasedData[0].location_name)
             localStorage.setItem('current_location_code', filteredUrlBasedData[0].location_code)
+            window.location.reload(false);
             // dispatch({ type: "CURRENTLOCATION", payload: filteredUrlBasedData[0].location_name });
           }
 
           dispatch({ type: "USERCURRENTPROJECTLOCATION", payload: filteredUrlBasedData });
 
+
+          // ---------- Start getting selected project data by LocationCode ---------- //
           const country_Based_Data = filteredUrlBasedData.filter(countrybased => {
             if (countrybased.location_code === current_location_code) {
               return countrybased;
@@ -228,8 +301,23 @@ const GetRanks = () => {
           })
           // console.log('country_Based_Data', country_Based_Data);
 
+          // ---------- End getting selected project data by LocationCode ---------- //
+
+
+          // ---------- Start getting selected project data by  LocationCode with device type ---------- //
+
+          const filterDeviceTypeData = country_Based_Data.filter((type) => {
+            if (type.deviceType === deviceType) {
+              return type;
+            }
+          });
+
+          // ---------- End getting selected project data by  LocationCode with device type ---------- //
+
+
+          // console.log('filterDeviceTypeData', filterDeviceTypeData)
           if (ALLPROJECTDATA.current.length !== 0) {
-            country_Based_Data && country_Based_Data.map((detail) => {
+            filterDeviceTypeData && filterDeviceTypeData.map((detail) => {
               return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
                 return (ALLPROJECTDATA.current.map((rankKeyword) => {
                   if (onlyKeyword === rankKeyword.keyword) {
@@ -246,8 +334,7 @@ const GetRanks = () => {
             });
           }
           else {
-            // alert('no data into database')
-            country_Based_Data && country_Based_Data.map((detail) => {
+            filterDeviceTypeData && filterDeviceTypeData.map((detail) => {
               return (detail.keyword && detail.keyword.filter((onlyKeyword) => {
                 return USERALLPENDINGRESULT.current.push(onlyKeyword);
               }))
@@ -328,7 +415,6 @@ const GetRanks = () => {
         else {
           dispatch({ type: "ISPROJECT", payload: false });
           localStorage.removeItem("websiteurl");
-
         }
 
 
@@ -337,8 +423,8 @@ const GetRanks = () => {
     })
     dispatch({ type: "ALLPROJECTDATA", payload: ALLPROJECTDATA.current });
     // All project Data end
-  }, [deviceType]);
-
+  }, []);
+  // deviceType any problem for related blank screen
 
 
 };
