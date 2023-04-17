@@ -4,6 +4,17 @@
     width: 100%;
     text-align: center;
 }
+.importCsv{
+    color: #000000;
+    margin-left: 1rem;
+}
+.importCsv label{
+    color: #495895;
+    text-decoration: underline;
+cursor: pointer;
+font-weight:bold;
+}
+
 
 .add-pr-url input {
     /* width: 100%; */

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { KEYWORD_POST, PROJECT_POST } from "../../../services/constants";
 import Keygatter from "./keygatter";
+import Papa from 'papaparse';
 
 export const AddKeyword = () => {
     // navigator
@@ -33,7 +34,6 @@ export const AddKeyword = () => {
     const [deviceAlert, setDeviceAlert] = useState(false);
     const [minLenth, setMinLengthAlert] = useState(false);
     const [sameKeyAlert, setSameKeyALert] = useState(false)
-
 
     // useRef data hooks
     const desktop = useRef(null);
@@ -133,7 +133,7 @@ export const AddKeyword = () => {
             localStorage.removeItem('filtered')
         }
 
-        else if (item.length * deviceType.current.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
+        else if (item.length * deviceType.current.length * addprojectlocation.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
             setItemAlert(true)
         }
 
@@ -141,6 +141,7 @@ export const AddKeyword = () => {
             setItem((olditems) => {
                 return [...olditems, keyword]
             })
+
             setKeyword('');
             setItemAlert(false)
             setMinLengthAlert(false)
@@ -194,7 +195,7 @@ export const AddKeyword = () => {
         else if (item.length === 0) {
             setMinLengthAlert(true)
         }
-        else if (item.length * deviceType.current.length + Number(UserKeywordLength) > Number(userKeywordlimit)) {
+        else if (item.length * deviceType.current.length + addprojectlocation.length + Number(UserKeywordLength) > Number(userKeywordlimit)) {
             setItemAlert(true)
         }
 
@@ -278,16 +279,56 @@ export const AddKeyword = () => {
         }
     }
 
+    const handleFileUpload = (event) => {
+        const file = event.target.files[0];
+        Papa.parse(file, {
+            header: true,
+            complete: (results) => {
+                // console.log(results.data); // log the parsed data to the console
+                const keywordSet = results.data;
+                keywordSet && keywordSet.map(res => {
 
+                    setItem((olditems) => {
+                        return [...olditems, res.Keyword]
+                    })
+                })
+
+            }
+        });
+
+    }
+
+    const handleMessagePaste = (event) => {
+        event.preventDefault();
+
+
+        if (deviceType.current.length === 0) {
+            setDeviceAlert(true);
+        }
+
+        else if (item.length * deviceType.current.length * addprojectlocation.length + Number(UserKeywordLength) >= Number(userKeywordlimit)) {
+            setItemAlert(true)
+        }
+
+        else {
+            const clipboardText = event.clipboardData.getData("text/plain");
+            const messages = clipboardText.split(/[\n;,]/);
+            setItem(item.concat(messages));
+            console.log(item)
+
+        }
+
+    }
 
     return <>
 
         <div className='cmd-b'>
             <div className="w-100 text-center">
                 <h1>Add Keyword </h1>
-                <p>
-                    Attract the right traffic by entering the  languages and locations you do business in.
+                <p className="mb-0">
+                    Track keywords to get regular ranking updates and daily content opportunities
                 </p>
+
                 <div className="cmc">
                     <div className="dev-type">
                         <div>
@@ -303,10 +344,13 @@ export const AddKeyword = () => {
                             </label>
                         </div>
                         <div>
-                            keyword :  {deviceType.current.length !== 0 ? item.length * deviceType.current.length + Number(UserKeywordLength) : item.length + Number(UserKeywordLength)}
+                            keyword :  {deviceType.current.length !== 0 && item.length !== 0 ? item.length * deviceType.current.length * addprojectlocation.length + Number(UserKeywordLength) : item.length + Number(UserKeywordLength)}
                         </div>
 
+
+
                     </div>
+
                 </div>
                 <div className=' add-pr-url'>
                     <form>
@@ -330,9 +374,14 @@ export const AddKeyword = () => {
                                     </ul>
                                 </div>
                         }
-                        <input style={itemAlert ? { borderColor: "red" } : {}} type='text' placeholder='Type keyword' value={keyword} onChange={ItemEvent} />
-                        <p className="vl-msd-line mt-0" >{itemAlert ? " You have reached your maximum limit of " + userKeywordlimit + ' keywords' : deviceAlert ? "Please select device type" : minLenth ? " Please enter atleast one keyword" : sameKeyAlert ? 'This keyword is already exits' : false}</p>
+                        <input style={itemAlert ? { borderColor: "red" } : {}} type='text' placeholder='Type keyword' value={keyword} onPaste={handleMessagePaste} onChange={ItemEvent} />
+                        <p className="vl-msd-line mt-0" >{itemAlert ? " You have reached your maximum limit of " + userKeywordlimit + ' keywords' : deviceAlert ? "Please select device type" : minLenth ? " Please enter atleast one keyword" : sameKeyAlert ? 'This keyword is already exits' : false}  <div className="importCsv"> Paste or <label htmlFor='importCSV'>import from csv </label></div></p>
+                        <div>
 
+                            <div className="d-none">
+                                <input type="file" accept=".csv" id="importCSV" name="importCSV" placeholder="dfd" onChange={handleFileUpload} />
+                            </div>
+                        </div>
                         <div className='add-pr-btn'>
                             <Link to={-1}><button className='cm-btn' type='button'>Back</button></Link>
                             <button className='cm-btn' type='submit' style={{ visibility: 'hidden' }} onClick={Listofitems}>Next</button>
@@ -342,6 +391,7 @@ export const AddKeyword = () => {
 
                     </form>
                 </div>
+
             </div>
 
 
