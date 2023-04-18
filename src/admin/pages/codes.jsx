@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
+import { Reffral_Get } from '../../services/constants'
 
 const Codes = () => {
     const [ShowAlert, setShowAlert] = useState(false)
@@ -11,7 +12,7 @@ const Codes = () => {
     const code = useRef('')
 
     useEffect(() => {
-        axios.get('https://eslrankspro.com/api/user/codesGet/')
+        axios.get(Reffral_Get())
             .then((res) => {
                 console.log('res.data of ckdse', res.data)
                 setCodesData(res.data.data)

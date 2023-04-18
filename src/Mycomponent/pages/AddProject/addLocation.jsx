@@ -36,31 +36,30 @@ export const AddCountry = () => {
     });
 
     useEffect(() => {
-        country.tasks && country.tasks.map((index, key) => (
-            index.result && index.result.slice(0, 2000).filter(obj => {
-                if (obj.location_name === countryName) {
-                    // setProjectLocations((prdetails) => {
-                    //     return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }]
-                    // })
+        country.filter(obj => {
+            if (obj.location_name === countryName) {
+                // setProjectLocations((prdetails) => {
+                //     return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }]
+                // })
 
-                    setProjectLocations((prdetails) => {
-                        // Check if an object with the same location_code already exists in the array
-                        const existingObj = prdetails.find((o) => o.location_code === obj.location_code);
+                setProjectLocations((prdetails) => {
+                    // Check if an object with the same location_code already exists in the array
+                    const existingObj = prdetails.find((o) => o.location_code === obj.location_code);
 
-                        // If an object already exists, return the original array without adding a new object
-                        if (existingObj) {
-                            return prdetails;
-                        }
-                        // If an object doesn't exist, add a new object to the array and return the updated array
-                        else {
-                            return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }];
-                        }
-                    });
+                    // If an object already exists, return the original array without adding a new object
+                    if (existingObj) {
+                        return prdetails;
+                    }
+                    // If an object doesn't exist, add a new object to the array and return the updated array
+                    else {
+                        return [...prdetails, { location_code: obj.location_code, location_name: obj.location_name }];
+                    }
+                });
 
-                    locationcode.current = obj.location_code
-                }
-            })
-        ))
+                locationcode.current = obj.location_code
+            }
+        })
+
 
     }, [countryName])
 
@@ -123,24 +122,21 @@ export const AddCountry = () => {
                         <div className='ms-3 add-sel'>
                             <label >Location</label>
 
-                            {
-                                country ? country.tasks && country.tasks.map((index, key) => (
-                                    <select key={key} value={countryName} onChange={(e) => setCountryName(e.target.value)}>
-                                        <option> {pllocation}</option>
-                                        {
-                                            index.result && index.result.slice(0, 2000).map((item, key) => (
-                                                <option value={item.location_name} key={key}>
-                                                    {item.location_name}
-                                                </option>
-                                            ))
-                                        }
 
-                                    </select>
-                                ))
-                                    : <select >
-                                        <option>select...</option>
-                                    </select>
-                            }
+                            <select value={countryName} onChange={(e) => setCountryName(e.target.value)}>
+                                <option> {pllocation}</option>
+
+                                {
+                                    country.map((item, key) => (
+                                        <option value={item.location_name} key={key}>
+                                            {item.location_name}
+                                        </option>
+                                    ))
+                                }
+
+                            </select>
+
+
 
 
                             <div className='add-country-box'>

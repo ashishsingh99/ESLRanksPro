@@ -6,9 +6,10 @@ import google from '../../Assets/google.png'
 import facebook from '../../Assets/facebook.png'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { regester_withAPi, regester_withOTP } from '../../../services/constants'
+import { Reffral_Get, regester_withAPi, regester_withOTP } from '../../../services/constants'
 import axios from 'axios';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -19,12 +20,63 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [OTP, setOTP] = useState(false);
     const [OTPVail, setOtpVail] = useState(0);
+    const [refftalMatch, setReffralMatch] = useState([])
+    const [refAlert, setRefAlert] = useState(false)
+    const [matchedRefitems, setmatchedRefItems] = useState({})
+
+    // navigator
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        axios.get(Reffral_Get())
+            .then((res) => {
+                console.log('refferal codes get', res.data.data)
+                setReffralMatch(res.data.data);
+            })
+    }, [])
+
+    const reffralHandler = (e) => {
+
+        if (email === '' || password === '' || password2 === '' || name === '') {
+            setRefAlert('Please fill all details')
+        }
+        else {
+            const foundPlan = refftalMatch.find((plan) => plan.codes.includes(e));
+            // console.log('foundPlan', foundPlan)
+            if (foundPlan) {
+                setRefAlert('Matched');
+                // console.log(foundPlan.plan_name, foundPlan.validity, foundPlan.id, e)
+
+                const reffralItems = {
+                    email: email,
+                    code_valid: e,
+                    valid: foundPlan.validity,
+                    code_name: foundPlan.plan_name
+                }
+                setmatchedRefItems(reffralItems);
+
+
+            } else {
+                if (e === '') {
+                    setRefAlert('')
+                }
+                else {
+                    setRefAlert('Please enter valid refferal code');
+                }
+            }
+
+        }
+
+    }
+
     const login = (e) => {
         e.preventDefault();
-        // dispatch({ type: 'LOADING' });
 
-        if (OTP !== false) {
+        if (email === '' || password === '' || password2 === '' || name === '') {
+            setRefAlert('Please fill all details')
+        }
+        else if (OTP !== false) {
 
             if (OTPVail.length === 4 && Number(OTPVail) === OTP) {
                 setMydata('');
@@ -38,26 +90,23 @@ const Register = () => {
                 };
                 axios.post(regester_withAPi(), item)
                     .then(res => {
-                        // alert(res.data.msg)
-
                         setOTP(false)
                         setMydata('');
-                        const mydata = res.data;
+                        axios.post('https://eslrankspro.com/api/user/codevalid/', matchedRefitems)
                         navigate('/login')
-                        // console.warn('res.data', res)
 
                     }).catch((res) => {
                         setMydata(res.response.data.email);
-                        // console.log('res', res)
                     })
             }
             else {
-                // alert('otp did not match')
                 setMydata('Otp did not match');
             }
 
         }
+
         else {
+
             setOTP(true);
             let item = {
                 email: email,
@@ -68,7 +117,7 @@ const Register = () => {
                 })
 
         }
-        // dispatch({ type: 'NOTLOADING' })
+
     }
 
     return (
@@ -92,14 +141,14 @@ const Register = () => {
                             <form>
                                 <div className='lg-ri-fm' style={{ height: '100%' }}>
                                     <h3 className='text-center'>REGISTER</h3>
-                                    <div className='lg-sn-op'>
+                                    {/* <div className='lg-sn-op'>
                                         <ul>
                                             <li> <img src={google} alt='google img'></img>continue with google</li>
                                             <li><img src={facebook} alt='facebook img'></img>continue with facebook</li>
                                         </ul>
                                     </div>
-                                    <div className='lg-line'> </div>
-                                    <div className='reg-anim'>
+                                    <div className='lg-line'> </div> */}
+                                    <div className='reg-anim pt-2'>
 
 
 
@@ -113,16 +162,21 @@ const Register = () => {
 
                                             </div> : <div className=''>
                                                 <input type='email' placeholder='Email' onChange={(e) => setEmail(e.target.value)} ></input>
-                                                <label id='lb'>Email</label>
+                                                <label id='lb'>Email*</label>
                                                 <input type='text' placeholder='Name' onChange={(e) => setName(e.target.value)} ></input>
-                                                <label id='lb'>Name</label>
+                                                <label id='lb'>Name*</label>
 
 
                                                 <input type='password' placeholder='Password' onChange={(e) => setPassword(e.target.value)} autoComplete='false'></input>
-                                                <label id='lb'>Password</label>
+                                                <label id='lb'>Password*</label>
 
                                                 <input type='password' placeholder=' Confirm Password' onChange={(e) => setPassword2(e.target.value)} autoComplete='false'></input>
-                                                <label id='lb'>Password</label>
+                                                <label id='lb'>Password*</label>
+
+
+                                                <input type='' placeholder='Referral Code' onChange={(e) => reffralHandler(e.target.value)} autoComplete='false'></input>
+                                                <label id='lb'>Referral</label>
+                                                <p className='vl-msd-line'>{refAlert === 'Matched' ? <span className='text-success'>{refAlert} </span> : refAlert} </p>
 
 
                                             </div>

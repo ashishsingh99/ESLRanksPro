@@ -42,6 +42,22 @@ export const AddKeyword = () => {
     const messagesEndRef = useRef(null);
     const sameKeyword = useRef(false);
     const ALLLocationCode = useRef([])
+    const inputRef = useRef(null);
+
+    // this useEffect function for ctrl + / target input
+    useEffect(() => {
+        function handleKeyDown(event) {
+            if (event.ctrlKey && event.key === '/') {
+                event.preventDefault(); // prevent default behavior of the browser
+                inputRef.current.focus();
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -300,8 +316,6 @@ export const AddKeyword = () => {
 
     const handleMessagePaste = (event) => {
         event.preventDefault();
-
-
         if (deviceType.current.length === 0) {
             setDeviceAlert(true);
         }
@@ -374,8 +388,8 @@ export const AddKeyword = () => {
                                     </ul>
                                 </div>
                         }
-                        <input style={itemAlert ? { borderColor: "red" } : {}} type='text' placeholder='Type keyword' value={keyword} onPaste={handleMessagePaste} onChange={ItemEvent} />
-                        <p className="vl-msd-line mt-0" >{itemAlert ? " You have reached your maximum limit of " + userKeywordlimit + ' keywords' : deviceAlert ? "Please select device type" : minLenth ? " Please enter atleast one keyword" : sameKeyAlert ? 'This keyword is already exits' : false}  <div className="importCsv"> Paste or <label htmlFor='importCSV'>import from csv </label></div></p>
+                        <input style={itemAlert ? { borderColor: "red" } : {}} type='text' placeholder='Type keyword' value={keyword} onPaste={handleMessagePaste} onChange={ItemEvent} ref={inputRef} />
+                        <p className="vl-msd-line mt-0" > <div className="importCsv"> Paste or <label htmlFor='importCSV'>import from csv </label></div>{itemAlert ? " You have reached your maximum limit of " + userKeywordlimit + ' keywords' : deviceAlert ? "Please select device type" : minLenth ? " Please enter atleast one keyword" : sameKeyAlert ? 'This keyword is already exits' : false} </p>
                         <div>
 
                             <div className="d-none">

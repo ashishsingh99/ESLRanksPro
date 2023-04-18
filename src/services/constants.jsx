@@ -29,3 +29,5 @@ export const OLD_RANK_DATA = () => `https://eslrankspro.com/api/user/Olddata/`;
 export const ADMIN_USERS = () => `https://eslrankspro.com/api/user/adminuser/`;
 
 
+// reffral codes get
+export const Reffral_Get = () => `https://eslrankspro.com/api/user/codesGet/`;

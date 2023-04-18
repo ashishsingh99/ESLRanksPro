@@ -35,12 +35,7 @@ const GetPreviousRanks = () => {
             const PreviousUserAllProjects = res.data.data;
             // console.log('PreviousUserAllProjects', PreviousUserAllProjects);
 
-
-
-
             axios.get(PROJECT_GET()).then((res) => {
-
-
 
                 const projectDatalist = res.data.data;
 

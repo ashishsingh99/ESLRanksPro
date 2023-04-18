@@ -26,7 +26,7 @@ const KeywordRanksChart = (props) => {
 
             },
             y: {
-                ticks: { stepSize: 10, max: 50, min: 0, },
+                ticks: { stepSize: 10 },
                 grid: { display: true }
             },
         }

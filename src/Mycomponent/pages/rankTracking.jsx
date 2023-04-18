@@ -10,6 +10,7 @@ import LastUpdate from '../share/components/lastUpdate';
 import { useDispatch, useSelector } from 'react-redux';
 import PlAdd from './login/plAdd';
 import ProjectLocation from '../share/searchBox/ProjectLocation';
+import AutoSearch from '../share/searchBox/autoSearch';
 
 
 
@@ -46,7 +47,8 @@ const RankTracking = () => {
 
               <div className='rank-se'>
 
-                <button className='cm-btn ms-3'>Search</button>
+                {/* <button className='cm-btn ms-3'>Search</button> */}
+                <AutoSearch />
               </div>
             </div>
 

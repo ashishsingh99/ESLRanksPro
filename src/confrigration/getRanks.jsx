@@ -189,6 +189,7 @@ const GetRanks = () => {
           for (let key in result) {
             totalKeywordCount += result[key].total_keyword;
           }
+
           dispatch({ type: "USERKEYWORDLENGTH", payload: totalKeywordCount });
 
           // const filter_commonLocation_code = userDataFilterByProjectUrl.filter((obj, index, self) => {
