@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib import admin
 from . import views
-from account.views import SendPasswordResetEmailView,projectView,PromotionCodeView,PromotionCodeGetView,keywordprojDeleteView,keywordprojUpdateView,projectGetView,projectDeleteView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
+from account.views import SendPasswordResetEmailView,projectView,CodeValidView,CodeValidGetView,CodeDeleteView,PromotionCodeView,PromotionCodeGetView,keywordprojDeleteView,keywordprojUpdateView,projectGetView,projectDeleteView,PlanDeleteView,PlanUpdateView,PlanGetView,PlanView,NewDataView,getOldDataView,deleteprofileView,profileView,projectGetView,KeywordGetView,OTPView,keywordView,UserChangePasswordView, UserLoginView, UserProfileView, UserRegistrationView, UserPasswordResetView
 urlpatterns = [
     
     path('register/', UserRegistrationView.as_view(), name='register'),
@@ -28,4 +28,7 @@ urlpatterns = [
     path('deleteplan/<id>/',PlanDeleteView.as_view(), name='plan-delete'),
     path('codes/', PromotionCodeView.as_view(), name='codes'),
     path('codesGet/', PromotionCodeGetView.as_view(), name='codesGet'),
+    path('codevalid/', CodeValidView.as_view(), name='code-valid'),
+    path('codevalidGet/', CodeValidGetView.as_view(), name='code-valid-get'),
+    path('deletecode/<id>/',CodeDeleteView.as_view(), name='code-delete'),
 ]

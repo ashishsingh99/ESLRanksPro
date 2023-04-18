@@ -1,13 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import SendPasswordResetEmailSerializer,codesSerializer,codesGetSerializer,DeleteProjectGetSerializer,DeleteProjectSerializer,PlanGetSerializer,PlanSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
+from account.serializers import SendPasswordResetEmailSerializer,codeValidSerializer,codeValidGetSerializer,codesSerializer,codesGetSerializer,DeleteProjectGetSerializer,DeleteProjectSerializer,PlanGetSerializer,PlanSerializer,KeywordGetSerializer,otpSerializer,KeywordSerializer, UserChangePasswordSerializer, UserLoginSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from django.middleware.csrf import get_token
-from .models import Keyword, User, Plan, DeleteProject,Codes
+from .models import Keyword, User, Plan, DeleteProject,Codes, codeValid
 import ast
 from .client import RestClient
 from pymongo import MongoClient
@@ -210,6 +210,14 @@ class keywordprojUpdateView(APIView):
                 data_key[i]['keyword'].extend(key)
                 del_keyword.save()
                 key_list.append(data_key[i])
+              elif data_key[i]['location_code'] == l and data_key[i]['deviceType'] != j:
+                new_dat['email'] = data_key[i]['email']
+                new_dat['weburl'] = data_key[i]['weburl']
+                new_dat['deviceType'] = j
+                new_dat['location_name'] = data_key[i]['location_name']
+                new_dat['location_code'] = l
+                new_dat['keyword'] = key
+                key_list.append(new_dat)
               else:
                 key_list.append(data_key[i])
       res_list = list(unique_everseen(key_list))
@@ -332,11 +340,8 @@ class SendPasswordResetEmailView(APIView):
       try:
         user = User.objects.get(email = email)
         uid = urlsafe_base64_encode(force_bytes(user.id))
-        # print('Encoded UID', uid)
         token = PasswordResetTokenGenerator().make_token(user)
-        # print('Password Reset Token', token)
         link = 'https://eslrankspro.com/api/user/reset/'+uid+'/'+token
-        # print('Password Reset Link', link)
         # Send EMail
         body = "We heard that you lost your password. Sorry about that! But don't worry! You can use the following link to reset your password: "+link
         data = {
@@ -366,7 +371,9 @@ class PromotionCodeView(APIView):
     serializer = codesSerializer(data=request.data)
     if serializer.is_valid():
       serializer.save()
-    return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
+      return Response({'msg':'Code Saved Successfully'}, status=status.HTTP_200_OK)
+    else:
+      return Response({'msg':'Incorrect Input'}, status=status.HTTP_400_BAD_REQUEST)
 
 class PromotionCodeGetView(APIView):
   def get(self, request):
@@ -380,5 +387,38 @@ class PromotionCodeGetView(APIView):
       new_code.append(new_data)
     return Response({"data":new_code}, status=status.HTTP_200_OK)
 
-class HomeView(TemplateView):
-  template_name = "home.html"
+class CodeValidView(APIView):
+  def post(self, request):
+    serializer = codeValidSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response({'msg':'Code Saved'}, status=status.HTTP_200_OK)
+    else:
+      return Response({'msg':'Invalid'}, status=status.HTTP_400_BAD_REQUEST)
+  
+class CodeValidGetView(APIView):
+  def get(self,request):
+    code_validation = codeValid.objects.all()
+    serializer = codeValidGetSerializer(code_validation, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CodeDeleteView(APIView):
+  def put(self,request,id):
+    new_data = dict()
+    if id:
+      del_code = Codes.objects.get(id=id)
+      serializer = codesGetSerializer(del_code)
+      code = request.query_params.get('code')
+      code_value = ast.literal_eval(serializer.data['codes'])
+      if code in code_value:
+        code_value.remove(code)
+        del_code.save()
+      new_data['plan_name'] = serializer.data['plan_name']
+      new_data['codes'] = code_value
+      new_data['validity'] = serializer.data['validity']
+      serializer = codesSerializer(data=new_data)
+      if serializer.is_valid():
+          serializer.update(del_code, new_data)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+      return Response({"msg":"No code found"}, status=status.HTTP_400_BAD_REQUEST)

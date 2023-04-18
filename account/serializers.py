@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from account.models import User, Keyword, OTP, Plan, DeleteProject, Codes
+from account.models import User, Keyword, OTP, Plan, DeleteProject, Codes, codeValid
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -141,4 +141,19 @@ class codesSerializer(serializers.ModelSerializer):
 class codesGetSerializer(serializers.ModelSerializer):
   class Meta:
     model = Codes
+    fields = '__all__'
+
+class codeValidSerializer(serializers.ModelSerializer):
+  code_valid = serializers.SlugField(max_length=50)
+  email = serializers.EmailField(max_length=255)
+  valid = serializers.SlugField(max_length=50)
+  code_name = serializers.CharField(max_length=128)
+  expiry_date = serializers.IntegerField()
+  class Meta:
+    model = codeValid
+    fields = ['code_valid', 'email', 'valid', 'code_name', 'expiry_date']
+
+class codeValidGetSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = codeValid
     fields = '__all__'

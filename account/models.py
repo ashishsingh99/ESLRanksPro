@@ -87,3 +87,15 @@ class Codes(models.Model):
     plan_name = models.CharField(max_length=256)
     codes = models.SlugField()
     validity = models.CharField(max_length=256)
+
+class codeValid(models.Model):
+    code_valid = models.SlugField()
+    email = models.EmailField(
+      verbose_name='Email',
+      max_length=255,
+      unique=True,
+      )
+    valid = models.SlugField()
+    code_name = models.CharField(max_length=256)
+    used_at = models.DateField(auto_now_add=True)
+    expiry_date = models.IntegerField()
