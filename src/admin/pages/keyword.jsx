@@ -14,7 +14,10 @@ const Keyword = () => {
                 console.log('res.data.data', res.data.data)
                 setKeyword(res.data.data)
             })
-    }, [keyword])
+
+
+
+    }, [])
 
 
 
@@ -39,18 +42,19 @@ const Keyword = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {keyword.length !== 0 ? keyword && keyword.map((project, key) => {
-                            return project.data && project.data.map((keywo, key) => {
-                                return <tr key={key}>
-                                    <td>{keywo.keyword}</td>
-                                    <td>{keywo.device}</td>
-                                    <td>{keywo.location_code}</td>
-                                    <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
+                        {
+                            // keyword && keyword.map((proj) => {
+                            //     proj.data && proj.data.map((keywo, key) => {
+                            //         return <tr key={key}>
+                            //             <td>{keywo.keyword}</td>
+                            //             <td>{keywo.device}</td>
+                            //             <td>{keywo.location_code}</td>
+                            //             <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
 
-                                </tr>
+                            //         </tr>
 
-                            })
-                        }) : 'loading'
+                            //     })
+                            // })
                         }
 
                     </tbody>

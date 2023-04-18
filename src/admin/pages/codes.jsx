@@ -17,12 +17,10 @@ const Codes = () => {
                 console.log('res.data of ckdse', res.data)
                 setCodesData(res.data.data)
             })
-    })
+    },[])
 
 
     const CodesHandler = () => {
-
-
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let newCodes = [];
         for (let i = 0; i < genratelmt; i++) {

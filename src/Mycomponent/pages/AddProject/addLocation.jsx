@@ -25,7 +25,7 @@ export const AddCountry = () => {
 
     useEffect(() => {
 
-        if (Number(UserKeywordLength) >= userkeywordlimit) {
+        if (Number(UserKeywordLength) >= Number(userkeywordlimit)) {
             navigate('/')
             alert('you have exceeded your plan keyword limit    ')
         }

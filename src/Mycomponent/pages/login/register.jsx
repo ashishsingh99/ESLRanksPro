@@ -48,11 +48,20 @@ const Register = () => {
                 setRefAlert('Matched');
                 // console.log(foundPlan.plan_name, foundPlan.validity, foundPlan.id, e)
 
+                const currentDate = new Date();
+                const futureDate = new Date();
+                futureDate.setDate(currentDate.getDate() + Number(foundPlan.validity));
+                const futureDay = futureDate.getDate();
+                // console.log("Future day:", futureDay);
+
+
                 const reffralItems = {
                     email: email,
                     code_valid: e,
                     valid: foundPlan.validity,
-                    code_name: foundPlan.plan_name
+                    code_name: foundPlan.plan_name,
+                    expiry_date: futureDay
+
                 }
                 setmatchedRefItems(reffralItems);
 
@@ -171,7 +180,7 @@ const Register = () => {
                                                 <label id='lb'>Password*</label>
 
                                                 <input type='password' placeholder=' Confirm Password' onChange={(e) => setPassword2(e.target.value)} autoComplete='false'></input>
-                                                <label id='lb'>Password*</label>
+                                                <label id='lb'>Confirm Password*</label>
 
 
                                                 <input type='' placeholder='Referral Code' onChange={(e) => reffralHandler(e.target.value)} autoComplete='false'></input>

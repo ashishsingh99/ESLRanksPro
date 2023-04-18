@@ -19,7 +19,7 @@ export const AddWebsite = () => {
 
     // authentication lmt for customer Project
     useEffect(() => {
-        if (USERALLPROJECTLength >= userProjectlimit) {
+        if (USERALLPROJECTLength >= Number(userProjectlimit)) {
             setShowAlert(true)
         }
         else {

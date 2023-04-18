@@ -4,15 +4,17 @@
     width: 100%;
     text-align: center;
 }
-.importCsv{
+
+.importCsv {
     color: #000000;
     margin-right: 1rem;
 }
-.importCsv label{
+
+.importCsv label {
     color: #495895;
     text-decoration: underline;
-cursor: pointer;
-font-weight:bold;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 
@@ -87,16 +89,19 @@ font-weight:bold;
 
 .add-sel select {
     margin-top: 0.5rem;
-    margin-right: 0;
     text-transform: capitalize !important;
+
+    margin-right: 0;
     /* margin-left: 1rem; */
 }
-.add-country-box{
+
+.add-country-box {
     max-height: 150px;
     max-width: 280px;
     overflow: auto;
     overflow-x: hidden;
 }
+
 .add-country-box ul {
     display: block;
     width: 100%;
@@ -112,7 +117,7 @@ font-weight:bold;
     margin-top: 0.5rem;
     display: flex;
     align-items: center;
-    white-space:break-spaces ;
+    white-space: break-spaces;
     text-overflow: ellipsis;
 
 
