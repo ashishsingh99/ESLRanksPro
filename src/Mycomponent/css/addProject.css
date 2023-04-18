@@ -88,7 +88,7 @@ font-weight:bold;
 .add-sel select {
     margin-top: 0.5rem;
     margin-right: 0;
-    text-transform: capitalize !important
+    text-transform: capitalize !important;
     /* margin-left: 1rem; */
 }
 .add-country-box{
