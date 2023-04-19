@@ -5,10 +5,12 @@ import logo from '../../Assets/seoimg/logo.png'
 import google from '../../Assets/google.png'
 import facebook from '../../Assets/facebook.png'
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login_withAPi } from '../../../services/constants'
 import axios from 'axios';
 const Login = () => {
+    const loginOut = useSelector(state => state.loginout);
+    const is_userauth = localStorage.getItem('is_userauth')
 
 
     const dispatch = useDispatch();
@@ -17,6 +19,10 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
+
+    if (is_userauth === 'true') {
+        navigate('/');
+    }
 
     const login = (e) => {
         e.preventDefault();
@@ -40,9 +46,8 @@ const Login = () => {
 
                     const status = res.data.status
                     if (status === '200') {
-                        const loginOut = true;
-                        localStorage.setItem('is_userauth', loginOut)
-                        navigate('/')
+                        dispatch({ type: "USER", payload: true })
+                        localStorage.setItem('is_userauth', true)
                     }
 
 

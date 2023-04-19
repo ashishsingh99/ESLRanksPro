@@ -12,7 +12,7 @@ import { curday, perday } from '../share/upDater/constant';
 import DoughnutChartone from '../share/charts/doughnutChart';
 import axios from 'axios';
 import { delete_Project } from '../../services/constants';
-export const Home = () => {
+export const  Home = () => {
   const allprojectDetails = useSelector(state => state.allprojectdetails);
   const RankMovedup = useSelector(state => state.rankmovedup);
   const RankMovedDown = useSelector(state => state.rankmoveddown);
@@ -72,7 +72,6 @@ export const Home = () => {
 
   useEffect(() => {
     if (loginOut !== true) {
-
       window.location.href = 'https://eslrankspro.com/'
     }
   })
