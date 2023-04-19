@@ -7,17 +7,19 @@ import { Admin_Keyword_Get } from '../../services/constants';
 const Keyword = () => {
 
     const [keyword, setKeyword] = useState([])
+    const [page, setpage] = useState(10)
 
     useEffect(() => {
         axios.get(Admin_Keyword_Get())
             .then((res) => {
                 console.log('res.data.data', res.data.data)
-                setKeyword(res.data.data)
+                const data = res.data.data
+                setKeyword(data)
             })
-
-
-
     }, [])
+
+
+
 
 
 
@@ -43,18 +45,19 @@ const Keyword = () => {
                     </thead>
                     <tbody>
                         {
-                            // keyword && keyword.map((proj) => {
-                            //     proj.data && proj.data.map((keywo, key) => {
-                            //         return <tr key={key}>
-                            //             <td>{keywo.keyword}</td>
-                            //             <td>{keywo.device}</td>
-                            //             <td>{keywo.location_code}</td>
-                            //             <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
+                            keyword.length !== 0 ? keyword && keyword.map((proj) => {
+                                // debugger
+                                return proj.data && proj.data.map((keywo, key) => {
+                                    return <tr key={key}>
+                                        <td>{keywo.keyword}</td>
+                                        <td>{keywo.device}</td>
+                                        <td>{keywo.location_code}</td>
+                                        <td className='table-edit'>  <i className=" fa-solid fa-trash"></i> </td>
 
-                            //         </tr>
+                                    </tr>
 
-                            //     })
-                            // })
+                                })
+                            }) : 'loading'
                         }
 
                     </tbody>

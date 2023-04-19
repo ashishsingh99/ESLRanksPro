@@ -73,7 +73,7 @@ export const Home = () => {
   useEffect(() => {
     if (loginOut !== true) {
 
-      // window.location.href = '#index.html'
+      window.location.href = 'https://eslrankspro.com/'
     }
   })
   return (

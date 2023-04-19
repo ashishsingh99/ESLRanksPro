@@ -29,15 +29,8 @@ const RankTable = () => {
     const UserSelectedPrId = useSelector((state) => state.userselectedprojectallid)
     const isProject = useSelector(state => state.isproject);
     const usercurrentprojectlocation = useSelector(state => state.usercurrentprojectlocation);
-    const CurrentLocation = useRef([])
 
-    CurrentLocation.current = usercurrentprojectlocation
-    CurrentLocation.current = CurrentLocation.current && CurrentLocation.current.filter((obj, index, self) => {
-        return index === self.findIndex((t) => (
-            t.location_code === obj.location_code
-        ))
 
-    })
 
     // useStates
     const [detailsCSV, setDetailsCSV] = useState([])
@@ -50,7 +43,15 @@ const RankTable = () => {
     const selectedKeyword = useRef([])
     const [addkeywordAlert, setAddKeywordAlert] = useState(false);
     const [locationViewer, setLocationViewer] = useState([])
+    const CurrentLocation = useRef([])
 
+    CurrentLocation.current = usercurrentprojectlocation
+    CurrentLocation.current = CurrentLocation.current && CurrentLocation.current.filter((obj, index, self) => {
+        return index === self.findIndex((t) => (
+            t.location_code === obj.location_code
+        ))
+
+    })
 
     // useEffect data rendring
     useEffect(() => {
@@ -191,7 +192,7 @@ const RankTable = () => {
         // selectedKeyword.current.map(res => {
         const selectedKeywordarray = JSON.stringify(selectedKeyword.current)
 
-        axios.put('https://eslrankspro.com/api/user/delkeyword/' + Number(UserSelectedPrId[0]) + '/?key=' + selectedKeywordarray + '&device=' + deviceType + '&location_code=' + current_location_code)
+        axios.put('https://app.eslrankspro.com/api/user/delkeyword/' + Number(UserSelectedPrId[0]) + '/?key=' + selectedKeywordarray + '&device=' + deviceType + '&location_code=' + current_location_code)
 
 
         const timerId = setInterval(() => window.location.reload(false), 1500);

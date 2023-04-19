@@ -31,9 +31,8 @@ const GetPreviousRanks = () => {
 
             const AllPreviousData = res.data.data;
             dispatch({ type: "PREVIOUSALLOLDDATA", payload: AllPreviousData });
-            // const PreviousUserAllProjects = [res.data.data[res.data.data.length - 1]];
-            const PreviousUserAllProjects = res.data.data;
-            // console.log('PreviousUserAllProjects', PreviousUserAllProjects);
+
+            console.log('AllPreviousData', AllPreviousData);
 
             axios.get(PROJECT_GET()).then((res) => {
 
@@ -54,11 +53,6 @@ const GetPreviousRanks = () => {
                 });
                 // console.log('ProjectDetail', ProjectDetail)
 
-                // ALLPROJECTDETAILS.current = ProjectDetail;
-                // dispatch({
-                //     type: "ALLPROJECTDETAILS",
-                //     payload: ALLPROJECTDETAILS.current,
-                // });
 
                 const filteredEmailList = ProjectDetail && ProjectDetail.filter((selectedEmail) => {
                     if (selectedEmail.email === email) {
@@ -83,7 +77,7 @@ const GetPreviousRanks = () => {
 
                 // console.log('country_Based_Data_old', country_Based_Data)
 
-                PreviousUserAllProjects && PreviousUserAllProjects.map((rest, key) => {
+                AllPreviousData && AllPreviousData.map((rest, key) => {
                     ALLPROJECTDATA.current = []
                     KEYWORDDATA.current = []
                     rest.datasave && rest.datasave.map((datasave) => {

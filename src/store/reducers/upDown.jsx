@@ -72,12 +72,14 @@ export const reducerFnOne = (state = false, action) => {
 }
 
 export const reducerFntwo = (state = 100, action) => {
-    if (action.type === 'USERKEYWORDLIMIT') { return state = action.payload }
+    if (action.payload === undefined) { return state }
+    else if (action.type === 'USERKEYWORDLIMIT') { return state = action.payload }
     else { return state; }
 }
 
 export const reducerFnthr = (state = 5, action) => {
-    if (action.type === 'USERPROJECTLIMIT') { return state = action.payload }
+    if (action.payload === undefined) { return state }
+    else if (action.type === 'USERPROJECTLIMIT') { return state = action.payload }
     else { return state; }
 }
 

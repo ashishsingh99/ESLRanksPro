@@ -3,19 +3,20 @@ import { useSelector } from "react-redux";
 import KeywordRanksChart from "./keywordAllRanksChart";
 
 const KeywordAllRanksChart = (props) => {
+
+    // redux useselector
+    const PreviousAllOldData = useSelector((state) => state.previousallolddata);
+    const selectedIndex = useSelector(state => state.selectcustomdate);
+
+    // localStorage
     const deviceType = localStorage.getItem("devicetype");
     const webURL = localStorage.getItem("websiteurl");
 
+    // hooks variable
     const TargetedKeyword_AllOldDataRanks = useRef([0]);
     const KeywordDetailsTime = useRef([''])
-    const PreviousAllOldData = useSelector((state) => state.previousallolddata);
-    // const today = new Date();
-    // const todayDate = today.getDate();
-    // console.log('todayDate', todayDate)
-    const selectedIndex = useSelector(state => state.selectcustomdate)
-    const lastDate = selectedIndex !== 0 ? selectedIndex : 7
 
-    // useEffect(() => {
+    const lastDate = selectedIndex !== 0 ? selectedIndex : 7
 
     if (props.Keyword === null) {
         TargetedKeyword_AllOldDataRanks.current = [0]
@@ -24,7 +25,7 @@ const KeywordAllRanksChart = (props) => {
     else {
 
         PreviousAllOldData && PreviousAllOldData.slice(PreviousAllOldData.length - lastDate, PreviousAllOldData.length).map(res => {
-            // if (res.date) {
+
             const keywordDetails = res.date + ' ' + res.month
 
             return res.datasave && res.datasave.map(datasave => {
@@ -59,8 +60,6 @@ const KeywordAllRanksChart = (props) => {
                                 });
 
                                 KeywordDetailsTime.current.push(keywordDetails);
-                                // console.log('KeywordDetailsTime.current', KeywordDetailsTime.current)
-                                // console.log('  TargetedKeyword_AllOldDataRanks.current', TargetedKeyword_AllOldDataRanks.current)
                                 TargetedKeyword_AllOldDataRanks.current.push(filteredUrlData[0].rank_group)
 
                             }
@@ -69,19 +68,15 @@ const KeywordAllRanksChart = (props) => {
 
                 })
             })
-            // }
 
         })
     }
 
 
-    // })
 
 
     return <>
-
         <KeywordRanksChart dataset={TargetedKeyword_AllOldDataRanks.current} labels={KeywordDetailsTime.current} Keyword={props.Keyword} />
-
     </>
 }
 export default KeywordAllRanksChart;

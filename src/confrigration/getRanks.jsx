@@ -161,7 +161,7 @@ const GetRanks = () => {
               return selectedUrl.weburl === webURL;
             }
           });
-          console.log('userDataFilterByProjectUrl', userDataFilterByProjectUrl)
+          // console.log('userDataFilterByProjectUrl', userDataFilterByProjectUrl)
 
           const result = userDataFilterByProjectUrl.reduce((acc, obj) => {
             const key = obj.location_code + obj.deviceType;

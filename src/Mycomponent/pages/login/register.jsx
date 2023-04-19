@@ -56,6 +56,7 @@ const Register = () => {
 
 
                 const reffralItems = {
+                    id: foundPlan.id,
                     email: email,
                     code_valid: e,
                     valid: foundPlan.validity,
@@ -63,6 +64,7 @@ const Register = () => {
                     expiry_date: futureDay
 
                 }
+                console.log('reffralItems', reffralItems)
                 setmatchedRefItems(reffralItems);
 
 
@@ -101,7 +103,8 @@ const Register = () => {
                     .then(res => {
                         setOTP(false)
                         setMydata('');
-                        axios.post('https://eslrankspro.com/api/user/codevalid/', matchedRefitems)
+                        axios.post('https://app.eslrankspro.com/api/user/codevalid/', matchedRefitems)
+                        axios.put('https://app.eslrankspro.com/api/user/deletecode/' + matchedRefitems.id + '/?code=' + matchedRefitems.code_valid)
                         navigate('/login')
 
                     }).catch((res) => {

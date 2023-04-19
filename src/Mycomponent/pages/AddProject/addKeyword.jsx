@@ -245,7 +245,7 @@ export const AddKeyword = () => {
             const itemData = JSON.stringify(item)
             const deviceTypeData = JSON.stringify(deviceType.current)
             const locations = JSON.stringify(ALLLocationCode.current)
-            axios.put('https://eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData + '&location_code=' + locations)
+            axios.put('https://app.eslrankspro.com/api/user/updatekeyword/' + userselectedprojectallid[0] + '/?key=' + itemData + '&device=' + deviceTypeData + '&location_code=' + locations)
             navigate('/addpr/gotraffic')
 
         }

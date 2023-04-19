@@ -165,7 +165,7 @@ const Plans = () => {
                                     <select onChange={(e) => setName(e.target.value)}>
                                         <option value='individual'>Individual</option>
                                         <option value='business'>Business</option>
-                                        <option value='enterprise'>enterprise</option>
+                                        <option value='enterprise'>Enterprise</option>
                                     </select>
                                     <label id='lb'> Plan Name </label>
 
@@ -223,7 +223,7 @@ const Plans = () => {
                                     <select onChange={(e) => setName(e.target.value)}>
                                         <option value='individual'>Individual</option>
                                         <option value='business'>Business</option>
-                                        <option value='enterprice'>EnterPrice</option>
+                                        <option value='enterprise'>EnterPrise</option>
                                     </select>
                                     <label id='lb'> Plan Name </label>
 

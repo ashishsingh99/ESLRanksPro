@@ -13,10 +13,14 @@ const GetProfile = () => {
             },
         };
 
-        axios.get(profile_withApi(), Headers).then((res) => {
-            localStorage.setItem('name', res.data.name)
-        });
-    },[]);
+        axios.get(profile_withApi(), Headers)
+            .then((res) => {
+                localStorage.setItem('name', res.data.name)
+            })
+            .catch(() => {
+                localStorage.clear();
+            })
+    }, []);
 
 }
 

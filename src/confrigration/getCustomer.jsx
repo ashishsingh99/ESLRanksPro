@@ -7,9 +7,15 @@ const GetCustomer = () => {
     const email = localStorage.getItem("email");
 
     useEffect(() => {
+        axios.get(get_Plans_Details())
+            .then((res) => {
+                // console.log('get plkan details', res.data.data)
+                const data = res.data.data
+                dispatch({ type: "PLANSDETAILS", payload: data });
+            })
 
 
-        axios.get('https://eslrankspro.com/api/user/codevalidGet/')
+        axios.get('https://app.eslrankspro.com/api/user/codevalidGet/')
             .then((res) => {
                 // console.log('codevalidGet/', res.data)
                 const referralUser = res.data.find(user => user.email === email);
@@ -35,6 +41,7 @@ const GetCustomer = () => {
                 }
                 else {
                     // alert('no reefer')
+                    // debugger
                     var Customerconfig = {
                         method: 'get', maxBodyLength: Infinity, url: customer_Subs_Email(email),
                         headers: {
@@ -73,7 +80,7 @@ const GetCustomer = () => {
                                             .then((res) => {
                                                 // console.log('get plkan details', res.data.data)
                                                 const data = res.data.data
-                                                dispatch({ type: "PLANSDETAILS", payload: data });
+                                                // dispatch({ type: "PLANSDETAILS", payload: data });
                                                 data && data.filter((res) => {
                                                     if (res.prod_id === cusProductId) {
                                                         dispatch({ type: "USERPROJECTLIMIT", payload: res.proj_len });
@@ -89,9 +96,9 @@ const GetCustomer = () => {
                             }
                             else {
                                 // when user not subscribe to any plan
-                                // change also his default states from updown.js
-                                dispatch({ type: "USERPROJECTLIMIT" });
-                                dispatch({ type: "USERKEYWORDLIMIT" });
+                                //than we set default states from updown.js
+                                dispatch({ type: "USERPROJECTLIMIT" })
+                                dispatch({ type: "USERKEYWORDLIMIT" })
                             }
                         })
                 }

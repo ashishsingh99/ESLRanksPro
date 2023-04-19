@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { ADMIN_USERS, get_Plans_Details } from '../../services/constants'
+import { ADMIN_USERS, Admin_Keyword_Get, get_Plans_Details } from '../../services/constants'
 import { useSelector } from 'react-redux'
 import analyze from '../../Mycomponent/Assets/analyze.png'
 
@@ -8,14 +8,14 @@ const Dashboard = () => {
     const [users, setUsers] = useState(0)
     const [keywords, setKeywords] = useState(0)
     const [planDetails, setPlanDetails] = useState(0)
-    const allprojectdata = useSelector((state) => state.allprojectdata);
+
     useEffect(() => {
         axios.get(ADMIN_USERS())
             .then((res) => {
                 const data = res.data
-                console.log('adminUser', res.data)
+                // console.log('adminUser', res.data)
                 setUsers(data.length)
-                setKeywords(allprojectdata.length)
+
 
             })
         axios.get(get_Plans_Details())
@@ -23,7 +23,17 @@ const Dashboard = () => {
                 // console.log('res get', res.data.data)
                 setPlanDetails(res.data.data.length)
             })
-    })
+
+        axios.get(Admin_Keyword_Get())
+            .then((res) => {
+                // console.log('res.data.data', res.data.data)
+                const data = res.data.data
+                const keywordCount = data.reduce((total, item) => total + item.data.length, 0);
+                setKeywords(keywordCount);
+
+            })
+
+    }, [])
 
     return (
         <div>
