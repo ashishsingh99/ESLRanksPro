@@ -29,7 +29,7 @@ SECRET_KEY = 'p&&w6=68bo0c-nq)psgh=%ed%#m1kdwmb@!s)w!y!4=f2408a-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['eslrankspro.com','www.eslrankspro.com','127.0.0.1']
+ALLOWED_HOSTS = ['eslrankspro.com','www.eslrankspro.com','127.0.0.1','app.eslrankspro.com']
 
 
 # Application definition
@@ -199,6 +199,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://3.7.92.255",
     "https://eslrankspro.com",
     "https://www.eslrankspro.com",
+    "https://app.eslrankspro.com",
 
 ]
 
