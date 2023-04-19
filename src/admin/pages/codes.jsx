@@ -39,7 +39,7 @@ const Codes = () => {
                 validity: validityFor
             }
             console.log(newCodes)
-            axios.post('https://eslrankspro.com/api/user/codes/', data)
+            axios.post('https://app.eslrankspro.com/api/user/codes/', data)
             setShowAlert(false);
         }
 

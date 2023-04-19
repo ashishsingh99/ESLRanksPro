@@ -24,5 +24,5 @@ export const plans = 'plans'
 export const adminkeyword = 'adminkeywords'
 export const users = 'users'
 export const codes = 'codes'
-export const baseUrlPath = 'eslrankspro.com'
+export const baseUrlPath = 'app.eslrankspro.com'
 

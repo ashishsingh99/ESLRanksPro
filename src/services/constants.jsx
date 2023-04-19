@@ -18,16 +18,16 @@ export const Admin_Keyword_Get = () => 'https://app.eslrankspro.com/api/user/Key
 export const Country = () => `https://api.dataforseo.com/v3/serp/google/locations`;
 
 // post data for SERP API
-export const KEYWORD_POST = () => `https://eslrankspro.com/api/user/Keyword/`;
-export const PROJECT_POST = () => `https://eslrankspro.com/api/user/project/`;
+export const KEYWORD_POST = () => `https://app.eslrankspro.com/api/user/Keyword/`;
+export const PROJECT_POST = () => `https://app.eslrankspro.com/api/user/project/`;
 
 // Getting Data From THE DATABASE ------
-export const profile_withApi = () => `https://eslrankspro.com/api/user/profile/`;
-export const DB_RANK_DATA = () => `https://eslrankspro.com/api/user/Newdata/`;
-export const PROJECT_GET = () => `https://eslrankspro.com/api/user/projectGet/`;
-export const OLD_RANK_DATA = () => `https://eslrankspro.com/api/user/Olddata/`;
-export const ADMIN_USERS = () => `https://eslrankspro.com/api/user/adminuser/`;
+export const profile_withApi = () => `https://app.eslrankspro.com/api/user/profile/`;
+export const DB_RANK_DATA = () => `https://app.eslrankspro.com/api/user/Newdata/`;
+export const PROJECT_GET = () => `https://app.eslrankspro.com/api/user/projectGet/`;
+export const OLD_RANK_DATA = () => `https://app.eslrankspro.com/api/user/Olddata/`;
+export const ADMIN_USERS = () => `https://app.eslrankspro.com/api/user/adminuser/`;
 
 
 // reffral codes get
-export const Reffral_Get = () => `https://eslrankspro.com/api/user/codesGet/`;
+export const Reffral_Get = () => `https://app.eslrankspro.com/api/user/codesGet/`;
