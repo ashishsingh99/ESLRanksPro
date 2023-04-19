@@ -241,7 +241,6 @@ class KeywordGetView(APIView):
     for data in serializer.data:
       GetData = dict(data)
       Check = ast.literal_eval(GetData.get('data'))
-      # print(Check)
       lis=[]
       for i in Check:
         for j in i:
@@ -341,7 +340,7 @@ class SendPasswordResetEmailView(APIView):
         user = User.objects.get(email = email)
         uid = urlsafe_base64_encode(force_bytes(user.id))
         token = PasswordResetTokenGenerator().make_token(user)
-        link = 'https://eslrankspro.com/api/user/reset/'+uid+'/'+token
+        link = 'https://app.eslrankspro.com/api/user/reset/'+uid+'/'+token
         # Send EMail
         body = "We heard that you lost your password. Sorry about that! But don't worry! You can use the following link to reset your password: "+link
         data = {

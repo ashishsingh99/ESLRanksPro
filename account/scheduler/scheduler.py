@@ -22,7 +22,6 @@ data_list = []
 def get(id=None, format=None):
   global data_list
   new_dat_list = []
-  db2.segment.drop()
   mycol = db["segment"]
   results = []
   try:
